@@ -198,7 +198,6 @@ def do_run_targets_promised():
     try:
         park4139.speak(f"약속된 타겟들을 실행합니다")
         targets = [
-            # rf'\\Desktop-5ncl18i\공유폴더', # 공유폴더는 잘 안됨.
             # rf'C:\Python312\Lib\site-packages\pkg_park4139\__init__.py', # 업데이트 시켜두었으므로 이제 실행해볼 필요 없음,파이선 폴더 동기화 시켜도록 시도해보자
             # rf'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log',
             rf"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\JetBrains\PyCharm Community Edition 2023.3.lnk",
@@ -213,16 +212,21 @@ def do_run_targets_promised():
         park4139.pause()
 
 
-def do_back_up_parks2park_archive_log_with_target_editing_monitoring():
-    if loop_cnt == 1:
-        park4139.speak(f"5초마다 자동빽업 루틴을 수행합니다")
-
+def monitor_parks2park_archive_log_edited_and_bkup():
     ment = 'parks2park_archive.log 빽업시도'
     # park4139.speak(ment)
     park4139.commentize(ment)
+
+
+
+
     target = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
+
+
     db_toml = park4139.db_toml_location_default
     db = park4139.read_db_toml(db_toml)
+
+
     line_cnt_measured = park4139.get_line_cnt_of_file(target)
     key = "parks2park_archive_log_line_cnt"
     try:
@@ -238,12 +242,8 @@ def do_back_up_parks2park_archive_log_with_target_editing_monitoring():
 
 
 def should_i_empty_trash_can():
-    # 휴지통 열기
-    # window r
-    # shell: RecycleBinFolder
-    # 확인
-
-    # 휴지통 열기
+    # 숨김 휴지통 을 보여드릴까요
+    # 숨김 휴지통 열기
     # explorer c:\$RECYCLE.BIN
     # explorer d:\$RECYCLE.BIN
     # explorer e:\$RECYCLE.BIN
@@ -258,7 +258,6 @@ def should_i_empty_trash_can():
     answser = pyautogui.confirm(ment, title='', buttons=[etc.button_ments['yes'], etc.button_ments['no'], etc.button_ments['again']], timeout=1000 * 30)
     print(f'answser >{park4139.indent_space_promised}{answser}')
     if answser == etc.button_ments['yes']:
-        # 휴지통 비우기
         ment = f'네 휴지통을 비울게요'
         park4139.speak(ment)
         try:
@@ -563,7 +562,9 @@ try:
                     do_routine_24_00()
                     # 5초 마다
                 if int(ss) % 5 == 0:
-                    do_back_up_parks2park_archive_log_with_target_editing_monitoring()
+                    if loop_cnt == 1:
+                        park4139.speak(f"5초마다 자동빽업 루틴을 수행합니다")
+                    monitor_parks2park_archive_log_edited_and_bkup()
                     # 5분 마다
                 if int(mm) % 5 == 0:
                     if loop_cnt == 1:
