@@ -213,20 +213,17 @@ def do_run_targets_promised():
 
 
 def monitor_target_edited_and_bkup(target_abspath:str, key :str):
-
-
-    park4139.speak(f'{os.path.basename(target_abspath)} 빽업시도')
-
-
+    # park4139.speak(f'{os.path.basename(target_abspath)} 타겟 변화 모니터링 시도')
+    park4139.commentize(f'{os.path.basename(target_abspath)} 타겟 변화 모니터링 시도')
     db_abspath = park4139.db_abspath
     if park4139.is_target_edited(target_abspath, key)==True:
-        park4139.speak("빽업을 수행합니다")
+        park4139.speak("타겟의 편집을 감지 했습니다")
+        park4139.speak("타겟빽업을 시도합니다")
         park4139.bkup(target_abspath)
         park4139.update_db_toml(key=key, value=park4139.get_line_cnt_of_file(target_abspath), db_abspath=db_abspath)
     if park4139.is_target_edited(target_abspath, key) ==None:
         park4139.speak("데이터베이스 key가 없어 key를 생성합니다")
         park4139.insert_db_toml(key=key, value=park4139.get_line_cnt_of_file(target_abspath), db_abspath=db_abspath)
-
 
 
 
@@ -474,6 +471,7 @@ def do_routine_per_60_mins(per_x_min: int):
     should_i_empty_trash_can()
 
 
+
 def check_local_database():
     park4139.speak("로컬 데이터베이스 접근 테스트를 시도합니다")
     if not os.path.exists(park4139.db_abspath):
@@ -513,6 +511,10 @@ try:
 
                 do_run_targets_promised()
 
+                target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
+                key = "parks2park_archive_log_line_cnt"
+                monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
+
                 # park4139.commentize(title = '전역 pkg_park4139 업데이트')
                 # 이 메소드는 프로젝트 내에 지역적으로 위치한 pkg_park4139 하나만 관리해도
                 # global site-packages에 위치한 pkg_park4139 동기화를 시켜 pycharm 자동완성 기능 가능.
@@ -523,7 +525,7 @@ try:
             loop_cnt = loop_cnt + 1
 
             # 0시에서 24시 사이,
-            if 0 <= int(HH) and int(HH) <= 24:
+            if 0 <= int(HH) <= 24:
                 # 6시 30분
                 if int(HH) == 6 and int(mm) == 30:
                     do_routine_06_30()
@@ -553,7 +555,11 @@ try:
                 if int(ss) % 5 == 0:
                     if loop_cnt == 1:
                         park4139.speak(f"5초마다 자동빽업 루틴을 수행합니다")
-                    monitor_target_edited_and_bkup()
+
+                    target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
+                    key = "parks2park_archive_log_line_cnt"
+                    monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
+
                     # 5분 마다
                 if int(mm) % 5 == 0:
                     if loop_cnt == 1:
