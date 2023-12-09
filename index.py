@@ -212,32 +212,21 @@ def do_run_targets_promised():
         park4139.pause()
 
 
-def monitor_parks2park_archive_log_edited_and_bkup():
-    ment = 'parks2park_archive.log 빽업시도'
-    # park4139.speak(ment)
-    park4139.commentize(ment)
+def monitor_target_edited_and_bkup(target_abspath:str, key :str):
 
 
+    park4139.speak(f'{os.path.basename(target_abspath)} 빽업시도')
 
 
-    target = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
-
-
-    db_toml = park4139.db_toml_location_default
-    db = park4139.read_db_toml(db_toml)
-
-
-    line_cnt_measured = park4139.get_line_cnt_of_file(target)
-    key = "parks2park_archive_log_line_cnt"
-    try:
-        if line_cnt_measured != db[key]:
-            park4139.speak("파일변경을 감지 했습니다")
-            park4139.speak("빽업을 수행합니다")
-            park4139.bkup(target)
-            park4139.update_db_toml(key=key, value=line_cnt_measured, target_abspath=db_toml)
-    except KeyError:
+    db_abspath = park4139.db_abspath
+    if park4139.is_target_edited(target_abspath, key)==True:
+        park4139.speak("빽업을 수행합니다")
+        park4139.bkup(target_abspath)
+        park4139.update_db_toml(key=key, value=park4139.get_line_cnt_of_file(target_abspath), db_abspath=db_abspath)
+    if park4139.is_target_edited(target_abspath, key) ==None:
         park4139.speak("데이터베이스 key가 없어 key를 생성합니다")
-        park4139.insert_db_toml(key=key, value=line_cnt_measured, target_abspath=db_toml)
+        park4139.insert_db_toml(key=key, value=park4139.get_line_cnt_of_file(target_abspath), db_abspath=db_abspath)
+
 
 
 
@@ -487,10 +476,10 @@ def do_routine_per_60_mins(per_x_min: int):
 
 def check_local_database():
     park4139.speak("로컬 데이터베이스 접근 테스트를 시도합니다")
-    if not os.path.exists(park4139.db_toml_location_default):
+    if not os.path.exists(park4139.db_abspath):
         park4139.speak("로컬 데이터베이스 접근이 불가능합니다")
         park4139.speak("접근이 가능하도록 설정합니다")
-        park4139.create_db_toml(target_abspath=park4139.db_toml_location_default, db_template=park4139.db_template)
+        park4139.create_db_toml(target_abspath=park4139.db_abspath, db_template=park4139.db_template)
     else:
         park4139.speak("로컬 데이터베이스에 접근이 가능한 상태입니다")
 
@@ -564,7 +553,7 @@ try:
                 if int(ss) % 5 == 0:
                     if loop_cnt == 1:
                         park4139.speak(f"5초마다 자동빽업 루틴을 수행합니다")
-                    monitor_parks2park_archive_log_edited_and_bkup()
+                    monitor_target_edited_and_bkup()
                     # 5분 마다
                 if int(mm) % 5 == 0:
                     if loop_cnt == 1:
