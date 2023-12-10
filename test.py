@@ -44,13 +44,13 @@ def generate_mp3_file_for_time_performance():  # time performance : 9028 초 /60
     """
     for HH in range(24, 0, -1):
         for mm in range(0, 60):
-            park4139.speak(f'{int(HH)}시')
-            park4139.speak(f'{int(mm)}분 입니다')
+            park4139.commentize(f'{int(HH)}시')
+            park4139.commentize(f'{int(mm)}분 입니다')
 
 
-# park4139.speak() 메소드 테스트 결과, 1개 파일을 만들어 실행하는 데까지 무려 11초 정도로 측정됨, ffmpeg 작업 속도로 문제
+# park4139.commentize() 메소드 테스트 결과, 1개 파일을 만들어 실행하는 데까지 무려 11초 정도로 측정됨, ffmpeg 작업 속도로 문제
 # 의도적으로 mp3 파일을 미리 만들어, ffmpeg 로 두 파일 합성작업 시간을 줄일수 있으므로, 성능 최적화 기대,
-# 따라서, 코드에서 사용되는 모든 텍스트를 추출하여 park4139.speak 하도록 하여, 최적화시도해보자
+# 따라서, 코드에서 사용되는 모든 텍스트를 추출하여 park4139.commentize 하도록 하여, 최적화시도해보자
 # 번외로 리스트의 파라미터를 몇개까지 가능하지 테스트 해보고 싶긴한데, 망가져도 되는 컴퓨터로 시도해보자
 
 
