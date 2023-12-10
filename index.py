@@ -441,7 +441,7 @@ def decorate_ment_about_routine_per_x_mins(do_routine_per_x_mins):
 
 @decorate_ment_about_routine_per_x_mins
 def do_routine_per_30_mins(per_x_mins: int):
-    ment = f'깃허브로 아카이브 파이 빽업을 시도합니다'
+    ment = f'깃허브로 파이썬 아카이브 프로젝트 빽업을 시도합니다'
     park4139.commentize(ment)
     park4139.speak(ment)
     try:
