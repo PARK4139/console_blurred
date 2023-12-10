@@ -192,8 +192,6 @@ def do_schedule_60(schedule_no: int):
     pass
 
 
-
-
 def do_run_targets_promised():
     try:
         park4139.speak(f"약속된 타겟들을 실행합니다")
@@ -212,18 +210,6 @@ def do_run_targets_promised():
         park4139.pause()
 
 
-def monitor_target_edited_and_bkup(target_abspath:str, key :str):
-    # park4139.speak(f'{os.path.basename(target_abspath)} 타겟 변화 모니터링 시도')
-    park4139.commentize(f'{os.path.basename(target_abspath)} 타겟 변화 모니터링 시도')
-    db_abspath = park4139.db_abspath
-    if park4139.is_target_edited(target_abspath, key)==True:
-        park4139.speak("타겟의 편집을 감지 했습니다")
-        park4139.speak("타겟빽업을 시도합니다")
-        park4139.bkup(target_abspath)
-        park4139.update_db_toml(key=key, value=park4139.get_line_cnt_of_file(target_abspath), db_abspath=db_abspath)
-    if park4139.is_target_edited(target_abspath, key) ==None:
-        park4139.speak("데이터베이스 key가 없어 key를 생성합니다")
-        park4139.insert_db_toml(key=key, value=park4139.get_line_cnt_of_file(target_abspath), db_abspath=db_abspath)
 
 
 
@@ -390,8 +376,6 @@ def do_random_schedules():
                 park4139.speak(f"나올때까지 계속 돌릴겁니다")
 
 
-
-
 @decorate_ment_about_time
 def do_routine_24_00():
     park4139.speak(f'{int(yyyy)}년 {int(MM)}월 {int(dd)}일 {int(HH)}시 {int(mm)}분 입니다')
@@ -442,15 +426,16 @@ def do_routine_that_to_make_developer_go_to_sleep():
     if random.random() >= 0.5:
         park4139.speak('아무래도 안되겠군요')
         park4139.speak('이제 하나씩 종료를 할겁니다')
-        park4139.speak('개발도구를 종료합니다')
         park4139.speak('팟플레이어를 종료합니다')
         # park4139.speak('알송을 종료합니다')
+        park4139.speak('개발 도구를 종료합니다')
 
 
 def decorate_ment_about_routine_per_x_mins(do_routine_per_x_mins):
-    def wrapper(args : int):
+    def wrapper(args: int):
         park4139.speak(f'{args}분 간격 루틴을 시작합니다')
         do_routine_per_x_mins(args)
+
     return wrapper
 
 
@@ -471,7 +456,6 @@ def do_routine_per_60_mins(per_x_min: int):
     should_i_empty_trash_can()
 
 
-
 def check_local_database():
     park4139.speak("로컬 데이터베이스 접근 테스트를 시도합니다")
     if not os.path.exists(park4139.db_abspath):
@@ -480,6 +464,7 @@ def check_local_database():
         park4139.create_db_toml(target_abspath=park4139.db_abspath, db_template=park4139.db_template)
     else:
         park4139.speak("로컬 데이터베이스에 접근이 가능한 상태입니다")
+
 
 try:
     if __name__ == "__main__":
@@ -513,7 +498,7 @@ try:
 
                 target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
                 key = "parks2park_archive_log_line_cnt"
-                monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
+                park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
 
                 # park4139.commentize(title = '전역 pkg_park4139 업데이트')
                 # 이 메소드는 프로젝트 내에 지역적으로 위치한 pkg_park4139 하나만 관리해도
@@ -558,9 +543,9 @@ try:
 
                     target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
                     key = "parks2park_archive_log_line_cnt"
-                    monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
+                    park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
 
-                    # 5분 마다
+                # 5분 마다
                 if int(mm) % 5 == 0:
                     if loop_cnt == 1:
                         park4139.speak(f"5분 마다 랜덤 스케쥴 루틴을 수행합니다")
@@ -571,22 +556,22 @@ try:
                         traceback.print_exc(file=sys.stdout)
                         park4139.pause()
                     pass
-                    # 30분 마다
+                # 30분 마다
                 if int(mm) % 30 == 0:
                     do_routine_per_30_mins(30)
-                    # 60분 마다
+                # 60분 마다
                 if int(mm) % 60 == 0:
                     do_routine_per_60_mins(60)
                     pass
 
-                # 0시에서 4시 사이, 30분 마다
-                # if 0 <= int(HH) <= 4 and int(mm) % 30 == 0:
-                #     pass
+            # 0시에서 4시 사이, 30분 마다
+            # if 0 <= int(HH) <= 4 and int(mm) % 30 == 0:
+            #     pass
 
-                # 0시에서 4시 사이, 30초 마다
-                if 0 <= int(HH) <= 4:
-                    if int(ss) % 30 == 0:
-                        do_routine_that_to_make_developer_go_to_sleep()
+            # 0시에서 4시 사이, 30초 마다
+            if 0 <= int(HH) <= 4:
+                if int(ss) % 30 == 0:
+                    do_routine_that_to_make_developer_go_to_sleep()
 
             # 루프 휴식
             park4139.sleep(milliseconds=1000)

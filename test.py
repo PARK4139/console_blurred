@@ -86,22 +86,14 @@ def test():
     # cmd = rf'start cmd /c "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다 #이걸로 선정함
     # park4139.get_cmd_output(cmd)
 
-    # 시스템 환경변수 %USERPROFILE% 가져오는 방법
-    # for i in os.environ:
-    #     print(i)
-    print(os.environ.get('USERPROFILE'))
+    target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
+    key = "parks2park_archive_log_line_cnt"
+    park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
 
 
-    # 시스템 환경변수 path 업데이트 방법
-    # sys.path.insert(0, dirname)
-    # sys.path.append(r'C:\Python312\Lib\site-packages')
-    # for i in sys.path:
-    #     print(i)
 
-    # 네입스페이스 가 보고 싶다면
-    # dir()
 
-    # park4139.is_target_edited(rf"{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log")
+
     pass
 
 
