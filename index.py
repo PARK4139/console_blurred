@@ -21,41 +21,29 @@ park4139.log_s()
 daily_random_tasks = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]
 
 
-
 def bkup_biggest_targets():
-    # park4139.commentize(f"용량이 큰 타겟에 대한 빽업을 시도합니다")
-    park4139.commentize(f"300 메가바이트 이상 타겟에 대한 빽업을 시도합니다")
-    try:
-        for biggest_target in park4139.biggest_targets:
-            park4139.bkup(f'{biggest_target}')
-        pass
-    except:
-        park4139.trouble_shoot("%%%FOO%%%")
-        traceback.print_exc(file=sys.stdout)
-        park4139.pause()
+    park4139.commentize(f"biggest_targets에 대한 빽업을 시도합니다")
+    for biggest_target in park4139.biggest_targets:
+        park4139.bkup(f'{biggest_target}')
 
 
-def do_schedule_56(schedule_no: int):
-    # park4139.commentize(f"용량이 작은 타겟에 대한 빽업을 시도합니다")
-    park4139.commentize(f"300 메가바이트 미만 타겟에 대한 빽업을 시도합니다")
-    park4139.commentize('300메가 이하 타겟 빽업 시도')
+def bkup_smallest_targets():
+    park4139.commentize(f"smallest_targets에 대한 빽업을 시도합니다")
     for target in park4139.smallest_targets:
         park4139.bkup(f'{target}')
+
+
+def speak_HH_mm():
+    park4139.speak(f"{int(HH)}시")
+    park4139.speak(f"{int(mm)}분 입니다")
     pass
 
 
-def do_schedule_57(schedule_no: int):
-    park4139.commentize(f"{int(HH)}시")
-    park4139.commentize(f"{int(mm)}분 입니다")
-    pass
-
-
-
-def do_schedule_58(schedule_no: int):
+def classify_targets_between_smallest_targes_biggest_targets():
     park4139.commentize('빽업할 파일들의 크기를 분류합니다.')
     targets = [
         fr"{park4139.USERPROFILE}\Desktop\services\helper-from-youtube-url-to-webm",
-        fr"{park4139.USERPROFILE}\Desktop\services\helper-from-youtube-url-to-webm",
+        fr"{park4139.USERPROFILE}\Desktop\services",
     ]
     park4139.commentize('biggest_targets(300 메가 초과), smallest_targets(300 메가 이하) 분류 시도')
     for target in targets:
@@ -81,8 +69,7 @@ def do_schedule_58(schedule_no: int):
     pass
 
 
-
-def gather_storages(schedule_no: int):
+def gather_storages():
     starting_directory = os.getcwd()
     park4139.commentize("gather_storages")
     dst = rf"{park4139.USERPROFILE}\Desktop\services\storage"
@@ -133,7 +120,6 @@ def gather_storages(schedule_no: int):
     os.chdir(starting_directory)
 
 
-
 def kill_alsong():
     park4139.commentize(rf'알송종료를 시도합니다')
     park4139.taskkill('ALSong.exe')
@@ -158,9 +144,6 @@ def do_run_targets_promised():
         park4139.pause()
 
 
-
-
-
 def should_i_empty_trash_can():
     # 숨김 휴지통 을 보여드릴까요
     # 숨김 휴지통 열기
@@ -171,18 +154,16 @@ def should_i_empty_trash_can():
     # park4139.run_command('explorer.exe shell:RecycleBinFolder')
 
     # park4139.commentize(rf'휴지통 용량확인 pyautogui RPA')
-
-    ment = f'현재 휴지통이 10기가 바이트 이상입니다 쓰레기통을 비울까요'
+    # ment = f'현재 휴지통이 10기가 바이트 이상입니다 쓰레기통을 비울까요'
+    ment = f'쓰레기통을 비울까요'
     park4139.speak(ment)
     answser = pyautogui.confirm(ment, title='', buttons=[etc.button_ments['yes'], etc.button_ments['no'], etc.button_ments['again']], timeout=1000 * 30)
     print(f'answser >{park4139.indent_space_promised}{answser}')
     if answser == etc.button_ments['yes']:
         ment = f'네 휴지통을 비울게요'
         print(ment)
-        try:
-            park4139.get_cmd_output('PowerShell.exe -NoProfile -Command Clear-RecycleBin -Confirm:$false')
-        except Exception as e:
-            park4139.trouble_shoot('20231204155143')
+
+        park4139.get_cmd_output('PowerShell.exe -NoProfile -Command Clear-RecycleBin -Confirm:$false')
 
         # 휴지통 삭제 (외장하드까지)
         # for %%a in (cdefghijk L mnopqrstuvwxyz) do (
@@ -207,9 +188,9 @@ def should_i_empty_trash_can():
 
 
 def should_i_enter_power_saving_mode():
-    ment = f'절전모드를 가이드할까요'
+    ment = f'절전모드로 진입할까요'
+    # ment = f'절전모드를 가이드할까요'
     # ment = f'절전모드로 진입을 시도할까요'
-    # ment = f'절전모드로 진입할까요'
     park4139.commentize(ment)
     park4139.commentize(ment)
     answser = pyautogui.confirm(ment, title='', buttons=[etc.button_ments['yes'], etc.button_ments['no'], etc.button_ments['again']], timeout=1000 * 30)
@@ -270,9 +251,9 @@ def do_routine_11_30():
     park4139.commentize('음악을 재생합니다')
 
 
-def speak_current_time():
-    park4139.commentize(f'현재 날짜와 시각은')
-    park4139.commentize(f'{yyyy}년 {int(MM)}월 {int(dd)}일 {int(HH)}시 {int(mm)}분 입니다')
+def speak_yyyy_MM_dd_HH_mm():
+    park4139.speak(f'현재 날짜와 시각은')
+    park4139.speak(f'{int(yyyy)}년 {int(MM)}월 {int(dd)}일 {int(HH)}시 {int(mm)}분 입니다')
 
 
 def change_console_color():
@@ -281,68 +262,34 @@ def change_console_color():
 
 
 def do_random_schedules():
-    if random.random() >= 0.5:
-        park4139.commentize(f"랜덤 스케쥴 로또를 돌릴 시간이 찾아왔습니다")
-    park4139.commentize(f"랜덤 스케쥴 로또를 돌립니다")
-    if random.random() >= 0.5:
-        park4139.commentize(f"두구두구두")
-    if random.random() >= 0.5:
-        park4139.commentize(f"어떤숫자가 나올까요")
-    while True:
+    park4139.commentize("랜덤 스케쥴을 수행합니다")
+    # 정상이 아닌것 같은데 마치 비동기 실행이 됨.
+    # random_schedules = [
+    #     should_i_empty_trash_can(),
+    #     speak_yyyy_MM_dd_HH_mm(),
+    #     change_console_color(),
+    #     bkup_smallest_targets(),
+    #     speak_HH_mm(),
+    #     gather_storages(),
+    #     kill_alsong(),
+    # ]
+    # random_no = random.randrange(0, len(random_schedules))  # 0에서 7 사이의 수
+    # random_schedules[random_no]
 
-        random_no = random.randrange(1, 101)  # 1에서 100 사이의 수
-        if random_no == 1:
-            park4139.commentize(f"{random_no}번 당첨입니다")
-            park4139.commentize(f"이번엔 특별히 쉬세요")
-            break
-        elif random_no == 2:
-            park4139.commentize(f"{random_no}번 당첨입니다")
-            should_i_empty_trash_can()
-            break
-        elif random_no == 3:
-            park4139.commentize(f"{random_no}번 당첨입니다")
-            speak_current_time()
-            break
-        elif random_no == 4:
-            park4139.commentize(f"{random_no}번 당첨입니다")
-            change_console_color()
-            break
-        elif random_no == 55:
-            park4139.commentize(f"{random_no}번 당첨입니다")
-            bkup_biggest_targets()
-            break
-        elif random_no == 56:
-            do_schedule_56(56)
-            break
-        elif random_no == 57:
-            do_schedule_57(57)
-            break
-        elif random_no == 58:
-            do_schedule_58(58)
-            break
-        elif random_no == 59:
-            gather_storages(59)
-            break
-        elif random_no == 60:
-            kill_alsong()
-            break
-        else:
-            print(f"꽝입니다")
-            if random.random() >= 0.5:
-                park4139.commentize(f"다시 랜덤 스케쥴 로또를 돌립니다")
-            else:
-                park4139.commentize(f"나올때까지 계속 돌릴겁니다")
+    # 정상이 아닌것 같은데 마치 비동기 실행이 됨.
+    random_schedules = [
+        speak_yyyy_MM_dd_HH_mm,
+        speak_HH_mm, 
+    ]
+    random_no = random.randrange(0, len(random_schedules))  # 0에서 7 사이의 수
+    random_schedules[random_no]
 
-
-@decorate_ment_about_time
-def do_routine_24_00():
-    park4139.commentize(f'{int(yyyy)}년 {int(MM)}월 {int(dd)}일 {int(HH)}시 {int(mm)}분 입니다')
 
 
 @decorate_ment_about_time
 def do_routine_13_00():
-    park4139.commentize('기분좋아지도록 음악을 재생합니다')
-
+    park4139.speak('기분좋아지도록 노동요를 재생합니다')
+    park4139.get_cmd_output(r'explorer "C:\Users\WIN10PROPC3\Desktop\services\storage\음악모음.dpl"')
 
 @decorate_ment_about_time
 def do_routine_22_10():
@@ -350,11 +297,15 @@ def do_routine_22_10():
     park4139.commentize('샤워루틴을 수행하실 것을 추천드립니다')
     park4139.commentize('샤워루틴을 보조를 수행할까요')
 
-
 @decorate_ment_about_time
 def do_routine_22_40():
     park4139.commentize('지금 누우실 것을 추천드립니다')
     park4139.commentize('건강을 위해서 씻고 주무실 것을 추천드립니다')
+
+@decorate_ment_about_time
+def do_routine_24_00():
+    speak_yyyy_MM_dd_HH_mm()
+    bkup_biggest_targets()
 
 
 def do_routine_that_to_make_developer_go_to_sleep():
@@ -412,9 +363,9 @@ def do_routine_per_60_mins(per_x_min: int):
     should_i_empty_trash_can()
 
 
-def is_accesable_local_database(db_abspath :str,db_template:str):
+def is_accesable_local_database(db_abspath: str, db_template: str):
     if not os.path.exists(db_abspath):
-        park4139.create_db_toml(db_abspath=db_abspath, db_template=db_template )
+        park4139.create_db_toml(db_abspath=db_abspath, db_template=db_template)
         return False
     else:
         return True
@@ -423,6 +374,8 @@ def is_accesable_local_database(db_abspath :str,db_template:str):
 try:
     if __name__ == "__main__":
         loop_cnt = 0
+        target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
+        key = "parks2park_archive_log_line_cnt"
         while True:
             # 가능한 짧은 시간 마다(루프마다)
             yyyy = park4139.get_time_as_('%Y')
@@ -440,11 +393,9 @@ try:
                 if not is_accesable_local_database(db_template=park4139.db_template, db_abspath=park4139.db_abspath):
                     park4139.commentize("로컬 데이터베이스에 접근이 가능하도록 설정합니다")
 
+                classify_targets_between_smallest_targes_biggest_targets()
 
-                target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
-                key = "parks2park_archive_log_line_cnt"
                 park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
-
 
                 # park4139.commentize(title = '전역 pkg_park4139 업데이트')
                 # 이 메소드는 프로젝트 내에 지역적으로 위치한 pkg_park4139 하나만 관리해도
@@ -454,8 +405,8 @@ try:
 
             # 루프 카운트 갱신
             loop_cnt = loop_cnt + 1
-            print(f"loop_cnt : {loop_cnt}")
-            # print(loop_cnt)
+            # print(f"loop_cnt : {loop_cnt}")
+            print(loop_cnt)
 
             # 0시에서 24시 사이,
             if 0 <= int(HH) <= 24:
@@ -487,23 +438,14 @@ try:
                     # 5초 마다
                 if int(ss) % 5 == 0:
                     if loop_cnt == 1:
-                        park4139.commentize(f"5초마다 자동빽업 루틴을 수행합니다")
+                        target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
+                        key = "parks2park_archive_log_line_cnt"
+                        park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
 
-                    target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
-                    key = "parks2park_archive_log_line_cnt"
-                    park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
+                # 1분 마다
+                if int(mm) % 1 == 0:
+                    do_random_schedules()
 
-                # 5분 마다
-                if int(mm) % 5 == 0:
-                    if loop_cnt == 1:
-                        park4139.commentize(f"5분 마다 랜덤 스케쥴 루틴을 수행합니다")
-                    try:
-                        do_random_schedules()
-                    except Exception as e:
-                        park4139.trouble_shoot("%%%FOO%%%")
-                        traceback.print_exc(file=sys.stdout)
-                        park4139.pause()
-                    pass
                 # 30분 마다
                 if int(mm) % 30 == 0:
                     do_routine_per_30_mins(30)
@@ -553,3 +495,4 @@ except Exception as e:
 # ENDING LOGGING SET UP
 park4139.log_e()
 park4139.pause()
+
