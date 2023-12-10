@@ -18,12 +18,12 @@
 
 
 :: CONSOLE SET UP
-@echo off            &&  :: CONSOLE ECHO SETTING
-color df             &&  :: CONSOLE COLOR SETTING
-chcp 65001 >nul      &&  :: KOREAN ENCODING SETTING
-title %~dpnx0 >nul   &&  :: CONSOLE TITLE SET UP
-@REM cls             &&  :: CONSOLE SCREEN CLEAR SETTING
-@REM setlocal        &&  :: LOCAL ENVRIONMENT MODE SETTING
+@echo off            
+color df             
+chcp 65001 >nul 
+title %~dpnx0 >nul
+@REM cls             
+@REM setlocal      
 
 
 :: MAXIMIZED WINDOW SET UP
@@ -67,6 +67,11 @@ goto :EOF
 cmd /k call "%~dp0.venv\Scripts\activate.bat"
 
 
+:: important py pkg
+:: pip install opencv-python
+
+
+
 :: CONSOLE DEBUGGING SETTING
 :: pause
 
@@ -82,4 +87,3 @@ cmd /k call "%~dp0.venv\Scripts\activate.bat"
 :: python ".\helper.py"
 :: python "%~dp0helper.py" %1
 :: python ".\helper.py" %FIRST_ARGUMENT%  && :: 배치파일에서 argument 파이썬 프로그램에 넘겨서 실행
-

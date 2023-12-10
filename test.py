@@ -4,8 +4,11 @@ import os
 import traceback
 import logging
 
+import keyboard
+import pyautogui
 # CUSTOM PY PKG SET UP
 import pkg_park4139
+import clipboard
 
 __author__ = 'Park4139 : Jung Hoon Park'
 park4139 = pkg_park4139.Park4139()
@@ -18,22 +21,9 @@ logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 
 import time
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-
-'''파일변경감지이벤트를 걸어 파일변경감지 시 비동기 백업처리'''
 
 
-class ProjectMonitoringEventHandler(FileSystemEventHandler):
-
-    def on_modified(self, event):
-        if event.is_directory:
-            park4139.update_db_toml(key="directory_modified", value=True, db_abspath=park4139.db_abspath)
-        else:
-            park4139.update_db_toml(key="file_modified", value=True, db_abspath=park4139.db_abspath)
-            print(event.src_path)
-            print(event.event_type)
-
+'''파일변경(이것 git으로 할 수 있잖아!)감지이벤트를 걸어 파일변경감지 시 비동기 백업처리'''
 
 
 
@@ -67,7 +57,6 @@ def print_with_test_status(status: str):
     print(status)
 
 
-@staticmethod
 def decorate_for_pause(function):
     """
         # ctrl c ctrl c 이렇게 두번 눌르면 소스 수정 후 재시작 됩니다
@@ -82,7 +71,7 @@ def decorate_for_pause(function):
 
 
 @park4139.decorate_seconds_performance_measuring_code
-# @decorate_for_pause
+@decorate_for_pause
 def test():
     try:
         # cmd = rf'python "{test_target_file}"' # SUCCESS # 가상환경이 아닌 로컬환경에서 실행이 됨.
@@ -94,17 +83,49 @@ def test():
         # cmd = rf'start cmd /c "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다 #이걸로 선정함
         # park4139.get_cmd_output(cmd)
 
+        # target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
+        # key = "parks2park_archive_log_line_cnt"
+        # park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
 
-        target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
-        key = "parks2park_archive_log_line_cnt"
-        park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
+
+        # 딕셔너리 샘플.
+        # tmp = ",".join(key for key in park4139.keyboards).split(",")
+        # print(tmp)
+        #
+        # tmp = [keyValue for keyValue in park4139.keyboards]
+        # print(tmp)
+        #
+        # for key, value in park4139.keyboards.items():
+        #     print(key, value)
+        # for key, value in park4139.keyboards.items():
+        #     print(key)
+        # for key, value in park4139.keyboards.items():
+        #     print(value)
+        #
+        # tmp = {keyValue for keyValue in park4139.keyboards}
+        # print(tmp)
+
+
+        park4139.do_rpa()
+
+
+
+        # # 여러개 체크박스 체크 예제
+        # for i in pyautogui.locateAllOnScreen("checkbox.png"):
+        #     pyautogui.click(i, duration=0.25)
+        #
+        # # 화면에서 특정범위를 제한하여 이동할때
+        # img_capture = pyautogui.locateOnScreen("Run_icon.png", region=(1800, 0, 1920, 100))
+        # img_capture = pyautogui.locateOnScreen("Run_icon.png", confidence=0.7)  # 인식이 잘안될때   유사도 70%  으로 설정
+        # pyautogui.moveTo(img_capture)
+
+
+
+
     except:
         park4139.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
         park4139.pause()
-
-
-
 
 
 # TDD 유사 환경

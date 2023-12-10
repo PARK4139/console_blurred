@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import string
 import sys
 import os
 import random
@@ -7,6 +8,9 @@ import pyautogui
 
 import traceback
 import traceback
+
+import schedule
+
 import pkg_park4139
 
 __author__ = 'Park4139 : Jung Hoon Park'
@@ -263,26 +267,27 @@ def change_console_color():
 
 def do_random_schedules():
     park4139.commentize("랜덤 스케쥴을 수행합니다")
-    # 정상이 아닌것 같은데 마치 비동기 실행이 됨.
-    # random_schedules = [
-    #     should_i_empty_trash_can(),
-    #     speak_yyyy_MM_dd_HH_mm(),
-    #     change_console_color(),
-    #     bkup_smallest_targets(),
-    #     speak_HH_mm(),
-    #     gather_storages(),
-    #     kill_alsong(),
-    # ]
-    # random_no = random.randrange(0, len(random_schedules))  # 0에서 7 사이의 수
-    # random_schedules[random_no]
+    int_random = random.randint(0, 7)
+    print(f'랜덤숫자 {int_random} 나왔습니다')
+    if int_random == 1:
+        should_i_empty_trash_can()
+    if int_random == 2:
+        speak_yyyy_MM_dd_HH_mm()
+    if int_random == 3:
+        change_console_color()
+    if int_random == 4:
+        bkup_smallest_targets()
+    if int_random == 5:
+        speak_HH_mm()
+    if int_random == 6:
+        gather_storages()
+    if int_random == 7:
+        kill_alsong()
 
-    # 정상이 아닌것 같은데 마치 비동기 실행이 됨.
-    random_schedules = [
-        speak_yyyy_MM_dd_HH_mm,
-        speak_HH_mm, 
-    ]
-    random_no = random.randrange(0, len(random_schedules))  # 0에서 7 사이의 수
-    random_schedules[random_no]
+
+
+
+
 
 
 
@@ -442,8 +447,8 @@ try:
                         key = "parks2park_archive_log_line_cnt"
                         park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
 
-                # 1분 마다
-                if int(mm) % 1 == 0:
+                # 15초 마다
+                if int(ss) % 15 == 0:
                     do_random_schedules()
 
                 # 30분 마다
@@ -495,4 +500,6 @@ except Exception as e:
 # ENDING LOGGING SET UP
 park4139.log_e()
 park4139.pause()
+
+
 
