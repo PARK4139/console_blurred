@@ -17,6 +17,23 @@ hdlr.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
 logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+'''파일변경감지이벤트를 걸어 파일변경감지 시 비동기 백업처리'''
+
+
+class ProjectMonitoringEventHandler(FileSystemEventHandler):
+
+    def on_modified(self, event):
+        if event.is_directory:
+            park4139.update_db_toml(key="directory_modified", value=True, db_abspath=park4139.db_abspath)
+        else:
+            park4139.update_db_toml(key="file_modified", value=True, db_abspath=park4139.db_abspath)
+            print(event.src_path)
+            print(event.event_type)
+
 
 
 
@@ -41,12 +58,58 @@ def decorate_test_status_printing_code(function):
     def wrapper():
         park4139.commentize(rf"test status")
         function()
+
     return wrapper
+
 
 @decorate_test_status_printing_code
 def print_with_test_status(status: str):
     print(status)
 
+
+@staticmethod
+def decorate_for_pause(function):
+    """
+        # ctrl c ctrl c 이렇게 두번 눌르면 소스 수정 후 재시작 됩니다
+        # 안그럼 계속 새롭게 창을 무한정 열게 되어 컴퓨터가 다운될 수 있습니다.
+    """
+
+    def wrapper():
+        function()
+        park4139.pause()
+
+    return wrapper
+
+
+@park4139.decorate_seconds_performance_measuring_code
+# @decorate_for_pause
+def test():
+    try:
+        # cmd = rf'python "{test_target_file}"' # SUCCESS # 가상환경이 아닌 로컬환경에서 실행이 됨.
+        # cmd = rf'start cmd /k "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다
+        # cmd = rf'start /b cmd /c "{test_helping_bat_file}" {test_target_file}' # FAIL  # 가상환경에서 실행되나 콘솔에 아무것도 출력되지 않음
+        # cmd = rf'call "{test_helping_bat_file}" {test_target_file}'  # FAIL  # 가상환경에서 실행되나 콘솔에 사용자 입력만 출력됨
+        # cmd = rf'"{test_helping_bat_file}" {test_target_file}' # FAIL  # 가상환경에서 실행되나  콘솔에 사용자 입력만 출력됨
+        # cmd = rf'call cmd /c "{test_helping_bat_file}" {test_target_file}'  # FAIL  # 가상환경에서 실행되나 콘솔에 사용자 입력만 출력됨
+        # cmd = rf'start cmd /c "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다 #이걸로 선정함
+        # park4139.get_cmd_output(cmd)
+
+
+        target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
+        key = "parks2park_archive_log_line_cnt"
+        park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
+    except:
+        park4139.trouble_shoot("%%%FOO%%%")
+        traceback.print_exc(file=sys.stdout)
+        park4139.pause()
+
+
+
+
+
+# TDD 유사 환경
+# 파일 변화 확인 로직 필요.
+# 파일 읽어와서 전체 자리수가 바뀌면 파일 변화 한 것으로 보면 된다. 완벽하진 않아도 대부분 해소
 
 
 content = r"""
@@ -56,55 +119,6 @@ content = r"""
 
 
 """
-
-
-@staticmethod
-def decorate_for_pause(function):
-    """시간성능 측정 코드"""
-
-    def wrapper():
-        function()
-        park4139.pause()
-    return wrapper
-
-@park4139.decorate_seconds_performance_measuring_code
-def test_pauseless():
-    # ctrl c ctrl c 이렇게 두번 눌르면 소스 수정 후 재시작 된다
-    # 안그럼 계속 새롭게 창을 무한정 열게 되어 컴퓨터가 다운될 수 있습니다.
-    pass
-
-
-@park4139.decorate_seconds_performance_measuring_code
-@decorate_for_pause
-def test():
-    # cmd = rf'python "{test_target_file}"' # SUCCESS # 가상환경이 아닌 로컬환경에서 실행이 됨.
-    # cmd = rf'start cmd /k "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다
-    # cmd = rf'start /b cmd /c "{test_helping_bat_file}" {test_target_file}' # FAIL  # 가상환경에서 실행되나 콘솔에 아무것도 출력되지 않음
-    # cmd = rf'call "{test_helping_bat_file}" {test_target_file}'  # FAIL  # 가상환경에서 실행되나 콘솔에 사용자 입력만 출력됨
-    # cmd = rf'"{test_helping_bat_file}" {test_target_file}' # FAIL  # 가상환경에서 실행되나  콘솔에 사용자 입력만 출력됨
-    # cmd = rf'call cmd /c "{test_helping_bat_file}" {test_target_file}'  # FAIL  # 가상환경에서 실행되나 콘솔에 사용자 입력만 출력됨
-    # cmd = rf'start cmd /c "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다 #이걸로 선정함
-    # park4139.get_cmd_output(cmd)
-
-    target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
-    key = "parks2park_archive_log_line_cnt"
-    park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
-
-
-
-
-
-    pass
-
-
-# TDD 유사 환경
-# 파일 변화 확인 로직 필요.
-# 파일 읽어와서 전체 자리수가 바뀌면 파일 변화 한 것으로 보면 된다. 완벽하진 않아도 대부분 해소
-
-
-
-
-
 
 if __name__ == '__main__':
     try:
@@ -128,12 +142,9 @@ if __name__ == '__main__':
                         # test_target_file = "test_pyside6_debugger.py"
                         print(f"test_target_file      :{test_target_file}")
 
-
                         park4139.commentize(f"{test_target_file} TEST LOOP {test_loop_cnt} STARTED")
-                        # test_pauseless()
                         test()
                         park4139.commentize(f"{test_target_file} TEST LOOP {test_loop_cnt} ENDED")
-
 
                         # park4139.sleep(milliseconds=5000)
                         test_loop_cnt = test_loop_cnt + 1
