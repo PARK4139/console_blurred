@@ -23,7 +23,7 @@ logger.setLevel(logging.INFO)
 import time
 
 
-'''파일변경(이것 git으로 할 수 있잖아!)감지이벤트를 걸어 파일변경감지 시 비동기 백업처리'''
+
 
 
 
@@ -74,6 +74,12 @@ def decorate_for_pause(function):
 @decorate_for_pause
 def test():
     try:
+        question = "파이썬 이걸로 개발자로서 20년간 밥벌이가 될까?"
+        park4139.ask_to_google(question)
+        park4139.ask_to_bard(question)
+        park4139.ask_to_wrtn(question)
+
+
         # cmd = rf'python "{test_target_file}"' # SUCCESS # 가상환경이 아닌 로컬환경에서 실행이 됨.
         # cmd = rf'start cmd /k "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다
         # cmd = rf'start /b cmd /c "{test_helping_bat_file}" {test_target_file}' # FAIL  # 가상환경에서 실행되나 콘솔에 아무것도 출력되지 않음
@@ -106,10 +112,6 @@ def test():
         # print(tmp)
 
 
-        park4139.do_rpa()
-
-
-
         # # 여러개 체크박스 체크 예제
         # for i in pyautogui.locateAllOnScreen("checkbox.png"):
         #     pyautogui.click(i, duration=0.25)
@@ -118,9 +120,7 @@ def test():
         # img_capture = pyautogui.locateOnScreen("Run_icon.png", region=(1800, 0, 1920, 100))
         # img_capture = pyautogui.locateOnScreen("Run_icon.png", confidence=0.7)  # 인식이 잘안될때   유사도 70%  으로 설정
         # pyautogui.moveTo(img_capture)
-
-
-
+        pass
 
     except:
         park4139.trouble_shoot("%%%FOO%%%")
@@ -157,24 +157,25 @@ if __name__ == '__main__':
             if int(ss) % 5 == 0:
                 while True:
                     try:
-                        park4139.commentize(f"TEST LOOP INITIAL SET UP")
-                        test_helping_bat_file = "test foo_py as virtual env.bat"
-                        test_target_file = "test_keyboard.py"
+                        # park4139.commentize(f"TEST LOOP INITIAL SET UP")
+                        # test_helping_bat_file = "test foo_py as virtual env.bat"
+                        # test_target_file = "test_keyboard.py"
                         # test_target_file = "test_pyside6_debugger.py"
-                        print(f"test_target_file      :{test_target_file}")
+                        # print(f"test_target_file      :{test_target_file}")
+                        # park4139.commentize(f"{test_target_file} TEST LOOP {test_loop_cnt} STARTED")
+                        # test()
+                        # park4139.commentize(f"{test_target_file} TEST LOOP {test_loop_cnt} ENDED")
 
-                        park4139.commentize(f"{test_target_file} TEST LOOP {test_loop_cnt} STARTED")
+
+
+                        park4139.commentize(f" TEST LOOP {test_loop_cnt} STARTED")
                         test()
-                        park4139.commentize(f"{test_target_file} TEST LOOP {test_loop_cnt} ENDED")
-
-                        # park4139.sleep(milliseconds=5000)
-                        test_loop_cnt = test_loop_cnt + 1
-
+                        park4139.commentize(f" TEST LOOP {test_loop_cnt} ENDED")
                     except:
                         print_with_test_status()
-                        # park4139.sleep(milliseconds=5000)
                         continue
-
+                    test_loop_cnt = test_loop_cnt + 1
+                    # park4139.sleep(milliseconds=5000)
             # 루프 휴식
             park4139.sleep(milliseconds=1000)
 
