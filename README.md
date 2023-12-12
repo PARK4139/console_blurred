@@ -47,10 +47,10 @@
 
 
 ### using example
+<!--
 - DO NOT TRY TO USE THIS PROJECT. IT WILL NOT WORK. 
 - BECAUSE MY CUSTOM PYTHON PACKAGE IS NOT PUSHED TO THIS GIT HUB REPOSITORY.
-<!--
+-->
  refer to file "index.bat"
 - call ".\.venv\Scripts\activate.bat"
 - python index.py  
--->
