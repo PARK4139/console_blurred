@@ -1,17 +1,27 @@
+import random
 import sys
 import re
 import os
 import traceback
 import logging
+from ctypes.wintypes import HWND
 
 import keyboard
 import pyautogui
+from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtGui import QScreen, QIcon, QShortcutEvent, QShortcut, QKeySequence
+from PySide6.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QLineEdit, QPushButton, QPlainTextEdit, QTextEdit, QTableWidget, QTableWidgetItem
+
 # CUSTOM PY PKG SET UP
 import pkg_park4139
 import clipboard
 
+from BlurWindow.blurWindow import GlobalBlur, blur
+
 __author__ = 'Park4139 : Jung Hoon Park'
-park4139 = pkg_park4139.Park4139()
+
+Park4139 = pkg_park4139.Park4139()
 
 # LOGGER SET UP
 logger = logging.getLogger('park4193_test_logger')
@@ -20,22 +30,16 @@ hdlr.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
 logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 
-import time
 
-
-
-
-
-
-@park4139.decorate_seconds_performance_measuring_code
+@Park4139.decorate_seconds_performance_measuring_code
 def generate_mp3_file_for_time_performance():  # time performance : 9028 초 /60 /60  =  2.5 시간
     """
     시간에 대한 mp3 파일 작업 최적화 함수
     """
     for HH in range(24, 0, -1):
         for mm in range(0, 60):
-            park4139.commentize(f'{int(HH)}시')
-            park4139.commentize(f'{int(mm)}분 입니다')
+            Park4139.commentize(f'{int(HH)}시')
+            Park4139.commentize(f'{int(mm)}분 입니다')
 
 
 # park4139.commentize() 메소드 테스트 결과, 1개 파일을 만들어 실행하는 데까지 무려 11초 정도로 측정됨, ffmpeg 작업 속도로 문제
@@ -46,7 +50,7 @@ def generate_mp3_file_for_time_performance():  # time performance : 9028 초 /60
 
 def decorate_test_status_printing_code(function):
     def wrapper():
-        park4139.commentize(rf"test status")
+        Park4139.commentize(rf"test status")
         function()
 
     return wrapper
@@ -65,20 +69,49 @@ def decorate_for_pause(function):
 
     def wrapper():
         function()
-        park4139.pause()
+        Park4139.pause()
 
     return wrapper
 
 
-@park4139.decorate_seconds_performance_measuring_code
+
+qss = """
+    # QWidget {
+    #     color: #FFFFFF;
+    #     background: #333333;
+    #     height: 32px;
+    # }
+    # QLabel {
+    #     color: #FFFFFF;
+    #     background: #333333;
+    #     font-size: 16px;
+    #     padding: 5px 5px;
+    # }
+    # QToolButton {
+    #     background: #333333;
+    #     border: none;
+    # }
+    # QToolButton:hover{
+    #     background: #444444;
+    # }
+"""
+
+
+@Park4139.decorate_seconds_performance_measuring_code
 @decorate_for_pause
 def test():
     try:
         question = "파이썬 이걸로 개발자로서 20년간 밥벌이가 될까?"
-        park4139.ask_to_google(question)
-        park4139.ask_to_bard(question)
-        park4139.ask_to_wrtn(question)
 
+        # Park4139.ask_to_google(question)
+        # Park4139.ask_to_bard(question)
+        # Park4139.ask_to_wrtn(question)
+
+        # Park4139.search_animation_data_from_web()
+
+        # Park4139.run_rpa_program_legacy()
+
+        Park4139.run_rpa_program()
 
         # cmd = rf'python "{test_target_file}"' # SUCCESS # 가상환경이 아닌 로컬환경에서 실행이 됨.
         # cmd = rf'start cmd /k "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다
@@ -92,7 +125,6 @@ def test():
         # target_abspath = fr'{park4139.USERPROFILE}\Desktop\services\archive_py\parks2park_archive.log'
         # key = "parks2park_archive_log_line_cnt"
         # park4139.monitor_target_edited_and_bkup(target_abspath=target_abspath, key=key)
-
 
         # 딕셔너리 샘플.
         # tmp = ",".join(key for key in park4139.keyboards).split(",")
@@ -111,7 +143,6 @@ def test():
         # tmp = {keyValue for keyValue in park4139.keyboards}
         # print(tmp)
 
-
         # # 여러개 체크박스 체크 예제
         # for i in pyautogui.locateAllOnScreen("checkbox.png"):
         #     pyautogui.click(i, duration=0.25)
@@ -123,9 +154,9 @@ def test():
         pass
 
     except:
-        park4139.trouble_shoot("%%%FOO%%%")
+        Park4139.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
-        park4139.pause()
+        Park4139.pause()
 
 
 # TDD 유사 환경
@@ -145,39 +176,29 @@ if __name__ == '__main__':
     try:
         test_loop_cnt = 1
         while (True):
-            yyyy = park4139.get_time_as_('%Y')
-            MM = park4139.get_time_as_('%m')
-            dd = park4139.get_time_as_('%d')
-            HH = park4139.get_time_as_('%H')
-            mm = park4139.get_time_as_('%M')
-            ss = park4139.get_time_as_('%S')
-            server_time = park4139.get_time_as_(rf'%Y-%m-%d %H:%M:%S')
-            park4139.commentize("TRYING TO ENTER TEST LOOP...")
+            yyyy = Park4139.get_time_as_('%Y')
+            MM = Park4139.get_time_as_('%m')
+            dd = Park4139.get_time_as_('%d')
+            HH = Park4139.get_time_as_('%H')
+            mm = Park4139.get_time_as_('%M')
+            ss = Park4139.get_time_as_('%S')
+            server_time = Park4139.get_time_as_(rf'%Y-%m-%d %H:%M:%S')
+            Park4139.commentize("TRYING TO ENTER TEST LOOP...")
             # 5초 마다
-            if int(ss) % 5 == 0:
+            # if int(ss) % 5 == 0:
+            if int(ss) % 1 == 0:
                 while True:
                     try:
-                        # park4139.commentize(f"TEST LOOP INITIAL SET UP")
-                        # test_helping_bat_file = "test foo_py as virtual env.bat"
-                        # test_target_file = "test_keyboard.py"
-                        # test_target_file = "test_pyside6_debugger.py"
-                        # print(f"test_target_file      :{test_target_file}")
-                        # park4139.commentize(f"{test_target_file} TEST LOOP {test_loop_cnt} STARTED")
-                        # test()
-                        # park4139.commentize(f"{test_target_file} TEST LOOP {test_loop_cnt} ENDED")
-
-
-
-                        park4139.commentize(f" TEST LOOP {test_loop_cnt} STARTED")
+                        Park4139.commentize(f" TEST LOOP {test_loop_cnt} STARTED")
                         test()
-                        park4139.commentize(f" TEST LOOP {test_loop_cnt} ENDED")
+                        Park4139.commentize(f" TEST LOOP {test_loop_cnt} ENDED")
                     except:
                         print_with_test_status()
                         continue
                     test_loop_cnt = test_loop_cnt + 1
                     # park4139.sleep(milliseconds=5000)
             # 루프 휴식
-            park4139.sleep(milliseconds=1000)
+            # Park4139.sleep(milliseconds=1000)
 
         # 의도적 트러블 발생
         # raise shutil.Error("의도적 트러블 발생")
