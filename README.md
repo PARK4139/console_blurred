@@ -6,10 +6,13 @@
 ### DESCRIPTION
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 ![We can't find image file](https://red-steps.netlify.app/rpa_program.PNG)
-
+*rpa_program.PNG*
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 ![We can't find image file](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
-
+*new_ui_prototype_2023_12_13_20_03.png*
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
+![We can't find image file](https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png)
+*new_ui_prototype_2023_12_14_01_11.png*
 
 <!-- ![We can't find image file](https://red-steps.netlify.app/sky1.jpg) -->
 <!-- ![We can't find image file](https://red-steps.netlify.app/sky2.jpg) -->
@@ -51,11 +54,13 @@
 - 2023 12 12 11:44:35 ADDED FUNCTIONS THAT TAKING SCREEN SHOT
 - 2023 12 12 11:44:35 ADDED FUNCTIONS THAT DOWNLOAD YOUTUBE(AS POSSIBLE AS HIQUALITY)
 - 2023 12 12 11:44:35 ADDED FUNCTIONS THAT BACK UP TARGET(YOU CAN BACK UP WHETHER IT'S A DIRECTORY OR A FILE)
-- 2023 12 13 20:01:40 CHANGE UI AS PROTOTYPE
+- 2023 12 13 20:01:40 CHANGED UI AS PROTOTYPE
 - 2023 12 13 20:01:40 TESTED FUNCTIONS BEFORE AND DEBUG (NO FILE PATH ISSUE/NOT INTENDED FUNCTION CALLING)
 - 2023 12 13 20:01:40 TESTED BUILD TEST BY PYINSTALLER (TTS FUNCTION FAILED, I GUESS THIS TROUBLE IS CAUSED CODE RELATED TO FILE PATH, THIS IS AN UNRESOLVED ISSUE)
 - 2023 12 13 20:01:40 UPDATED "README.md"
-
+- 2023 12 14 01:27:55 ADDED FUNCTIONS THAT SHUTDOWN COMPUTER
+- 2023 12 14 01:27:55 ADDED FUNCTIONS THAT REBOOT COMPUTER
+- 2023 12 13 20:01:40 UPDATED UI AS PROTOTYPE
 
 
 ### ABBREVIATED? USAGE EXAMPLE
