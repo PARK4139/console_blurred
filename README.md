@@ -6,13 +6,15 @@
 ### DESCRIPTION
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 ![We can't find image file](https://red-steps.netlify.app/rpa_program.PNG)
+{: .align-center}
 *rpa_program.PNG*
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 ![We can't find image file](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
+{: .align-center}
 *new_ui_prototype_2023_12_13_20_03.png*
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 ![We can't find image file](https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png)
-*new_ui_prototype_2023_12_14_01_11.png*
+{: .align-center}*new_ui_prototype_2023_12_14_01_11.png*
 
 <!-- ![We can't find image file](https://red-steps.netlify.app/sky1.jpg) -->
 <!-- ![We can't find image file](https://red-steps.netlify.app/sky2.jpg) -->
