@@ -6,7 +6,11 @@
 ### DESCRIPTION
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 ![We can't find image file](https://red-steps.netlify.app/rpa_program.PNG)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 ![We can't find image file](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
+
+
 <!-- ![We can't find image file](https://red-steps.netlify.app/sky1.jpg) -->
 <!-- ![We can't find image file](https://red-steps.netlify.app/sky2.jpg) -->
 <!-- ![We can't find image file](https://red-steps.netlify.app/sky3.jpg) -->
@@ -54,12 +58,12 @@
 
 
 
-### Abbreviated? usage example
+### ABBREVIATED? USAGE EXAMPLE
 <!-- - clone this project 
 - run "~\archive_py\dist\index.exe" -->
-not ready yet, but I have a plan to build program as pyinstaller and study license related to program publishing.
-### detail usage example for git hub beginner
-not ready yet, but I have a plan to build program as pyinstaller and study license related to program publishing.
+NOT READY YET, BUT I HAVE A PLAN TO BUILD PROGRAM AS PYINSTALLER AND I AM STUDING LICENSE RELATED TO PROGRAM PUBLISHING.
+### DETAIL USAGE EXAMPLE FOR GIT HUB BEGINNER
+NOT READY YET, BUT I HAVE A PLAN TO BUILD PROGRAM AS PYINSTALLER AND I AM STUDING LICENSE RELATED TO PROGRAM PUBLISHING.
 <!-- - press windows key
 - type cmd.exe
 - press enter
