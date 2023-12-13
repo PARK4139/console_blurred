@@ -1,7 +1,7 @@
 ### DESCRIPTION
 | ![space-1.jpg](http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg) | 
-|:--:| 
-| *Space* |
+:--:
+*Space*
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 ![We can't find image file](https://red-steps.netlify.app/rpa_program.PNG)*rpa_program.PNG*
