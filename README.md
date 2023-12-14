@@ -4,32 +4,33 @@
 - I expect that this program save my time and take Happy Time To Stay With My Dog In Future
 
 
-### DESCRIPTION
+### PREVIEW
 <!-- ![space-1.jpg](http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg)  -->
 <!-- :--:
 *Space* -->
-
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
-  ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG){width=50% height=50%}  
+
+<!-- ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG)  이 방식은 IMAGE RESIZING 안된다고 해서 방식 변경, 방법이 있긴한데 지킬관련 코드를 이용해야 함-->
+<img src="https://red-steps.netlify.app/rpa_program.PNG" width="200" height="200"/>   
 :--:
-*rpa_program.PNG*
+*auto_program.PNG*
 
+<!-- ![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
+<img src="" width="200" height="200"/>  -->
 
-![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png){width=50% height=50%}  
+<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="200" height="200"/>  
 :--:
-*new_ui_prototype_2023_12_13_20_03.png* 
+*ui_prototype_2023_12_13_20_03.png* 
 
 
-
-![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png){width=50% height=50%}
+<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="200" height="200"/> 
 :--:
-*new_ui_prototype_2023_12_14_01_11.png*
+*ui_prototype_2023_12_14_01_11.png*
 
 
-![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png){width=50% height=50%}
+<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="200" height="200"/> 
 :--:
-*new_ui_prototype_2023_12_14_16_39.png*
-
+*new_ui_prototype_2023_12_14_16_39.png* 
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky1.jpg) -->
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky2.jpg) -->
@@ -37,8 +38,8 @@
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky4.jpg) -->
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky5.jpg) -->
 [//]: # (![WHERE IS IMG?]&#40;https://red-steps.netlify.app/sky6.jpg&#41;)
-<!-- *LOVELY MY DOG.png* -->
-
+<!-- *LOVELY MY DOG.png* -->  
+ 
 
 ### IT TESTED IN ENVIRONMENT BELOW
 - WINDOWS 10 PRO 
@@ -85,12 +86,12 @@
 
 
 
-### ABBREVIATED? USAGE EXAMPLE
+<!-- ### ABBREVIATED? USAGE EXAMPLE -->
 <!-- - clone this project 
 - run "~\archive_py\dist\index.exe" -->
-NOT READY YET, BUT I HAVE A PLAN TO BUILD PROGRAM AS PYINSTALLER AND I AM STUDING LICENSE RELATED TO PROGRAM PUBLISHING.
-### DETAIL USAGE EXAMPLE FOR GIT HUB BEGINNER
-NOT READY YET, BUT I HAVE A PLAN TO BUILD PROGRAM AS PYINSTALLER AND I AM STUDING LICENSE RELATED TO PROGRAM PUBLISHING.
+<!-- NOT READY YET, BUT I HAVE A PLAN TO BUILD PROGRAM AS PYINSTALLER AND I AM STUDING LICENSE RELATED TO PROGRAM PUBLISHING. -->
+<!-- ### DETAIL USAGE EXAMPLE FOR GIT HUB BEGINNER -->
+<!-- NOT READY YET, BUT I HAVE A PLAN TO BUILD PROGRAM AS PYINSTALLER AND I AM STUDING LICENSE RELATED TO PROGRAM PUBLISHING. -->
 <!-- - press windows key
 - type cmd.exe
 - press enter
