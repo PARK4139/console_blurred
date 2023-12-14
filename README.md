@@ -1,39 +1,44 @@
+### THIS SERVICE
+- python auto progarm for korean (its TTS system, Text is setted as Korean)
+- The goal of this project is to help you live a convenient lifestyle by automating pattern tasks around you based on python tests
+- I expect that this program save my time and take Happy Time To Stay With My Dog In Future
+
+
 ### DESCRIPTION
 <!-- ![space-1.jpg](http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg)  -->
 <!-- :--:
 *Space* -->
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
-![We can't find image file](https://red-steps.netlify.app/rpa_program.PNG)
+  ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG){width=50% height=50%}  
 :--:
 *rpa_program.PNG*
 
 
-
-<!-- ![We can't find image file](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
+![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png){width=50% height=50%}  
 :--:
-*new_ui_prototype_2023_12_13_20_03.png* -->
+*new_ui_prototype_2023_12_13_20_03.png* 
 
 
 
-![We can't find image file](https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png)
+![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png){width=50% height=50%}
 :--:
 *new_ui_prototype_2023_12_14_01_11.png*
 
 
-<!-- ![We can't find image file](https://red-steps.netlify.app/sky1.jpg) -->
-<!-- ![We can't find image file](https://red-steps.netlify.app/sky2.jpg) -->
-<!-- ![We can't find image file](https://red-steps.netlify.app/sky3.jpg) -->
-<!-- ![We can't find image file](https://red-steps.netlify.app/sky4.jpg) -->
-<!-- ![We can't find image file](https://red-steps.netlify.app/sky5.jpg) -->
-[//]: # (![We can't find image file]&#40;https://red-steps.netlify.app/sky6.jpg&#41;)
+![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png){width=50% height=50%}
+:--:
+*new_ui_prototype_2023_12_14_16_39.png*
+
+
+<!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky1.jpg) -->
+<!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky2.jpg) -->
+<!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky3.jpg) -->
+<!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky4.jpg) -->
+<!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky5.jpg) -->
+[//]: # (![WHERE IS IMG?]&#40;https://red-steps.netlify.app/sky6.jpg&#41;)
 <!-- *LOVELY MY DOG.png* -->
 
-
-### THIS SERVICE
-- python auto progarm for korean (its TTS system, Text is setted as Korean)
-- The goal of this project is to help you live a convenient lifestyle by automating pattern tasks around you based on python tests
-- I expect that this program save my time and take Happy Time To Stay With My Dog In Future
 
 ### IT TESTED IN ENVIRONMENT BELOW
 - WINDOWS 10 PRO 
@@ -76,6 +81,8 @@
 - 2023 12 14 01:27:55 ADDED FUNCTIONS THAT REBOOT COMPUTER
 - 2023 12 13 20:01:40 UPDATED UI AS PROTOTYPE
 - 2023 12 13 20:01:40 UPDATED "README.md"
+- 2023 12 14 16:27:12 APPLIED FIXED-WIDTH-FONT
+
 
 
 ### ABBREVIATED? USAGE EXAMPLE
