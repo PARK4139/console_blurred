@@ -32,6 +32,16 @@
 </figure>
 
 
+
+<div align="center">
+  <img src="http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg" alt="이미지 설명">
+  <p>캡션 내용</p>
+</div>
+ 
+<div align="center">
+  <img src="이미지 파일 경로" alt="이미지 설명">
+  <p>캡션 내용</p>
+</div>
  
 
 
