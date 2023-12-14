@@ -12,8 +12,10 @@
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG)  이 방식은 IMAGE RESIZING 안된다고 해서 방식 변경, 방법이 있긴한데 지킬관련 코드를 이용해야 함-->
 <img src="https://red-steps.netlify.app/rpa_program.PNG" width="200" height="200"/>   
-:--:
-*auto_program.PNG*
+<figcaption style= "display: block; margin-top: 10px;">
+auto_program.PNG
+</figcaption>
+
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
 <img src="" width="200" height="200"/>  -->
