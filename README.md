@@ -19,7 +19,7 @@
 </div>
 
 <div align="center">
-  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="60%" height="60%"/>  
+  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="90%" height="90%"/>   
   <p>ui_prototype_2023_12_13_20_03.png</p>
 </div>
 
