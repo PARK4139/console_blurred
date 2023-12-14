@@ -11,28 +11,32 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG)  이 방식은 IMAGE RESIZING 안된다고 해서 방식 변경, 방법이 있긴한데 지킬관련 코드를 이용해야 함-->
-<img src="https://red-steps.netlify.app/rpa_program.PNG" width="200" height="200"/>   
-<figcaption style= "display: block; margin-top: 10px;">
-auto_program.PNG
+<img src="https://red-steps.netlify.app/rpa_program.PNG" width="60%" height="60%"/>   
+<figcaption style= "display: block;  text-align: center;">
+    auto_program.PNG
 </figcaption>
 
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
-<img src="" width="200" height="200"/>  -->
+<img src="" width="60%" height="60%"/>  -->
 
-<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="200" height="200"/>  
-:--:
-*ui_prototype_2023_12_13_20_03.png* 
-
-
-<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="200" height="200"/> 
-:--:
-*ui_prototype_2023_12_14_01_11.png*
+<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="60%" height="60%"/>  
+<figcaption style= "display: block;  text-align: center;">
+    ui_prototype_2023_12_13_20_03.png
+</figcaption>
 
 
-<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="200" height="200"/> 
-:--:
-*new_ui_prototype_2023_12_14_16_39.png* 
+<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="60%" height="60%"/> 
+<figcaption style= "display: block;  text-align: center;">
+    ui_prototype_2023_12_14_01_11.png
+</figcaption>
+
+
+<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="60%" height="60%"/> 
+<figcaption style= "display: block;  text-align: center;">
+    new_ui_prototype_2023_12_14_16_39.png
+</figcaption>
+
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky1.jpg) -->
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky2.jpg) -->
@@ -85,6 +89,7 @@ auto_program.PNG
 - 2023 12 13 20:01:40 UPDATED UI AS PROTOTYPE
 - 2023 12 13 20:01:40 UPDATED "README.md"
 - 2023 12 14 16:27:12 APPLIED FIXED-WIDTH-FONT
+- 2023 12 14 17:05:38 UPDATED "README.md"
 
 
 
