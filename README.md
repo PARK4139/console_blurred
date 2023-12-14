@@ -14,7 +14,7 @@
 
 
 <div align="center">
-  <img src="https://red-steps.netlify.app/rpa_program.PNG" width="60%" height="60%"/>   
+  <img src="https://red-steps.netlify.app/rpa_program.PNG" width="90%" height="90%"/>   
   <p>auto_program.PNG</p>
 </div>
 
@@ -24,7 +24,7 @@
 </div>
 
 <div align="center">
-  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="60%" height="60%"/> 
+  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="40%" height="40%"/> 
   <p>ui_prototype_2023_12_14_01_11.png</p>
 </div>
 
