@@ -11,31 +11,28 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG)  이 방식은 IMAGE RESIZING 안된다고 해서 방식 변경, 방법이 있긴한데 지킬관련 코드를 이용해야 함-->
-<img src="https://red-steps.netlify.app/rpa_program.PNG" width="60%" height="60%"/>   
-<div style= "text-align: center;">
-    auto_program.PNG
-</div>
+<figure style="text-align: center;">
+  <img src="https://red-steps.netlify.app/rpa_program.PNG" width="60%" height="60%"/>   
+  <figcaption>auto_program.PNG</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="60%" height="60%"/>  
+  <figcaption>ui_prototype_2023_12_13_20_03.png</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="60%" height="60%"/> 
+  <figcaption>ui_prototype_2023_12_14_01_11.png</figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="60%" height="60%"/> 
+  <figcaption>new_ui_prototype_2023_12_14_16_39.png</figcaption>
+</figure>
 
 
-<!-- ![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
-<img src="" width="60%" height="60%"/>  -->
-
-<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="60%" height="60%"/>  
-<div style= "text-align: center;">
-    ui_prototype_2023_12_13_20_03.png
-</div>
-
-
-<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="60%" height="60%"/> 
-<div style= "text-align: center;">
-    ui_prototype_2023_12_14_01_11.png
-</div>
-
-
-<img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="60%" height="60%"/> 
-<div style= "text-align: center;">
-    new_ui_prototype_2023_12_14_16_39.png
-</div>
+ 
 
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky1.jpg) -->
