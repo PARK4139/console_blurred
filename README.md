@@ -12,30 +12,30 @@
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG)  이 방식은 IMAGE RESIZING 안된다고 해서 방식 변경, 방법이 있긴한데 지킬관련 코드를 이용해야 함-->
 <img src="https://red-steps.netlify.app/rpa_program.PNG" width="60%" height="60%"/>   
-<figcaption style= "display: block;  text-align: center;">
+<div style= "text-align: center;">
     auto_program.PNG
-</figcaption>
+</div>
 
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png)
 <img src="" width="60%" height="60%"/>  -->
 
 <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="60%" height="60%"/>  
-<figcaption style= "display: block;  text-align: center;">
+<div style= "text-align: center;">
     ui_prototype_2023_12_13_20_03.png
-</figcaption>
+</div>
 
 
 <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="60%" height="60%"/> 
-<figcaption style= "display: block;  text-align: center;">
+<div style= "text-align: center;">
     ui_prototype_2023_12_14_01_11.png
-</figcaption>
+</div>
 
 
 <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="60%" height="60%"/> 
-<figcaption style= "display: block;  text-align: center;">
+<div style= "text-align: center;">
     new_ui_prototype_2023_12_14_16_39.png
-</figcaption>
+</div>
 
 
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky1.jpg) -->
