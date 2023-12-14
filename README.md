@@ -14,8 +14,8 @@
 
 
 <div align="center">
-  <img src="https://red-steps.netlify.app/rpa_program.PNG" width="90%" height="90%"/>   
-  <p>auto_program.PNG</p>
+  <img src="https://red-steps.netlify.app/ui_prototype_2023_12_12_11_14.PNG" width="90%" height="90%"/>   
+  <p>ui_prototype_2023_12_12_11_14.PNG</p>
 </div>
 
 <div align="center">
