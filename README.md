@@ -5,43 +5,35 @@
 
 
 ### PREVIEW
-<!-- ![space-1.jpg](http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg)  -->
-<!-- :--:
-*Space* -->
-[![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
-
+<!-- [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys) -->
+<!-- <div align="center">
+  <img src="http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg" alt="이미지 설명">
+  <p>우주</p>
+</div> -->
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG)  이 방식은 IMAGE RESIZING 안된다고 해서 방식 변경, 방법이 있긴한데 지킬관련 코드를 이용해야 함-->
-<figure style="text-align: center;">
-  <img src="https://red-steps.netlify.app/rpa_program.PNG" width="60%" height="60%"/>   
-  <figcaption>auto_program.PNG</figcaption>
-</figure>
-
-<figure style="text-align: center;">
-  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="60%" height="60%"/>  
-  <figcaption>ui_prototype_2023_12_13_20_03.png</figcaption>
-</figure>
-
-<figure style="text-align: center;">
-  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="60%" height="60%"/> 
-  <figcaption>ui_prototype_2023_12_14_01_11.png</figcaption>
-</figure>
-
-<figure style="text-align: center;">
-  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="60%" height="60%"/> 
-  <figcaption>new_ui_prototype_2023_12_14_16_39.png</figcaption>
-</figure>
-
 
 
 <div align="center">
-  <img src="http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg" alt="이미지 설명">
-  <p>캡션 내용</p>
+  <img src="https://red-steps.netlify.app/rpa_program.PNG" width="60%" height="60%"/>   
+  <p>auto_program.PNG</p>
+</div>
+
+<div align="center">
+  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="60%" height="60%"/>  
+  <p>ui_prototype_2023_12_13_20_03.png</p>
+</div>
+
+<div align="center">
+  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="60%" height="60%"/> 
+  <p>ui_prototype_2023_12_14_01_11.png</p>
+</div>
+
+<div align="center">
+  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="60%" height="60%"/> 
+  <p>new_ui_prototype_2023_12_14_16_39.png</p>
 </div>
  
-<div align="center">
-  <img src="이미지 파일 경로" alt="이미지 설명">
-  <p>캡션 내용</p>
-</div>
+
  
 
 
