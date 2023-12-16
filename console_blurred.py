@@ -468,9 +468,9 @@ class RpaProgramMainWindow(QWidget):
         self.set_shortcut('EMPTY RECYCLE BIN', self.should_i_empty_trash_can)
         self.set_shortcut('ENG TO KOR', self.should_i_translate_eng_to_kor)
         self.set_shortcut('KOR TO ENG', self.translate_kor_to_eng)
-
         self.set_shortcut('EXIT', self.should_i_exit_this_program)
         self.set_shortcut('SYSTEM POWER SAVING MODE', self.should_i_enter_to_power_saving_mode)
+
         self.set_shortcut('SYSTEM REBOOT', self.reboot_this_computer)
         self.set_shortcut('SCREENSHOT CUSTOM', self.make_screenshot_custom)
         self.set_shortcut('SCREENSHOT FULL', self.make_screenshot_full)
@@ -1807,7 +1807,14 @@ class RpaProgramMainWindow(QWidget):
     #     self.show_available_shortcut_list()
 
     def reboot_this_computer(self):
-        park4139.reboot_this_computer()
+        while True:
+            if self.prompt_window is None:
+                self.prompt_window = PromptWindow(ment='시스템을 재시작할까요?', buttons=["재시작", "재시작하지 않기"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.reboot_this_computer)
+                self.prompt_window.show()
+                self.showMinimized()
+                break
+            else:
+                self.prompt_window = None
 
     @QtCore.Slot()
     def login(self):
@@ -1820,7 +1827,7 @@ class RpaProgramMainWindow(QWidget):
     def should_i_exit_this_program(self):
         while True:
             if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='앱을 종료할까요', buttons=["종료", "종료하지 않기"], default="", countdown=0, shared_obj=self.shared_obj, function=app.quit) #function 타입힌팅을 function 만 받으려고 해서 해두었는데 app.quit 도 메소드이지 않을까 했는데 아닌가 보다, app.quit 호출 시 AttributeError 에러가 발생한다. 일단 AttributeError 예외 발생 시 동작되도록 처리를 해두었다
+                self.prompt_window = PromptWindow(ment='앱을 종료할까요?', buttons=["종료", "종료하지 않기"], default="", countdown=0, shared_obj=self.shared_obj, function=app.quit) #function 타입힌팅을 function 만 받으려고 해서 해두었는데 app.quit 도 메소드이지 않을까 했는데 아닌가 보다, app.quit 호출 시 AttributeError 에러가 발생한다. 일단 AttributeError 예외 발생 시 동작되도록 처리를 해두었다
                 self.prompt_window.show()
                 self.showMinimized()
                 break

@@ -1,9 +1,10 @@
 ### THIS SERVICE
 - IT IS PYTHON AUTO PROGARM FOR KOREAN (ITS TTS SYSTEM, TEXT IS SETTED AS KOREAN)
-- I LIKE SHORTCUTS WHEN I WORK, SO I TRIED TO MADE SHORTCUT FOR ME 
+- I LIKE SHORTCUTS WHEN I WORK, SO I TRIED TO MADE SHORTCUT FOR ME
+- BLURRED DESIGN, THE REASON FOR DESIGNING WITH A BLURRED WINDOW IS PERSONAL PREFERENCE. IT MAY BE HARD TO SEE AGAINST CERTAIN BACKGROUNDS. 
 - THE GOAL OF THIS PROJECT IS TO HELP PEOPLE LIVE A CONVENIENT LIFESTYLE BY AUTOMATING PATTERN TASKS AROUND YOU BASED ON PYTHON 
 - I EXPECT THAT THIS PROGRAM SAVE MY TIME AND TAKE HAPPY TIME TO STAY WITH MY DOG IN FUTURE
-
+ 
 
 ### PREVIEW
 <!-- [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys) -->
@@ -14,20 +15,29 @@
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/rpa_program.PNG)  이 방식은 IMAGE RESIZING 안된다고 해서 방식 변경, 방법이 있긴한데 지킬관련 코드를 이용해야 함-->
 
 
-<div align="center">
-  <img src="https://red-steps.netlify.app/ui_prototype_2023_12_12_11_14.PNG" width="90%" height="90%"/>   
-  <p>ui_prototype_2023_12_12_11_14.PNG</p>
-</div>
+[//]: # (<div align="center">)
 
-<div align="center">
-  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="90%" height="90%"/>   
-  <p>ui_prototype_2023_12_13_20_03.png</p>
-</div>
+[//]: # (  <img src="https://red-steps.netlify.app/ui_prototype_2023_12_12_11_14.PNG" width="90%" height="90%"/>   )
 
-<div align="center">
-  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="40%" height="40%"/> 
-  <p>ui_prototype_2023_12_14_01_11.png</p>
-</div>
+[//]: # (  <p>ui_prototype_2023_12_12_11_14.PNG</p>)
+
+[//]: # (</div>)
+
+[//]: # (<div align="center">)
+
+[//]: # (  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_13_20_03.png" width="90%" height="90%"/>   )
+
+[//]: # (  <p>ui_prototype_2023_12_13_20_03.png</p>)
+
+[//]: # (</div>)
+
+[//]: # (<div align="center">)
+
+[//]: # (  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_01_11.png" width="40%" height="40%"/> )
+
+[//]: # (  <p>ui_prototype_2023_12_14_01_11.png</p>)
+
+[//]: # (</div>)
 
 <div align="center">
   <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="60%" height="60%"/> 
@@ -86,6 +96,9 @@
 - 2023 12 13 20:01:40 UPDATED "README.md"
 - 2023 12 14 16:27:12 APPLIED FIXED-WIDTH-FONT
 - 2023 12 14 17:05:38 UPDATED "README.md"
+- 2023 12 16 14:13:41 UPDATED GUI DESIGN
+- 2023 12 16 14:13:41 APPLIED SINGLETONE,  PROGRAM DESIGN PATTERN BY FOLLOWING PYSIDE6 APPLICATION
+
 
 
 
