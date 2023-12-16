@@ -63,7 +63,7 @@ call ".\.venv\Scripts\activate.bat"
  
 
 :: RUN PYTHON PROGRAM SETTING
-python ".\index.py"
+python ".\console_blurred.py"
 
 
 :: CONSOLE DEBUGGING SETTING

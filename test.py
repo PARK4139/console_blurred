@@ -19,16 +19,18 @@ import clipboard
 
 from BlurWindow.blurWindow import GlobalBlur, blur
 
-__author__ = 'Park4139 : Jung Hoon Park'
+__author__ = 'PARK4139 : Jung Hoon Park'
 
+import pkg_park4139
 Park4139 = pkg_park4139.Park4139()
 
+
 # LOGGER SET UP
-logger = logging.getLogger('park4193_test_logger')
-hdlr = logging.FileHandler('park4193_logger.log')
-hdlr.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
-logger.addHandler(hdlr)
-logger.setLevel(logging.INFO)
+# logger = logging.getLogger('park4139_test_logger')
+# hdlr = logging.FileHandler('park4139_logger.log')
+# hdlr.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+# logger.addHandler(hdlr)
+# logger.setLevel(logging.INFO)
 
 
 @Park4139.decorate_seconds_performance_measuring_code
@@ -74,7 +76,6 @@ def decorate_for_pause(function):
     return wrapper
 
 
-
 qss = """
     # QWidget {
     #     color: #FFFFFF;
@@ -101,17 +102,22 @@ qss = """
 @decorate_for_pause
 def test():
     try:
-        question = "파이썬 이걸로 개발자로서 20년간 밥벌이가 될까?"
-
+        # question = "파이썬 이걸로 개발자로서 20년간 밥벌이가 될까?"
         # Park4139.ask_to_google(question)
         # Park4139.ask_to_bard(question)
         # Park4139.ask_to_wrtn(question)
 
         # Park4139.search_animation_data_from_web()
 
-        # Park4139.run_rpa_program_legacy()
 
-        Park4139.run_rpa_program()
+
+        # answer = Park4139.pop_up(texts="경고입니다\n경고입니다\n경고입니다\n", buttons=["네"])
+        # answer = Park4139.pop_up(texts="다운로드를 계속진행할까요?", buttons=["네", "아니요"])
+        # answer = Park4139.pop_up(texts="다운로드를 계속진행할까요?", buttons=["네", "아니요" , "싫어요"])
+        # print(f"answer : {answer}")
+
+        # answer = Park4139.prompt(text="URL을 입력해 주세요", buttons=["제출", "싫어요"])
+        # print(f"answer : {answer}")
 
         # cmd = rf'python "{test_target_file}"' # SUCCESS # 가상환경이 아닌 로컬환경에서 실행이 됨.
         # cmd = rf'start cmd /k "{test_helping_bat_file}" {test_target_file}'  # SUCCESS # 가상환경에서 실행 # 새 cmd.exe 창에서 열린다
@@ -203,12 +209,12 @@ if __name__ == '__main__':
         # 의도적 트러블 발생
         # raise shutil.Error("의도적 트러블 발생")
 
-        logger.info(f'logger: dst : {"??????"}')
+        # logger.info(f'logger: dst : {"??????"}')
     except Exception as e:
         # print(str(e))
-        logger.error(msg="에러발생?????")
-        logger.error(f'logger: str(e) : {"????????"}')
+        # logger.error(msg="에러발생?????")
+        # logger.error(f'logger: str(e) : {"????????"}')
 
         # park4139.trouble_shoot("%%%FOO%%%")
-        # traceback.print_exc(file=sys.stdout)
-        # park4139.pause()
+        traceback.print_exc(file=sys.stdout)
+        # Park4139.pause()

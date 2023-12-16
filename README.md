@@ -1,7 +1,8 @@
 ### THIS SERVICE
-- python auto progarm for korean (its TTS system, Text is setted as Korean)
-- The goal of this project is to help you live a convenient lifestyle by automating pattern tasks around you based on python tests
-- I expect that this program save my time and take Happy Time To Stay With My Dog In Future
+- IT IS PYTHON AUTO PROGARM FOR KOREAN (ITS TTS SYSTEM, TEXT IS SETTED AS KOREAN)
+- I LIKE SHORTCUTS WHEN I WORK, SO I TRIED TO MADE SHORTCUT FOR ME 
+- THE GOAL OF THIS PROJECT IS TO HELP PEOPLE LIVE A CONVENIENT LIFESTYLE BY AUTOMATING PATTERN TASKS AROUND YOU BASED ON PYTHON 
+- I EXPECT THAT THIS PROGRAM SAVE MY TIME AND TAKE HAPPY TIME TO STAY WITH MY DOG IN FUTURE
 
 
 ### PREVIEW
@@ -34,9 +35,6 @@
 </div>
  
 
- 
-
-
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky1.jpg) -->
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky2.jpg) -->
 <!-- ![WHERE IS IMG?](https://red-steps.netlify.app/sky3.jpg) -->
@@ -49,12 +47,11 @@
 ### IT TESTED IN ENVIRONMENT BELOW
 - WINDOWS 10 PRO 
 - PYTHON3.12 
-- bandizip (FILE COMPRESSION KOREAN PROGRAM)
+- bandizip  
 - ffmpeg
 - pot player
 
-### DEVELOPMENT RULE CHECKLIST
-- apply OS environment variable as much as possible ✔️
+### PERSONAL DEVELOPMENT RULE 
 - consider target(file/directory) path as much as possible ✔️
 - Deploy A Package File As Exe File (Using pyinstaller)
 - File Auto Back Up(Following Schedule)
