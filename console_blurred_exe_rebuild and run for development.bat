@@ -13,16 +13,16 @@
 @REM 	 pushd "%CD%"
 @REM 	 CD /D "%~dp0"
 @REM  :------------------------------------------ below cript will acted as administrator mode ------------------------------------------
-@REM
+
 
 
 
 :: CONSOLE SET UP
 @REM @echo off >nul
-color df
-chcp 65001 >nul
+color df >nul
+chcp 65001 >nul 
 title %~dpnx0 >nul
-cls
+@REM cls >nul
 @REM setlocal >nul
 
 
@@ -39,6 +39,8 @@ cls
 @REM start /min cmd /C "%~dpnx0"
 @REM goto :EOF
 @REM :minimized
+
+
 
 
 
@@ -61,28 +63,37 @@ cls
 
 
 :: RUN PYTHON VIRTUAL ENVIRONMENT
-@REM echo "%~dp0.venv\Scripts\activate.bat"
-@REM call "%~dp0.venv\Scripts\activate.bat"
-cmd /k call ".\.venv\Scripts\activate.bat"
+:: echo "%~dp0.venv\Scripts\activate.bat"
+:: call "%~dp0.venv\Scripts\activate.bat"
+call ".\.venv\Scripts\activate.bat"
 
 
-:: important py pkg
-pip install opencv-python
+:: BUILD FOR DEVELOPMENT
+echo y | del ".\console_blurred.exe"
+echo y | rmdir /s ".\_internal"
+echo y | rmdir /s ".\build"
+echo y | rmdir /s ".\dist"
+echo y | rmdir /s ".\dist\console_blurred\_internal\$cache_database"
+echo y | rmdir /s ".\dist\console_blurred\_internal\$cache_log"
+echo y | rmdir /s ".\dist\console_blurred\_internal\$cache_mp3"
+echo y | rmdir /s ".\dist\console_blurred\_internal\$cache_png"
+echo y | rmdir /s ".\dist\console_blurred\_internal\$cache_tools"
+echo y | rmdir /s ".\dist\console_blurred\_internal\$cache_txt"
+:: pyinstaller --windowed -i ".\$cache_png\icon.PNG" console_blurred.py
+pyinstaller -i ".\$cache_png\icon.PNG" console_blurred.py
+echo d | xcopy ".\$cache_database" ".\dist\console_blurred\_internal\$cache_database" /e /h /k
+echo d | xcopy ".\$cache_log" ".\dist\console_blurred\_internal\$cache_log" /e /h /k
+echo d | xcopy ".\$cache_mp3" ".\dist\console_blurred\_internal\$cache_mp3" /e /h /k
+echo d | xcopy ".\$cache_png" ".\dist\console_blurred\_internal\$cache_png" /e /h /k
+echo d | xcopy ".\$cache_tools" ".\dist\console_blurred\_internal\$cache_tools" /e /h /k
+echo d | xcopy ".\$cache_txt" ".\dist\console_blurred\_internal\$cache_txt" /e /h /k
+echo d | xcopy ".\pkg_park4139" ".\dist\console_blurred\_internal\pkg_park4139" /e /h /k
+@rem echo y | echo d | xcopy ".\$cache_zip" ".\dist\console_blurred\_internal\$cache_zip" /e /h /k
+explorer ".\dist\console_blurred\console_blurred.exe"
+@REM echo a | move ".\dist\console_blurred\console_blurred.exe" ".\"
+@REM echo a | move ".\dist\console_blurred\_internal" ".\"
+@REM echo y | rmdir /s ".\build"
+@REM echo y | rmdir /s ".\dist"
+@REM explorer ".\console_blurred.exe
 
-
-
-:: CONSOLE DEBUGGING SETTING
-pause
-
-
-:: 배치파일에서 argument 받기
-:: set "FIRST_ARGUMENT=%1"
-:: set "promised_space=      "
-:: echo "park4139 command >%promised_space% FIRST_ARGUMENT:{%FIRST_ARGUMENT%}"
-
-
-:: RUN PYTHON PROGRAM
-:: python console_blurred.py
-:: python ".\console_blurred.py"
-:: python "%~dp0console_blurred.py" %1
-:: python ".\console_blurred.py" %FIRST_ARGUMENT%  && :: 배치파일에서 argument 파이썬 프로그램에 넘겨서 실행
+timeout 66

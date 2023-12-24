@@ -13,25 +13,25 @@
 @REM 	 pushd "%CD%"
 @REM 	 CD /D "%~dp0"
 @REM  :------------------------------------------ below cript will acted as administrator mode ------------------------------------------
-@REM
+
 
 
 
 :: CONSOLE SET UP
-@REM @echo off >nul
-color df
-chcp 65001 >nul
+@echo off            
+color df             
+chcp 65001 >nul 
 title %~dpnx0 >nul
-cls
-@REM setlocal >nul
+@REM cls             
+@REM setlocal      
 
 
 :: MAXIMIZED WINDOW SET UP
-@REM if not "%maximized%"=="" goto :maximized
-@REM set maximized=true
-@REM start /max cmd /C "%~dpnx0"
-@REM goto :EOF
-@REM :maximized
+if not "%maximized%"=="" goto :maximized
+set maximized=true
+start /max cmd /C "%~dpnx0"
+goto :EOF
+:maximized
 
 :: MINIMIZED WINDOW SET UP
 @REM if not "%minimized%"=="" goto :minimized
@@ -39,6 +39,8 @@ cls
 @REM start /min cmd /C "%~dpnx0"
 @REM goto :EOF
 @REM :minimized
+
+
 
 
 
@@ -61,28 +63,10 @@ cls
 
 
 :: RUN PYTHON VIRTUAL ENVIRONMENT
-@REM echo "%~dp0.venv\Scripts\activate.bat"
-@REM call "%~dp0.venv\Scripts\activate.bat"
-cmd /k call ".\.venv\Scripts\activate.bat"
+echo "%~dp0.venv\Scripts\activate.bat"
+:: pause
+call "%~dp0.venv\Scripts\activate.bat"
 
 
-:: important py pkg
-pip install opencv-python
-
-
-
-:: CONSOLE DEBUGGING SETTING
-pause
-
-
-:: 배치파일에서 argument 받기
-:: set "FIRST_ARGUMENT=%1"
-:: set "promised_space=      "
-:: echo "park4139 command >%promised_space% FIRST_ARGUMENT:{%FIRST_ARGUMENT%}"
-
-
-:: RUN PYTHON PROGRAM
-:: python console_blurred.py
-:: python ".\console_blurred.py"
-:: python "%~dp0console_blurred.py" %1
-:: python ".\console_blurred.py" %FIRST_ARGUMENT%  && :: 배치파일에서 argument 파이썬 프로그램에 넘겨서 실행
+:: BUILD FOR CLIENT TEST
+explorer ".\dist\console_blurred\console_blurred.exe"

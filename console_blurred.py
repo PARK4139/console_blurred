@@ -2,8 +2,92 @@
 # -*- coding: utf-8 -*-
 __author__ = 'PARK4139 : Jung Hoon Park'
 
+# PEP8 ?
+# PEP8 은 파이썬 코드의 작성에 대한 표준권장규칙 정도로 나는 생각한다.
+# recommand to apply naming convention to code
+#
+# naming convention
+# 코드작성용 용어사용 규칙 정도로 나는 생각한다.
+#
+# PEP8 에 의거해서 내 코드 분석하기
+# 지켜지지 않은 부분
+# - 권장줄길이 79 : 나는 간단한 건 한줄로...웬만한건 한줄로 작성했고 최대 180 자 정도까지는 작성했다...
+# - 주석용법 : 코드자체에 대한 설명이 아닌 코드의 의도를 설명해야한다고 하는데 코드자체의 설명을 작성함.. 상당히 지켜가기 어렵다. 네이밍센스가 좋게 작성된 경우라면 지킬 수 있겠지만 다음에 다시봐도 이해가 안갈 네이밍센스로 작성된 코드라면 코드자체 설명을 주석으로 또 달 것 같다. 노력은 해야겠다.
+# - 파이썬 메소드 함수 대소문자 :
+# - 상수명 : 어떤건 소문자로 되어있는데...모두 대문자여야 함 : FILE_ABSPATH = "blah\blah\foo\foo"
+# - import 순서 : 나중에 내 import 부분 코드를 정리해봐야겠다. import 표준라이브러리모듈, import 서드파티모듈, import 로컬모듈 , 요 순서라고 하는데 몰랐다. 아 하나더 있는 규칙이, 알파벳순서 로 나열할 것. vscode 로 line sort 해야 겠다.
+# - import 는 필요한 것만 : 세부적으로 그 모듈에 특정 함수, 객체만 필요한 경우 딱 꼬집어 그것만 import 해야한다.
+# - ' 또는 " 로 일관된 사용 권장 : 지켜지기 어려울 것 같다. 그 이유는 나는 f-string 문법으로 포멧팅을 즐겨 사용하는데... string escaping을 위해서 ' 과 " 의 혼용은 필 수이다.
+# - 한줄에 여러코드를 작성 시 ; 로 구분권장 : 여러코드를 한줄로 구동하도록 시도한 적이 있는데 그 때 ; 로 구분이 되었었다는 것이 떠올랐다. 모르고 쓴 건데 이번에 알았다,
+# - ; 를 사용할 것을 권장하지 않음 : 가독성을 위해서 여러줄로 작성하고 ;를 웬만하면 쓰지 말아야겠다, 나도 공감 ; 를 쓰면 코드를 읽기 어려웠다.
+
+# 지켜진 부분
+# - 클래스명 : class RpaProgramWindow(QWindow):
+# - 함수, 메소드명 : def love_you():
+# - import 중 이름충돌 예상 시 as 사용 : 충돌의 소지가 있을 때 as 를 썻다. PEP8을 알고 지킨건 아니고 jetbrain IDE 의 가이드기능을 잘 따르다 보니, 잘 지켜졌다. : import blahblah as blah
+
+
+# 국내주식과 미국주식을 크롤링해서 보고 싶어졌다.
+# 몇 가지 라이브러리가 있음을 확인했고 기획하는 중이다.
+# 데이터수집장소 : 다양한 웹사이트에서 크롤링하여 데이터를 수집하기로 생각하였다, 신뢰도가 높아보이는 데이터를 수집해야 한다
+# 데이터신뢰도판단 : 네이버 금융정보 데이터신뢰도가 높다고 판단한 이유는 타블로그에서 정보를 얻었으며, 여러 이유 중 가장 큰 이유는 네이버의 공인력을 내가 믿기때문이다.)
+# 데이터수집방식 : 특정데이터는 네이버에서 직접 크롤링할 것. 웹 크롤링도 약간 늘었고, 데이터를 엑셀의 형태로 핸들링 하기 위해서 pandas 배워야 겠다. 잠깐만 기다려라 배워서 다시 오겠다.
+# import pykrx # 국내증권데이터 공유 라이브러리,               네이버금융사이트(실시간수정되는 주식데이터),               한국증권사이트 의 데이터 기반, 고신뢰성데이터 인 국내주식정보 를 볼 수 있다.  pykrx의 특징은 국내 주식만 수집이 가능한대신 yfinance보다 국내주식 시세가 정확하고 PER, PBR, 배당수익률과 같은 지표는 신뢰성이 떨어진다 - 출처: https://bigdata-doctrine.tistory.com/7 [경제와 데이터:티스토리]
+# import yfinance # 증권데이터 공유 라이브러리,              야후 파이낸스에서 크롤링한 데이터를 제공하는 라이브러리, 미국주식데이터 는 상대적으로 정확 , 국내주식데이터 의 잦은누락,   결론은 다른게 나아보인다.
+import FinanceDataReader as fdr  # 증권데이터 공유 라이브러리,      pip install finance-datareader,   한국 주식 가격, 미국 주식 가격, 지수, 환율, 암호 화폐 가격, 종목 리스트 등을 제공하는 API 패키지입니다,
+
+# 나의 가치는 "있어 보이는 척 말고 해본 것" 에서 온다고 믿는다.
+# 그만큼 해보려면 시간을 쏟아 부어야 한다는 주변의 어느 개발자의 말씀도 있었다
+# comprehensive input 에 대해서 집중하여 작성, 내가 이해한 만큼만 작성을 하자
+
+# 그동안 나는 주관이 나쁜 것이란 착각에 빠져 생각을 하는 방법을 몰랐던 것 같다.
+# 내 생각을 갖는 시간이 중요하다라는 것을 깨달았다.
+
+# 까먹으면 기록에서 찾는다. 이 때 그 기록은 기록 시스템으로 되어 있어야 한다.
+# 인덱싱하여 빠르게 찾아야 그 기록은 가치가 있다
+# 기록을 검색할 때에는 텍스트를 작성하게 된다, 그 텍스트는 기록에 반드시 포함되어야 한다, 이 텍스트는 기록내용에 중복 작성이 가능하다.
+# 해시태그를 활용한 기록을 하여 내가 내 기록을 찾는 검색에 있어서 노출이 활률을 높이자.
+
+# 그동안 텍스트를 외운 것을 이해한다고 착각한 것 같다.
+# 항상 실험하고 실험결과에서 얻은 통찰을 풀어서 생각하자.
+# 논리는 풀어서 이해해야 한다.
+# 나는 엄청 메모를 많이 하는 편이지만 이 메모에 너무 의존한 것 같다.
+# 그 의존 때문에 그 동안 깊게 생각해보는 시간을 많이 갖지 않았던 것 같다.
+# 나에겐 메모하는 시간은 줄이고 이해하기 위해 실험과 그에 의거한 통찰로 생각 해보는 시간을 더 갖도록 해야 겠다.
+
+
+# import plotly # 대표적인 인터랙티브 시각화 도구
+# print(plotly.__version__)
+# plotly 오프라인 graph 플로팅 어찌 합니까?
+# Candlestick chart를 그려낼것.
+# 주피터 노트북으로 하는 방법이 나오는데 나는 주피터 노트북 말고 pyside6 를 활용해서 ui에 띄우거나 웹에 띄우고 싶다.
+# import plotly.express as px
+# df = px.data.iris()
+# fig = px.scatter(df, x="sepal_width", y="sepal_length", color='petal_length')
+# fig.show()
+# df = px.data.stocks()
+# df
+
+
+# interface 에 관하여
+# high-level interface : 기계보다 사람에 더 가까운 인터페이스, 이 말은 CLI 보다 GUI 로 가는 이유를 설명하는 근거지 않을까 싶은데.
+# 많은 설정을 해야하는 겨우라면 나는 CLI 를 더 선호한다.
+
+# api 에 관하여
+# program 간 program 이다. 프로그램들 사이에 위치한 프로그램으로서 통신중계 역할을 주로 한다. api 라 부르는 것은 통신 기능이 들어있기 마련이다
+
+
+import asyncio
+import threading
 import inspect
+import sys
+import threading
+import webbrowser
+from functools import partial
 from typing import Callable, TypeVar
+
+import pynput
+import schedule
 # numpy
 from PIL import Image, ImageFilter  # PIL : Py img lib
 import random
@@ -34,27 +118,29 @@ from bs4 import BeautifulSoup
 import selenium.webdriver as webdriver
 # GUI 프로그램용
 from PySide6 import QtCore, QtWidgets, QtGui
-from PySide6.QtCore import Qt, QObject, Signal
-from PySide6.QtGui import QScreen, QIcon, QShortcut, QKeySequence
-from PySide6.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushButton, QTextEdit, QVBoxLayout, QLineEdit
+from PySide6.QtCore import Qt, QObject, Signal, QPoint, QEvent, QTimer, QEventLoop, Slot
+from PySide6.QtGui import QScreen, QIcon, QShortcut, QKeySequence, QFont, QCursor, QColor, QFontDatabase
+from PySide6.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushButton, QTextEdit, QVBoxLayout, QLineEdit, QMainWindow, QMessageBox, QDialog, QScrollArea, QSpacerItem, QSizePolicy
 from BlurWindow.blurWindow import GlobalBlur
 
 import pkg_park4139
 
-park4139 = pkg_park4139.Park4139()
+Park4139 = pkg_park4139.Park4139()
 
-# /////////////////////////////////////////////// 로깅 설정
+#  로깅 설정
 # logger = logging.getLogger('park4139_test_logger')
 # hdlr = logging.FileHandler('park4139_logger.log')
 # hdlr.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
 # logger.addHandler(hdlr)
 # logger.setLevel(logging.INFO)
 
-# /////////////////////////////////////////////// 타입 힌팅 설정
+#  타입 힌팅 설정
 T = TypeVar('T')
 
 
 #  ///////////////////////////////////////////////  공유 객체 클래스 정의
+
+
 class SharedObject(QObject):
     dataChanged = Signal(str)  # 데이터 변경을 알리는 시그널
 
@@ -63,6 +149,7 @@ class SharedObject(QObject):
         self._data = ""
         self.answer = ""
         self.question = ""
+        self.rpa_program_main_window = None
 
     #  /////////////////////////////////////////////// SharedObject.data
     @property
@@ -84,7 +171,7 @@ class SharedObject(QObject):
         self.answer = value
         self.dataChanged.emit(self.answer)
 
-    # /////////////////////////////////////////////// SharedObject.question
+    #  SharedObject.question
     @property
     def data(self):
         return self.question
@@ -94,292 +181,53 @@ class SharedObject(QObject):
         self.question = value
         self.dataChanged.emit(self.question)
 
+    #  SharedObject.rpa_program_main_window ....이래도 되나 모르겠네... 성능 이슈 있을 수도...
+    @property
+    def data(self):
+        return self.rpa_program_main_window
 
-class PromptWindow(QWidget):
-
-    # def __init__(self):
-    def __init__(self, ment, buttons, default, countdown, shared_obj, function: Callable[[T or None], T or None]):
-        super().__init__()
-
-        park4139.commentize(ment)
-        park4139.speak_fast(ment)  # 말하도록 설정
-
-        self.function = function
-        self.ment = str(ment.strip())
-        self.buttons = buttons
-        self.default = default
-        self.countdown = countdown
-
-        # /////////////////////////////////////////////// 창간 통신 설정
-        self.question = None
-        # 창간 통신 재시도
-        self.shared_obj = shared_obj
-        #
-
-        global btn_no
-        pyautogui.FAILSAFE = False
-
-        # /////////////////////////////////////////////// 팝업창 전역 변수 설정
-        self.display_width = park4139.get_display_info()['width'],
-        self.display_height = park4139.get_display_info()['height'],
-        self.pop_up_window_width_default = int(int(self.display_width[0]) * 0.18)
-        self.pop_up_window_height_default = int(int(self.display_height[0]) * 0.09)
-        # contents 의 내용이 얼마나 많은 지 보고 많으면 최대화하는 건 어떤가?
-
-        # /////////////////////////////////////////////// 팝업창 설정
-        self.setWindowTitle('.')  # 팝업창 타이틀 설정
-        # self.setWindowTitle('5 초 후 이 팝업은 닫칩니다')  # schedule 여기서 걸어두면 되지 않을까?
-
-        icon_png = rf"C:\Users\WIN10PROPC3\Desktop\services\archive_py\$cache_png\icon.PNG"
-        self.setWindowIcon(QIcon(icon_png))  # 팝업창 아이콘 설정
-        # self.setAttribute(Qt.WA_TranslucentBackground) # 팝업창 블러 설정
-        # self.setWindowFlags(Qt.WindowType.FramelessWindowHint)  # 팝업창 최상단 프레임레스 설정
-        GlobalBlur(self.winId(), hexColor=False, Acrylic=False, Dark=True, QWidget=self)
-        self.setWindowFlags(Qt.WindowTitleHint | Qt.WindowCloseButtonHint)  # 팝업창 최대화 최소화 버튼숨기기
-        self.setWindowFlag(Qt.WindowCloseButtonHint, False)  # 팝업창 닫기 버튼 disable
-        # self.setWindowFlag(Qt.WindowStaysOnTopHint)  # 모든 창들 중 가장 앞에 팝업창 위치하도록 설정
-        self.setStyleSheet("background-color: rgba(0, 0, 0, 0)")  # 팝업창 스타일시트 적용 설정
-        self.resize(self.pop_up_window_width_default, self.pop_up_window_height_default)
-        # self.setGeometry(0, 0, self.pop_up_window_width_default, self.pop_up_window_height_default)
-        self.move_window_to_center()  # 팝업창 화면의 중심으로 이동
-
-        # /////////////////////////////////////////////// inputbox 설정
-        self.inputbox = QLineEdit(self)
-        self.inputbox.setStyleSheet("color: rgba(255,255,255, 0.9);")
-
-        self.inputbox.setText(self.default)
-        self.inputbox.setFixedWidth(self.pop_up_window_width_default)
-        # # self.inputbox.setStyleSheet("text-shadow: 1px 1px 7px rgba(1, 1, 1, 1);") #텍스트에 그림자 넣고 싶었는데 안된다.
-        # self.inputbox.textChanged.connect(self.inputbox_changed)
-        # self.inputbox.editingFinished.connect(self.inputbox_edit_finished)
-        # self.inputbox.returnPressed.connect(self.inputbox_return_pressed)
-
-        # /////////////////////////////////////////////// 단축키 설정
-        self.set_shortcut1(function=self.do_positive)
-        self.set_shortcut2(function=self.do_nagative)
-        self.set_shortcut3(function=self.do_proper)
-
-        # /////////////////////////////////////////////// 레이블 설정
-        self.pop_up_label = QLabel(self.ment)
-        if len(self.ment.split("\n")) < 10:
-            self.pop_up_label.setAlignment(Qt.AlignCenter)  # 레이블 가운데 정렬
-        self.pop_up_label.setStyleSheet("QLabel { color: rgba(255,255,255, 0.9); height: 70px ; width: 500px ; font-size: 10px}")
-
-        # /////////////////////////////////////////////// 버튼 설정
-        try:
-            # self.btn1 = self.get_btn(btn_name=f"{buttons[0]}", function=self.do_action1)
-            # self.btn2 = self.get_btn(btn_name=f"{buttons[1]}", function=self.do_action2)
-            self.btn1 = self.get_btn(btn_name=f"{self.buttons[0]} (Alt+Y)", function=self.do_positive)
-            self.btn2 = self.get_btn(btn_name=f"{self.buttons[1]} (Alt+N)", function=self.do_nagative)
-            self.btn3 = self.get_btn(btn_name=f"{self.buttons[2]} (Alt+R)", function=self.do_proper)
-        except:
-            pass
-
-        # /////////////////////////////////////////////// TEST
-        # self.inputbox = QPlainTextEdit(self)
-        # self.inputbox = QTextEdit(self)
-        # self.ta1 = QTableWidget(self)
-        # self.ta1.resize(500, 500)
-        # self.ta1.setColumnCount(3)
-        # self.ta1.setStyleSheet("color: rgba(255,255,255, 0.9);")
-        # self.ta1.setStyleSheet("background-color: rgba(255,255,255, 0.9);")
-        # table_column = ["첫번째 열", "두번째 열", "Third 열"]
-        # self.ta1.setHorizontalHeaderLabels(table_column)
-        #
-        # # 행 2개 추가
-        # self.ta1.setRowCount(2)
-        #
-        # # 추가된 행에 데이터 채워넣음
-        # self.ta1.setItem(0, 0, QTableWidgetItem("(0,0)"))
-        # self.ta1.setItem(0, 1, QTableWidgetItem("(0,1)"))
-        # self.ta1.setItem(1, 0, QTableWidgetItem("(1,0)"))
-        # self.ta1.setItem(1, 1, QTableWidgetItem("(1,1)"))
-
-        # 마지막에 행 1개추가
-        # self.ta1.insertRow(2)
-        # self.ta1.setItem(2, 0, QTableWidgetItem("New Data"))
-
-        # 셀의 텍스트 변경
-        # self.ta1.item(1, 1).setText("데이터 변경")
-
-        # 셀에 있는 텍스트 출력
-        # print(self.ta1.item(0, 1).text())
-
-        # 테이블 데이터 전부 삭제
-        # self.ta1.clear()
-
-        # 테이블 행전부 삭제
-        # self.ta1.setRowCount(0)
-
-        # /////////////////////////////////////////////// 레이아웃 일부 설정
-        self.pop_up_answer_layout = QtWidgets.QGridLayout()
-        try:
-            self.pop_up_answer_layout.addWidget(self.btn1, 0, 1)
-            self.pop_up_answer_layout.addWidget(self.btn2, 0, 2)
-            self.pop_up_answer_layout.addWidget(self.btn3, 0, 3)
-        except:
-            pass
-
-        # 레이아웃 설정
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.pop_up_label)
-        # layout.addWidget(self.textEdit)
-        # layout.addWidget(self.btn_yes)
-        layout.addWidget(self.inputbox)
-        layout.addLayout(self.pop_up_answer_layout)
-        self.setLayout(layout)
-
-    def __del__(self):
-        park4139.commentize("소멸자 실행")
-        # return self.answer
-
-    def move_window_to_center(self):
-        center = QScreen.availableGeometry(app.primaryScreen()).center()
-        geo = self.frameGeometry()
-        geo.moveCenter(center)
-        self.move(geo.topLeft())
-
-    def keyPressEvent(self, e):
-        # 이걸로 나온 숫자로 확인하면된다.
-        # print(type(e.key()))
-        # print(e.key())
-        if e.key() == 16777220:  # enter
-            park4139.press("space")
-
-    def set_shortcut1(self, function):
-        self.shortcut = QShortcut(QKeySequence("alt+y"), self)
-        self.shortcut.activated.connect(function)
-
-    def set_shortcut2(self, function):
-        self.shortcut = QShortcut(QKeySequence("alt+n"), self)
-        self.shortcut.activated.connect(function)
-
-    def set_shortcut3(self, function):
-        self.shortcut = QShortcut(QKeySequence("alt+r"), self)
-        self.shortcut.activated.connect(function)
-
-    def do_positive(self):
-        try:
-            park4139.commentize(f"_________________________________________________ {inspect.currentframe().f_code.co_name}")
-            RpaProgramMainWindow.hide(self)
-            self.hide()
-
-            try:
-                if park4139.is_void_function(self.function):
-                    self.function()
-                elif park4139.is_void_function(self.function)==False:
-                    answer = self.inputbox.text()
-                    print(fr"{type(answer)} : 사용자로부터 {answer} 입력되었습니다 ")
-                    if answer != None:
-                        if answer != "":
-                            self.function(answer)
-            except AttributeError:# app.quit() 호출 에 대한 예외처리
-                # function 이 함수가 아닌경우,
-                # function 이 객체의 경우 여기에 속한다
-                self.function()
-
-            # # park4139.commentize("공유 객체에 저장 예시")
-            # self.shared_obj.answer = self.inputbox.text()
-            # print(self.shared_obj.data)
-
-            RpaProgramMainWindow.show(self)
-            self.close()
-        except:
-            traceback.print_exc(file=sys.stdout)
-
-    def do_nagative(self):
-        park4139.commentize(f"_________________________________________________ {inspect.currentframe().f_code.co_name}")
-        RpaProgramMainWindow.hide(self)
-        self.hide()
-        self.answer = self.buttons[1]
-        answer = self.answer
-        print(fr"{type(answer)} : 사용자로부터 {answer} 입력되었습니다 ")
-        park4139.speak_fast(fr"{answer} 입력되었습니다")
-        RpaProgramMainWindow.show(self)
-        self.close()
-
-    def do_proper(self):
-        park4139.commentize(f"_________________________________________________ {inspect.currentframe().f_code.co_name}")
-        RpaProgramMainWindow.hide(self)
-        self.hide()
-        self.answer = self.buttons[2]
-        answer = self.answer
-        print(fr"{type(answer)} : 사용자로부터 {answer} 입력되었습니다 ")
-        park4139.speak(fr"{answer} 입력되었습니다")
-        # park4139.speak_fast("나중에 다시 물어볼게요")
-        park4139.speak_fast('나중에 다시 물을게요')
-        RpaProgramMainWindow.show(self)
-        self.close()
-
-    @staticmethod
-    def app_method_decorator(app_method):
-        def wrapper(self):
-            self.hide()  # 비동기 전까지는 사용자가 다른 명령을 하지 못하도록 이 코드를 사용
-            app_method(self)
-            # window_main.activateWindow()
-            self.show()
-            pass
-
-        return wrapper
-
-    def inputbox_changed(self):
-        park4139.commentize("inputbox 텍스트 change event 감지 되었습니다")
-        print(self.inputbox.text())
-
-    def inputbox_edit_finished(self):
-        park4139.commentize("inputbox edit finish event 감지 되었습니다")
-
-    def inputbox_return_pressed(self):
-        park4139.commentize("inputbox return pressed event 감지 되었습니다")
-
-    def get_btn(self, btn_name, function):
-        button = QPushButton(btn_name, self)
-        button.clicked.connect(function)  # 버튼 함수 설정
-        font = QtGui.QFont("Consolas")
-        button.setFont(font)  # 버튼 폰트 설정
-        font.setFixedPitch(True)  # 고정폭 폰트 설정
-        # button.setStyleSheet("QLabel { text-align: left; color: rgba(255,255,255, 0.9); height: 20px ; font-size: 10px}")
-        button.setStyleSheet("QPushButton { text-align: center; color: rgba(255,255,255, 0.9); height: 20px ; font-size: 10px}")
-        return button
+    @data.setter
+    def data(self, value):
+        self.rpa_program_main_window = value
+        self.dataChanged.emit(self.rpa_program_main_window)
 
 
 class RpaProgramMainWindow(QWidget):
-    # def __init__(self ): # 공유객체를 적용하기 전 코드
-    # shared_obj 는 창간 통신용 공유객체 이다
-    def __init__(self, shared_obj):
+    # def __init__(self, shared_obj): # shared_obj 는 창간 통신용 공유객체 이다
+    def __init__(self):  # 공유객체를 적용하기 전 코드
         super().__init__()
 
-        ment = "자동화 프로그램을 실행 시도합니다"
-        park4139.speak_fast(ment)
-        pyautogui.FAILSAFE = False
+        #  창간 통신 설정
+        # self.shared_obj = shared_obj  # 창간 통신용 객체
+        # self.shared_obj.rpa_program_main_window = self  # 메인 창(self)을 다른 창에서도 공유 할 수 있도록 설정 # 안됨.
+        # shared_obj.prompt_window = self.prompt_window
 
-        # /////////////////////////////////////////////// 창간 통신 설정
-        self.prompt_window = None
-        self.question = None
-        # 창간 통신 재시도
-        self.shared_obj = shared_obj
-        #
+        # deprecated test started at 2023 12 23 01 28
+        # self.prompt_window = None
+        # self.sub_window = None
+        # self.question = None
 
-        # /////////////////////////////////////////////// 앱 전역 변수 설정
+
+        #  앱 전역 변수 설정
         self.text = "text"
         self.pw = "`"
         self.id = "`"
         # self.is_window_maximized = False
-        self.display_width = park4139.get_display_info()['width'],
-        self.display_height = park4139.get_display_info()['height'],
+        self.display_width = Park4139.get_display_info()['width'],
+        self.display_height = Park4139.get_display_info()['height'],
         # self.display_width_default = int(int(self.display_width[0]) * 0.106)
-        self.display_width_default = int(int(self.display_width[0]) * 0.06)
+        self.display_width_default = int(int(self.display_width[0]) * 0.045)
         self.display_height_default = int(int(self.display_height[0]) * 0.2)
 
-        # /////////////////////////////////////////////// 메인창 설정
+        #  메인창 설정
         self.setWindowTitle('.')
-        icon_png = rf"C:\Users\WIN10PROPC3\Desktop\services\archive_py\$cache_png\icon.PNG"
+        icon_png = rf"{Park4139.PROJECT_DIRECTORY}\$cache_png\icon.PNG"
         self.setWindowIcon(QIcon(icon_png))  # 메인창 아이콘 설정
         # self.setAttribute(Qt.WA_TranslucentBackground) # 메인창 블러 설정
         # self.setWindowFlags(Qt.WindowType.FramelessWindowHint) # 메인창 최상단 프레임레스 설정
         GlobalBlur(self.winId(), hexColor=False, Acrylic=False, Dark=True, QWidget=self)
         self.setWindowFlags(Qt.WindowTitleHint | Qt.WindowCloseButtonHint)  # 최대화 최소화 버튼 숨기기
-        # self.setWindowFlags(Qt.WindowStaysOnTopHint) # 모든 창 앞에 위치하도록 설정
+        # self.setWindowFlags(Qt.WindowStaysOnTopHint)  # 모든 창 앞에 위치하도록 설정
         self.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
         # self.setStyleSheet(pyqt6css.qss)
         # self.setAttribute(Qt.WA_TranslucentBackground)
@@ -392,12 +240,14 @@ class RpaProgramMainWindow(QWidget):
         # self.setGeometry(0, 0, int(self.display_width_default * self.scale), int(self.display_height_default * self.scale))
         # self.setGeometry(0, 0,self.display_width_default, self.display_height_default)
         # self.resize(self.display_width_default, self.display_height_default)
-        # self.move_window_to_center() # 화면의 중심으로 창 이동
+
         # self.setGeometry(0, 0, int(self.display_width_default * self.scale), int(self.display_height[0]))
         self.windows_size_mode = 0  # 창크기 모드 설정  #0 ~ 3
-        self.rotate_window_size_mode()
+        # self.rotate_window_size_mode()
 
-        # mkr /////////////////////////////////////////////// inputbox 설정
+
+
+        # inputbox 설정
         # self.inputbox = QLineEdit(self)
         # self.inputbox.setStyleSheet("color: rgba(255,255,255, 0.9);")
         # self.inputbox.setText("0,0")
@@ -407,127 +257,205 @@ class RpaProgramMainWindow(QWidget):
         # self.inputbox.editingFinished.connect(self.inputbox_edit_finished)
         # self.inputbox.returnPressed.connect(self.inputbox_return_pressed)
 
-        # mkr /////////////////////////////////////////////// LABEL 설정
-        # self.label10 = QLabel("event monitor:\n")
-        # self.label10.setStyleSheet("color: rgba(255,255,255, 0.9);")
-        #
-        # self.label11 = QLabel("mouse event monitor:\n")
-        # self.label11.setStyleSheet("color: rgba(255,255,255, 0.9);")
 
-        # mkr /////////////////////////////////////////////// 단축키 설정
+        # 프로그램 외 단축키 설정
+        self.shortcut_keys_up_promised = {
+            "<ctrl>+<cmd>": self.toogle_rpa_window
+            # "<ctrl>+h": partial(self.toogle_rpa_window, "<ctrl>+h"),
+        }
+        self.keyboard_main_listener = pynput.keyboard.GlobalHotKeys(self.shortcut_keys_up_promised)
+        self.keyboard_main_listener.start()
+
+        # monitor_mouse_position 이벤트 설정
+        self.listener = pynput.mouse.Listener(on_move=self.monitor_mouse_position)
+        self.listener.start()
+
+        # detect_mouse_movement 이벤트 설정 (마우스 멈춤 감지 이벤트/ 5초간 마우스 중지 시 메인화면 자동 숨김 이벤트)
+        self.mouse_positions = []
+        self.previous_position = None
+        self.current_position = None
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.detect_mouse_position_per_second)
+        self.timer.start(1000)
+
+        # 시작스케쥴러 설정
+        self.run_stating_scheduler_without_confirm()
+
+
+        # 프로그램 내 단축키 설정 mkr
         self.available_shortcut_list = {
-            # /////////////////////////////////////////////// Ctrl 단축키 설정(서비스 제어 관련)
+            #  Ctrl 단축키 설정(서비스 제어 관련)
+            # 'Ctrl+F4' 는 설정하지 마는 것이 좋겠다.
             'ASK AI QUESTION': 'Ctrl+A',
             'BACK UP TARGET': 'Ctrl+S',
-            'SCREENSHOT FULL': 'Ctrl+F',
-            'SCREENSHOT CUSTOM': 'Ctrl+C',
-            'COLLECT IMG FOR RPA': 'Ctrl+4',
-            # '': 'Ctrl+F4', # 스스로 종료되도록 이대로 남겨 두는 것도 좋겠다. 일반적인 단축키이니까
+            'SHOOT SCREENSHOT FULL': 'Ctrl+F',
+            'SHOOT SCREENSHOT CUSTOM': 'Ctrl+C',
+            'SHOOT SCREENSHOT FOR RPA': 'Ctrl+4',
             'ANI': 'Ctrl+5',
-            # 'rdp-82106': 'Ctrl+R',
+            'rdp-82106': 'Ctrl+R',
             'DOWNLOAD YOUTUBE(webm)': 'Ctrl+Y',
-            # 'DOWNLOAD YOUTUBE(webm)_': 'Ctrl+Alt+Y',
+            'DOWNLOAD YOUTUBE(webm)_': 'Ctrl+Alt+Y',
+            'TOOGLE': 'Ctrl+win',  # GHOST MODE?
             # 'DOWNLOAD YOUTUBE(wav)': 'Ctrl+S',
             # 'DOWNLOAD YOUTUBE(webm) ONLY SOUND': 'Ctrl+Alt+S',
             'WEATHER': 'Ctrl+W',
             # 'NO PASTE MEMO': 'Ctrl+M',
             'ENG TO KOR': 'Ctrl+K',
             'KOR TO ENG': 'Ctrl+E',
-            # 'TEST 1': 'Ctrl+1',
-            # 'TEST 2': 'Ctrl+2',
+            'RECORD MACRO': 'Ctrl+M',
+            'TEST': 'Ctrl+1',
 
-            # /////////////////////////////////////////////// Alt 단축키 설정(시스템 제어 관련)
+            #  Alt 단축키 설정(시스템 제어 관련)
+            'DOWNLOAD VIDEO FROM WEB1': 'Alt+F1',
+            'DOWNLOAD VIDEO FROM WEB2': 'Alt+F2',
             # 'KEYMAP': 'Alt+F1',
-            'TOOGLE WINDOW SIZE': 'Alt+W',
+            'ROTATE WINDOW MODE': 'Alt+W',
             'SYSTEM REBOOT': 'Alt+9',
             'SYSTEM SHUTDOWN': 'Alt+]',
             'SYSTEM POWER SAVING MODE': 'Alt+[',
             # 'LOGIN': 'Alt+F7',
-            'EXIT': 'Alt+Q',
-            # 'HIDE': 'Alt+H',
-            # 'PROJECT DIRECTORY': 'Alt+P',
+            'PROJECT DIRECTORY': 'Alt+P',
             'EMPTY RECYCLE BIN': 'Alt+E',
             # 'RUN CMD.EXE AS ADMIN': 'Alt+C',
-            'RECORD MACRO': 'Alt+M',
+            # 'EXCUTE MACRO': 'Alt+M+E',
+            'NAVER MAP': 'Alt+N',
+            'EXIT': 'Alt+Q',
         }
         # self.set_shortcut('RUN CMD.EXE AS ADMIN', self.run_cmd_exe)
         # self.set_shortcut('DOWNLOAD YOUTUBE(wav)', self.download_youtube_as_wav)
         # self.set_shortcut('DOWNLOAD YOUTUBE(webm) ONLY SOUND', self.download_youtube_as_webm_only_sound)
-        # self.set_shortcut('DOWNLOAD YOUTUBE(webm)_', self.download_youtube_as_webm_alt)
-        # self.set_shortcut('HIDE', self.hide_windows_of_this_app)
+        self.set_shortcut('DOWNLOAD YOUTUBE(webm)_', self.should_i_download_youtube_as_webm_alt)
+        # self.set_shortcut('TOOGLE', self.hide_windows_of_this_app)
         # self.set_shortcut('LOGIN', self.login)
         # self.set_shortcut('NO PASTE MEMO', self.run_no_paste_memo)
-        # self.set_shortcut('PROJECT DIRECTORY', self.open_project_directory)
-        # self.set_shortcut('rdp-82106', self.connect_to_another_computer_as_rdp1)
-        # self.set_shortcut('TEST 1', self.test1)
+        self.set_shortcut('PROJECT DIRECTORY', self.open_project_directory)
+        self.set_shortcut('rdp-82106', self.connect_to_rdp1)
+        self.set_shortcut('TEST', self.test)
         # self.set_shortcut('TEST 2', self.test2)
-        self.set_shortcut('ASK AI QUESTION', self.ask_something_to_ai_via_web)
+        self.set_shortcut('ASK AI QUESTION', self.ask_something_to_ai)
         self.set_shortcut('BACK UP TARGET', self.back_up_target)
-        self.set_shortcut('COLLECT IMG FOR RPA', self.collect_imgs_for_rpa_setting)
+        self.set_shortcut('SHOOT SCREENSHOT FOR RPA', self.shoot_screenshot_for_rpa)
         self.set_shortcut('DOWNLOAD YOUTUBE(webm)', self.should_i_download_youtube_as_webm)
         self.set_shortcut('EMPTY RECYCLE BIN', self.should_i_empty_trash_can)
         self.set_shortcut('ENG TO KOR', self.should_i_translate_eng_to_kor)
         self.set_shortcut('KOR TO ENG', self.translate_kor_to_eng)
+        self.set_shortcut('TOOGLE', self.toogle_rpa_window)
         self.set_shortcut('EXIT', self.should_i_exit_this_program)
         self.set_shortcut('SYSTEM POWER SAVING MODE', self.should_i_enter_to_power_saving_mode)
-
-        self.set_shortcut('SYSTEM REBOOT', self.reboot_this_computer)
-        self.set_shortcut('SCREENSHOT CUSTOM', self.make_screenshot_custom)
-        self.set_shortcut('SCREENSHOT FULL', self.make_screenshot_full)
-        self.set_shortcut('SYSTEM SHUTDOWN', self.shutdown_this_computer)
-        self.set_shortcut('TOOGLE WINDOW SIZE', self.rotate_window_size_mode)
+        self.set_shortcut('SYSTEM REBOOT', self.should_i_reboot_this_computer)
+        self.set_shortcut('SYSTEM SHUTDOWN', self.should_i_shutdown_this_computer)
+        self.set_shortcut('ROTATE WINDOW MODE', self.rotate_window_size_mode)
+        self.set_shortcut('SHOOT SCREENSHOT CUSTOM', self.make_screenshot_custom)
+        self.set_shortcut('SHOOT SCREENSHOT FULL', self.make_screenshot_full)
+        self.set_shortcut('NAVER MAP', self.should_i_find_direction_via_naver_map)
         self.set_shortcut('WEATHER', self.show_weather_from_web)
-        self.set_shortcut('ANI', self.show_animation_data_from_web)
-        # self.set_shortcut('RECORD MACRO', self.record_macro)
+        self.set_shortcut('ANI', self.should_i_show_animation_information_from_web)
+        self.set_shortcut('DOWNLOAD VIDEO FROM WEB1', self.download_video_from_web1)
+        self.set_shortcut('DOWNLOAD VIDEO FROM WEB2', self.download_video_from_web2)
+        self.set_shortcut('RECORD MACRO', self.record_macro)
 
-        # mkr /////////////////////////////////////////////// 버튼 설정
-        # btn_to_show_weather_from_web = self.get_btn(self.get_button_name_with_shortcut('WEATHER'), self.show_weather_from_web)
-        # btn_to_run_no_paste_memo = self.get_btn(self.get_button_name_with_shortcut('NO PASTE MEMO'), self.run_no_paste_memo)
-        # btn_to_login = self.get_btn(self.get_button_name_with_shortcut('LOGIN'), self.login)
-        # btn_to_show_animation_data_from_web = self.get_btn(self.get_button_name_with_shortcut('ANI'), self.show_animation_data_from_web)
-        # btn_to_quit_rpa_program = self.get_btn(self.get_button_name_with_shortcut('EXIT'), self.quit_rpa_program)
-        # btn_to_download_youtube_as_wav = self.get_btn(self.get_button_name_with_shortcut('DOWNLOAD YOUTUBE(wav)'), self.download_youtube_as_wav)
-        # btn_to_download_youtube_as_webm = self.get_btn(self.get_button_name_with_shortcut('DOWNLOAD YOUTUBE(webm)'), self.download_youtube_as_webm)
-        # btn_to_download_youtube_as_webm_alt = self.get_btn(self.get_button_name_with_shortcut('DOWNLOAD YOUTUBE(webm)_'), self.download_youtube_as_webm_alt)
-        # btn_to_download_youtube_as_webm_only_sound = self.get_btn(self.get_button_name_with_shortcut('DOWNLOAD YOUTUBE(webm) ONLY SOUND'), self.download_youtube_as_webm_only_sound)
-        # btn_to_collect_imgs_for_rpa_setting = self.get_btn(self.get_button_name_with_shortcut('COLLECT IMG FOR RPA'), self.collect_imgs_for_rpa_setting)
-        # btn_to_hide_windows_of_this_app = self.get_btn(self.get_button_name_with_shortcut('HIDE'), self.hide_windows_of_this_app)
-        # btn_to_toogle_window_size_max_or_min = self.get_btn(self.get_button_name_with_shortcut('TOOGLE WINDOW SIZE'), self.rotate_window_size_mode)
-        # btn_to_make_screenshot_custom = self.get_btn(self.get_button_name_with_shortcut('SCREENSHOT CUSTOM'), self.make_screenshot_custom)
-        # btn_to_back_up_target = self.get_btn(self.get_button_name_with_shortcut('BACK UP TARGET'), self.back_up_target)
-        # btn_to_test1 = self.get_btn(self.get_button_name_with_shortcut('TEST 1'), self.test1)
-        # btn_to_test2 = self.get_btn(self.get_button_name_with_shortcut('TEST 2'), self.test2)
-        # btn_to_make_screenshot_full = self.get_btn(self.get_button_name_with_shortcut('SCREENSHOT FULL'), self.make_screenshot_full)
-        # btn_to_empty_recycle_bin = self.get_btn(self.get_button_name_with_shortcut('EMPTY RECYCLE BIN'), self.empty_recycle_bin)
-        # btn_to_ask_something_to_ai_via_web = self.get_btn(self.get_button_name_with_shortcut('ASK AI QUESTION'), self.ask_something_to_ai_via_web)
-        # btn_to_connect_to_another_computer_as_rdp1 = self.get_btn(self.get_button_name_with_shortcut('rdp-82106'), self.connect_to_another_computer_as_rdp1)
-        # btn_to_reboot_this_computer = self.get_btn(self.get_button_name_with_shortcut('SYSTEM REBOOT'), self.reboot_this_computer)
-        # btn_to_shutdown_this_computer = self.get_btn(self.get_button_name_with_shortcut('SYSTEM SHUTDOWN'), self.shutdown_this_computer)
-        # btn_to_open_project_directory = self.get_btn(self.get_button_name_with_shortcut('PROJECT DIRECTORY'), self.open_project_directory)
-        # btn_to_enter_to_power_saving_mode = self.get_btn(self.get_button_name_with_shortcut('SYSTEM POWER SAVING MODE'), self.enter_to_power_saving_mode)
+        # 약속된 버튼명인 버튼 설정
+        self.btn_to_show_weather_from_web = self.get_btn(self.get_btn_name_promised('WEATHER'), self.show_weather_from_web)
+        #  self.btn_to_run_cmd_exe= self.get_btn(self.get_btn_name_promised('RUN CMD.EXE AS ADMIN'), self.run_cmd_exe)
+        #  self.btn_to_download_youtube_as_wav= self.get_btn(self.get_btn_name_promised('DOWNLOAD YOUTUBE(wav)'), self.download_youtube_as_wav)
+        #  self.btn_to_download_youtube_as_webm_only_sound= self.get_btn(self.get_btn_name_promised('DOWNLOAD YOUTUBE(webm) ONLY SOUND'), self.download_youtube_as_webm_only_sound)
+        self.btn_to_should_i_download_youtube_as_webm_alt = self.get_btn(self.get_btn_name_promised('DOWNLOAD YOUTUBE(webm)_'), self.should_i_download_youtube_as_webm_alt)
+        #  self.btn_to_hide_windows_of_this_app= self.get_btn(self.get_btn_name_promised('TOOGLE'), self.hide_windows_of_this_app)
+        #  self.btn_to_login= self.get_btn(self.get_btn_name_promised('LOGIN'), self.login)
+        #  self.btn_to_run_no_paste_memo= self.get_btn(self.get_btn_name_promised('NO PASTE MEMO'), self.run_no_paste_memo)
+        self.btn_to_open_project_directory = self.get_btn(self.get_btn_name_promised('PROJECT DIRECTORY'), self.open_project_directory)
+        self.btn_to_connect_to_rdp1 = self.get_btn(self.get_btn_name_promised('rdp-82106'), self.connect_to_rdp1)
+        self.btn_to_test = self.get_btn(self.get_btn_name_promised('TEST'), self.test)
+        #  self.btn_to_test2= self.get_btn(self.get_btn_name_promised('TEST 2'), self.test2)
+        self.btn_to_ask_something_to_ai = self.get_btn(self.get_btn_name_promised('ASK AI QUESTION'), self.ask_something_to_ai)
+        self.btn_to_back_up_target = self.get_btn(self.get_btn_name_promised('BACK UP TARGET'), self.back_up_target)
+        self.btn_to_shoot_screenshot_for_rpa = self.get_btn(self.get_btn_name_promised('SHOOT SCREENSHOT FOR RPA'), self.shoot_screenshot_for_rpa)
+        self.btn_to_should_i_download_youtube_as_webm = self.get_btn(self.get_btn_name_promised('DOWNLOAD YOUTUBE(webm)'), self.should_i_download_youtube_as_webm)
+        self.btn_to_should_i_empty_trash_can = self.get_btn(self.get_btn_name_promised('EMPTY RECYCLE BIN'), self.should_i_empty_trash_can)
+        self.btn_to_should_i_translate_eng_to_kor = self.get_btn(self.get_btn_name_promised('ENG TO KOR'), self.should_i_translate_eng_to_kor)
+        self.btn_to_translate_kor_to_eng = self.get_btn(self.get_btn_name_promised('KOR TO ENG'), self.translate_kor_to_eng)
+        self.btn_to_toogle_rpa_window = self.get_btn(self.get_btn_name_promised('TOOGLE'), self.toogle_rpa_window)
+        self.btn_to_should_i_exit_this_program = self.get_btn(self.get_btn_name_promised('EXIT'), self.should_i_exit_this_program)
+        self.btn_to_should_i_enter_to_power_saving_mode = self.get_btn(self.get_btn_name_promised('SYSTEM POWER SAVING MODE'), self.should_i_enter_to_power_saving_mode)
+        self.btn_to_should_i_reboot_this_computer = self.get_btn(self.get_btn_name_promised('SYSTEM REBOOT'), self.should_i_reboot_this_computer)
+        self.btn_to_should_i_shutdown_this_computer = self.get_btn(self.get_btn_name_promised('SYSTEM SHUTDOWN'), self.should_i_shutdown_this_computer)
+        self.btn_to_rotate_window_size_mode = self.get_btn(self.get_btn_name_promised('ROTATE WINDOW MODE'), self.rotate_window_size_mode)
+        self.btn_to_make_screenshot_custom = self.get_btn(self.get_btn_name_promised('SHOOT SCREENSHOT CUSTOM'), self.make_screenshot_custom)
+        self.btn_to_make_screenshot_full = self.get_btn(self.get_btn_name_promised('SHOOT SCREENSHOT FULL'), self.make_screenshot_full)
+        self.btn_to_should_i_find_direction_via_naver_map = self.get_btn(self.get_btn_name_promised('NAVER MAP'), self.should_i_find_direction_via_naver_map)
+        self.btn_to_should_i_show_animation_information_from_web = self.get_btn(self.get_btn_name_promised('ANI'), self.should_i_show_animation_information_from_web)
+        self.btn_to_download_video_from_web1 = self.get_btn(self.get_btn_name_promised('DOWNLOAD VIDEO FROM WEB1'), self.download_video_from_web1)
+        self.btn_to_download_video_from_web2 = self.get_btn(self.get_btn_name_promised('DOWNLOAD VIDEO FROM WEB2'), self.download_video_from_web2)
+        self.btn_to_record_macro = self.get_btn(self.get_btn_name_promised('RECORD MACRO'), self.record_macro)
 
-        # 버튼기능이 무의미해보여 레이블로 실험적으로 대체
-        numbers = []
-        for key, value in self.available_shortcut_list.items():
-            numbers.append(len(value) + len(key))
-        max_len_value = max(numbers)
-        keymap_colum1 = ""
-        keymap_colum2 = ""
-        cnt = 0
-        column_lines = len(self.available_shortcut_list) / 2
-        for key, value in self.available_shortcut_list.items():
-            if cnt <= column_lines:
-                space_between = " " * (max_len_value - len(key) - len(value) + 1)
-                # keymap_colum1 = keymap_colum1 + f"{key}{space_between}{value}\n"
-                keymap_colum1 = keymap_colum1 + f"{key}{space_between}{value}\n\n"
-            elif column_lines < cnt:
-                space_between = " " * (max_len_value - len(key) - len(value) + 1)
-                # keymap_colum2 = keymap_colum2 + f"{key}{space_between}{value}\n"
-                keymap_colum2 = keymap_colum2 + f"{key}{space_between}{value}\n\n"
-        print(keymap_colum1)
-        print(keymap_colum2)
-        btn_to_do_nothing1 = self.get_btn(keymap_colum1, self.do_nothing)
-        btn_to_do_nothing2 = self.get_btn(keymap_colum2, self.do_nothing)
+        # 약속된 단축키명 버튼 설정
+        self.btn_to_show_weather_from_web_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('WEATHER'), function=self.show_weather_from_web)
+        #  self.btn_to_run_cmd_exe_only_shortcut_name= self.get_btn(btn_text_align = "right", btn_name  = self.get_shortcut_name_promised()('RUN CMD.EXE AS ADMIN'), function= self.run_cmd_exe)
+        #  self.btn_to_download_youtube_as_wav_only_shortcut_name= self.get_btn(btn_text_align = "right", btn_name  = self.get_shortcut_name_promised()('DOWNLOAD YOUTUBE(wav)'), function= self.download_youtube_as_wav)
+        #  self.btn_to_download_youtube_as_webm_only_sound_only_shortcut_name= self.get_btn(btn_text_align = "right", btn_name  = self.get_shortcut_name_promised()('DOWNLOAD YOUTUBE(webm) ONLY SOUND'), function= self.download_youtube_as_webm_only_sound)
+        self.btn_to_should_i_download_youtube_as_webm_alt_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('DOWNLOAD YOUTUBE(webm)_'), function=self.should_i_download_youtube_as_webm_alt)
+        #  self.btn_to_hide_windows_of_this_app_only_shortcut_name= self.get_btn(btn_text_align = "right", btn_name  = self.get_shortcut_name_promised()('TOOGLE'), function= self.hide_windows_of_this_app)
+        #  self.btn_to_login_only_shortcut_name= self.get_btn(btn_text_align = "right", btn_name  = self.get_shortcut_name_promised()('LOGIN'), function= self.login)
+        #  self.btn_to_run_no_paste_memo_only_shortcut_name= self.get_btn(btn_text_align = "right", btn_name  = self.get_shortcut_name_promised()('NO PASTE MEMO'), function= self.run_no_paste_memo)
+        self.btn_to_open_project_directory_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('PROJECT DIRECTORY'), function=self.open_project_directory)
+        self.btn_to_connect_to_rdp1_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('rdp-82106'), function=self.connect_to_rdp1)
+        self.btn_to_test_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('TEST'), function=self.test)
+        #  self.btn_to_test2_only_shortcut_name= self.get_btn(btn_text_align = "right", btn_name  = self.get_shortcut_name_promised()('TEST 2'), function= self.test2)
+        self.btn_to_ask_something_to_ai_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('ASK AI QUESTION'), function=self.ask_something_to_ai)
+        self.btn_to_back_up_target_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('BACK UP TARGET'), function=self.back_up_target)
+        self.btn_to_shoot_screenshot_for_rpa_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('SHOOT SCREENSHOT FOR RPA'), function=self.shoot_screenshot_for_rpa)
+        self.btn_to_should_i_download_youtube_as_webm_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('DOWNLOAD YOUTUBE(webm)'), function=self.should_i_download_youtube_as_webm)
+        self.btn_to_should_i_empty_trash_can_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('EMPTY RECYCLE BIN'), function=self.should_i_empty_trash_can)
+        self.btn_to_should_i_translate_eng_to_kor_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('ENG TO KOR'), function=self.should_i_translate_eng_to_kor)
+        self.btn_to_translate_kor_to_eng_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('KOR TO ENG'), function=self.translate_kor_to_eng)
+        self.btn_to_toogle_rpa_window_only_shorcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('TOOGLE'), function=self.toogle_rpa_window)
+        self.btn_to_should_i_exit_this_program_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('EXIT'), function=self.should_i_exit_this_program)
+        self.btn_to_should_i_enter_to_power_saving_mode_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('SYSTEM POWER SAVING MODE'), function=self.should_i_enter_to_power_saving_mode)
+        self.btn_to_should_i_reboot_this_computer_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('SYSTEM REBOOT'), function=self.should_i_reboot_this_computer)
+        self.btn_to_should_i_shutdown_this_computer_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('SYSTEM SHUTDOWN'), function=self.should_i_shutdown_this_computer)
+        self.btn_to_rotate_window_size_mode_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('ROTATE WINDOW MODE'), function=self.rotate_window_size_mode)
+        self.btn_to_make_screenshot_custom_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('SHOOT SCREENSHOT CUSTOM'), function=self.make_screenshot_custom)
+        self.btn_to_make_screenshot_full_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('SHOOT SCREENSHOT FULL'), function=self.make_screenshot_full)
+        self.btn_to_should_i_find_direction_via_naver_map_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('NAVER MAP'), function=self.should_i_find_direction_via_naver_map)
+        self.btn_to_should_i_show_animation_information_from_web_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('ANI'), function=self.should_i_show_animation_information_from_web)
+        self.btn_to_download_video_from_web1_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('DOWNLOAD VIDEO FROM WEB1'), function=self.download_video_from_web1)
+        self.btn_to_download_video_from_web2_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('DOWNLOAD VIDEO FROM WEB2'), function=self.download_video_from_web2)
+        self.btn_to_record_macro_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('RECORD MACRO'), function=self.record_macro)
+
+        btns = [
+            [self.btn_to_show_weather_from_web, self.btn_to_show_weather_from_web_only_shortcut_name],
+            # [  self.btn_to_run_cmd_exe,      self.btn_to_run_cmd_exe_only_shortcut_name],
+            # [  self.btn_to_download_youtube_as_wav,      self.btn_to_download_youtube_as_wav_only_shortcut_name],
+            # [  self.btn_to_download_youtube_as_webm_only_sound,      self.btn_to_download_youtube_as_webm_only_sound_only_shortcut_name],
+            [self.btn_to_should_i_download_youtube_as_webm_alt, self.btn_to_should_i_download_youtube_as_webm_alt_only_shortcut_name],
+            # [  self.btn_to_hide_windows_of_this_app,      self.btn_to_hide_windows_of_this_app_only_shortcut_name],
+            # [  self.btn_to_login,      self.btn_to_login_only_shortcut_name],
+            # [  self.btn_to_run_no_paste_memo,      self.btn_to_run_no_paste_memo_only_shortcut_name],
+            [self.btn_to_open_project_directory, self.btn_to_open_project_directory_only_shortcut_name],
+            [self.btn_to_connect_to_rdp1, self.btn_to_connect_to_rdp1_only_shortcut_name],
+            [self.btn_to_test, self.btn_to_test_only_shortcut_name],
+            # [  self.btn_to_test2,      self.btn_to_test2_only_shortcut_name],
+            [self.btn_to_ask_something_to_ai, self.btn_to_ask_something_to_ai_only_shortcut_name],
+            [self.btn_to_back_up_target, self.btn_to_back_up_target_only_shortcut_name],
+            [self.btn_to_shoot_screenshot_for_rpa, self.btn_to_shoot_screenshot_for_rpa_only_shortcut_name],
+            [self.btn_to_should_i_download_youtube_as_webm, self.btn_to_should_i_download_youtube_as_webm_only_shortcut_name],
+            [self.btn_to_should_i_empty_trash_can, self.btn_to_should_i_empty_trash_can_only_shortcut_name],
+            [self.btn_to_should_i_translate_eng_to_kor, self.btn_to_should_i_translate_eng_to_kor_only_shortcut_name],
+            [self.btn_to_translate_kor_to_eng, self.btn_to_translate_kor_to_eng_only_shortcut_name],
+            [self.btn_to_toogle_rpa_window, self.btn_to_toogle_rpa_window_only_shorcut_name],
+            [self.btn_to_should_i_exit_this_program, self.btn_to_should_i_exit_this_program_only_shortcut_name],
+            [self.btn_to_should_i_enter_to_power_saving_mode, self.btn_to_should_i_enter_to_power_saving_mode_only_shortcut_name],
+            [self.btn_to_should_i_reboot_this_computer, self.btn_to_should_i_reboot_this_computer_only_shortcut_name],
+            [self.btn_to_should_i_shutdown_this_computer, self.btn_to_should_i_shutdown_this_computer_only_shortcut_name],
+            [self.btn_to_rotate_window_size_mode, self.btn_to_rotate_window_size_mode_only_shortcut_name],
+            [self.btn_to_make_screenshot_custom, self.btn_to_make_screenshot_custom_only_shortcut_name],
+            [self.btn_to_make_screenshot_full, self.btn_to_make_screenshot_full_only_shortcut_name],
+            [self.btn_to_should_i_find_direction_via_naver_map, self.btn_to_should_i_find_direction_via_naver_map_only_shortcut_name],
+            [self.btn_to_should_i_show_animation_information_from_web, self.btn_to_should_i_show_animation_information_from_web_only_shortcut_name],
+            [self.btn_to_download_video_from_web1, self.btn_to_download_video_from_web1_only_shortcut_name],
+            [self.btn_to_download_video_from_web2, self.btn_to_download_video_from_web2_only_shortcut_name],
+            [self.btn_to_record_macro, self.btn_to_record_macro_only_shortcut_name],
+        ]
 
         # GRID SETTING
         grid = QtWidgets.QGridLayout(self)
@@ -537,54 +465,25 @@ class RpaProgramMainWindow(QWidget):
         #        1,0  1,1  1,2
         #        2,0  2,1  2,2
 
-        # COLUMN1
-        # btns = [
-        #     btn_to_ask_something_to_ai_via_web,
-        #     btn_to_make_screenshot_custom,
-        #     btn_to_make_screenshot_full,
-        #     btn_to_collect_imgs_for_rpa_setting,
-        #     btn_to_hide_windows_of_this_app,
-        #     btn_to_login,
-        #     btn_to_quit_rpa_program,
-        #
-        #     btn_to_show_animation_data_from_web,
-        #     btn_to_show_weather_from_web,
-        #     btn_to_run_no_paste_memo,
-        # ]
-        btns = [
-            btn_to_do_nothing1
-        ]
-        cnt = 0
-        for i in btns:
-            grid.addWidget(i, cnt, 0)
-            cnt = cnt + 1
+        # spaver
 
-        # COLUMN2
-        # btns = [
-        #     btn_to_download_youtube_as_wav,
-        #     btn_to_download_youtube_as_webm_alt,
-        #     btn_to_download_youtube_as_webm_only_sound,
-        #     btn_to_download_youtube_as_webm,
-        #     btn_to_connect_to_another_computer_as_rdp1,
-        #     btn_to_empty_recycle_bin,
-        #     btn_to_open_project_directory,
-        #     btn_to_back_up_target,
-        #     btn_to_reboot_this_computer,
-        #     btn_to_shutdown_this_computer,
-        #     btn_to_toogle_window_size_max_or_min,
-        #     btn_to_enter_to_power_saving_mode,
-        #     btn_to_test1,
-        #     btn_to_test2,
-        # ]
-        btns = [
-            btn_to_do_nothing2
-        ]
-        cnt = 0
-        for i in btns:
-            grid.addWidget(i, cnt, 1)
-            cnt = cnt + 1
+        # GRID_COLUMN 1 폭 조절용 policy
+        # size_policy = QSizePolicy()
+        # grid.setHorizontalPolicy(QSizePolicy.Minimum)  # 그리드의 열의 폭을 최소로 설정합니다.
+        grid.setVerticalSpacing(9)
+        grid.setHorizontalSpacing(5)
+        grid.setColumnMinimumWidth(1,125)
+        grid.setColumnMinimumWidth(2,45)
 
-        # mkr /////////////////////////////////////////////// TEST
+        btns_grid = btns
+        line_no = 0
+        for btn in btns_grid:
+            grid.addWidget(btn[0], line_no, 0)  # GRID_COLUMN 0 설정
+            grid.addWidget(btn[1], line_no, 2)  # GRID_COLUMN 1 설정
+            line_no = line_no + 1
+
+
+        # TEST
         # self.inputbox = QPlainTextEdit(self)
         # self.inputbox = QTextEdit(self)
         # self.ta1 = QTableWidget(self)
@@ -594,10 +493,10 @@ class RpaProgramMainWindow(QWidget):
         # self.ta1.setStyleSheet("background-color: rgba(255,255,255, 0.9);")
         # table_column = ["첫번째 열", "두번째 열", "Third 열"]
         # self.ta1.setHorizontalHeaderLabels(table_column)
-        #
+
         # # 행 2개 추가
         # self.ta1.setRowCount(2)
-        #
+
         # # 추가된 행에 데이터 채워넣음
         # self.ta1.setItem(0, 0, QTableWidgetItem("(0,0)"))
         # self.ta1.setItem(0, 1, QTableWidgetItem("(0,1)"))
@@ -620,102 +519,187 @@ class RpaProgramMainWindow(QWidget):
         # 테이블 행전부 삭제
         # self.ta1.setRowCount(0)
 
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll_area.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+        self.scroll_area.setStyleSheet(f" border: none; width: {self.display_width_default}px; height: {self.display_height_default}px")
+        self.scroll_area.setLayout(grid)
+
+
         # 레이아웃 설정
-        layout = QGridLayout(self)
-        layout.addLayout(grid, 0, 0)
-        # layout.addLayout(self.ta1, 1, 0)
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.scroll_area)
+
+        self.toogle_rpa_window()
+        Park4139.press("alt","w")
+
+
+
+        self.event_loop = QEventLoop()
+        self.event_loop.exec()
+
+    def detect_mouse_position_per_second(self):
+        """마우스 움직임 감지 함수"""
+        x, y = pyautogui.position()  # 현재 마우스 위치 ( 이게 내가 원하던 수치 )
+        # print(x, y)
+        self.current_position = QCursor.pos()  # 현재 마우스 커서 위치 ( 이건 내가 원하는 수치는 아닌데... 뭘 의미하는 거지? )
+        # print(self.current_position)
+        if self.previous_position is not None and self.previous_position == self.current_position:
+            # print("마우스가 멈췄습니다")
+            # print(f"self.mouse_positions : {self.mouse_positions}") # 마우스 위치 리스트
+            if 10 <= len(self.mouse_positions):
+                # 10번 연속 mouse 중지 감지
+                # self.mouse_positions 에 등록된 모든 self.current_position 가 동일하면 10번 연속으로 움직이지 않은 것으로 판단
+                if len(self.mouse_positions) == 10:
+                    # 동일한 10개 원소를 갖는 리스트 내에서 요소의 중복을 제거하면 중복이 제거된 리스트의 요소의 수는 1개가 나올 것을 기대
+                    mouse_positions_removed_duplicatd_elements = list(set(self.mouse_positions))  # orderless way
+                    if len(mouse_positions_removed_duplicatd_elements) == 1:
+                        # print("10번 연속 중지 감지")
+                        self.hide()
+                        pass
+
+            if 5 <= len(self.mouse_positions):
+                self.mouse_positions = []  # 감지값들이 5개 이상이면 감지값목록 초기화
+
+            elif len(self.mouse_positions) < 5:
+                self.mouse_positions.append(self.current_position)
+            pass
+        else:
+            # print("마우스가 움직였습니다")
+
+            # 우측하단 꼭지점 네비게이션
+            if x == 3440 and y == 1440:
+                Park4139.press("win", "d")
+            # 우측 네비게이션
+            if 3440 - 50 <= x <= 3440 and 300 <= y <= 1440:
+                try:
+                    Park4139.explorer(Park4139.PYCHARM64_EXE)
+                except:
+                    Park4139.trouble_shoot("%%%FOO%%%")
+                    pass
+
+            # 좌측 네비게이션
+            elif 0 <= x <= 15 and 0 <= y <= 1440:
+                self.toogle_rpa_window()
+                pass
+
+
+            else:
+                pass
+        self.previous_position = self.current_position
+
+    def monitor_mouse_position(self, x, y):
+        # 상단 네비게이션
+        if 0 <= x <= 3440 and 0 <= y <= 25:
+            # Park4139.debug_as_cli("아주 빠르게 마우스 움직임 감지")
+            pass
+        else:
+            pass
 
     @staticmethod
-    # def rpa_program_method_decorator(method):
-    def rpa_program_method_decorator(method: Callable[[T], None]):
+    # def rpa_program_method_decorator(function):
+    def rpa_program_method_decorator(function: Callable[[T], None]):
         def wrapper(self):
             self.hide()  # 비동기 전까지는 사용자가 다른 명령을 하지 못하도록 이 코드를 사용
-            method(self)
-            # RpaProgramMainWindow.activateWindow()
-            # self.show()
-            pass
+            function(self)
+
+            # console_blurred 프로그램 창 활성화
+            self.show()
+            self.activateWindow()
 
         return wrapper
 
-    # def mouseMoveEvent(self, e):
-    #     self.label10.setText(f"event monitor:\nmouseMoveEvent : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #
-    # def mousePressEvent(self, e):
-    #     self.label10.setText(f"event monitor:\nmousePressEvent : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     if e.pos() == Qt.AllButtons:
-    #         self.label11.setText(f"mouse event monitor:\nAllButtons : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.BackButton:
-    #         self.label11.setText(f"mouse event monitor:\nBackButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton1:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton1 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton10:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton10 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton11:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton11 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton12:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton12 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton13:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton13 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton14:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton14 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton15:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton15 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton16:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton16 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton17:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton17 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton18:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton18 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton19:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton19 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton2:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton2 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton20:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton20 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton21:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton21 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton22:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton22 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton23:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton23 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton24:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton24 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton3:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton3 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton4:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton4 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton5:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton5 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton6:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton6 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton7:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton7 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton8:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton8 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ExtraButton9:
-    #         self.label11.setText(f"mouse event monitor:\nExtraButton9 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.ForwardButton:
-    #         self.label11.setText(f"mouse event monitor:\nForwardButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.LeftButton:
-    #         self.label11.setText(f"mouse event monitor:\nLeftButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.MiddleButton:
-    #         self.label11.setText(f"mouse event monitor:\nMiddleButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.NoButton:
-    #         self.label11.setText(f"mouse event monitor:\nNoButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.RightButton:
-    #         self.label11.setText(f"mouse event monitor:\nRightButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.TaskButton:
-    #         self.label11.setText(f"mouse event monitor:\nTaskButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.XButton1:
-    #         self.label11.setText(f"mouse event monitor:\nXButton1 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #     elif e.pos() == Qt.XButton2:
-    #         self.label11.setText(f"mouse event monitor:\nXButton2 : {str(e.pos().x())} ,{str(e.pos().y())} ")
-    #
+    def eventFilter(self, obj, event):
+        # if event.type() == QEvent.MouseMove:
+        #     x = event.globalX()
+        #     y = event.globalY()
+        #     print(f"마우스 이동 - X: {x}, Y: {y}")
+        # return super().eventFilter(obj, event)
+        if event.type() == QEvent.MouseButtonPress and not self.rect().contains(event.pos()):
+            print("pyside6 창 외부 클릭 되었습니다")
+        return super().eventFilter(obj, event)
+
+    def mousePressEvent(self, e):
+        if e.button() == Qt.LeftButton:  # 왼쪽 버튼 클릭 시 동작
+            print("왼쪽 버튼 클릭")
+        #     print(f"마우스 좌표: ({x}, {y})")
+        #     print(f"마우스 좌표:\n : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.BackButton:
+            print(f"mouse event monitor:\nBackButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton1:
+            print(f"mouse event monitor:\nExtraButton1 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton10:
+            print(f"mouse event monitor:\nExtraButton10 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton11:
+            print(f"mouse event monitor:\nExtraButton11 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton12:
+            print(f"mouse event monitor:\nExtraButton12 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton13:
+            print(f"mouse event monitor:\nExtraButton13 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton14:
+            print(f"mouse event monitor:\nExtraButton14 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton15:
+            print(f"mouse event monitor:\nExtraButton15 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton16:
+            print(f"mouse event monitor:\nExtraButton16 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton17:
+            print(f"mouse event monitor:\nExtraButton17 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton18:
+            print(f"mouse event monitor:\nExtraButton18 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton19:
+            print(f"mouse event monitor:\nExtraButton19 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton2:
+            print(f"mouse event monitor:\nExtraButton2 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton20:
+            print(f"mouse event monitor:\nExtraButton20 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton21:
+            print(f"mouse event monitor:\nExtraButton21 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton22:
+            print(f"mouse event monitor:\nExtraButton22 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton23:
+            print(f"mouse event monitor:\nExtraButton23 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton24:
+            print(f"mouse event monitor:\nExtraButton24 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton3:
+            print(f"mouse event monitor:\nExtraButton3 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton4:
+            print(f"mouse event monitor:\nExtraButton4 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton5:
+            print(f"mouse event monitor:\nExtraButton5 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton6:
+            print(f"mouse event monitor:\nExtraButton6 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton7:
+            print(f"mouse event monitor:\nExtraButton7 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton8:
+            print(f"mouse event monitor:\nExtraButton8 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ExtraButton9:
+            print(f"mouse event monitor:\nExtraButton9 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.ForwardButton:
+            print(f"mouse event monitor:\nForwardButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.LeftButton:
+            print(f"mouse event monitor:\nLeftButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.MiddleButton:
+            print(f"mouse event monitor:\nMiddleButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.NoButton:
+            print(f"mouse event monitor:\nNoButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.RightButton:
+            print(f"mouse event monitor:\nRightButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.TaskButton:
+            print(f"mouse event monitor:\nTaskButton : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.XButton1:
+            print(f"mouse event monitor:\nXButton1 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+        elif e.button() == Qt.XButton2:
+            print(f"mouse event monitor:\nXButton2 : {str(e.pos().x())} ,{str(e.pos().y())} ")
+
     # def mouseReleaseEvent(self, e):
     #     self.label10.setText(f"event monitor:\nmouseReleaseEvent : {str(e.pos().x())} ,{str(e.pos().y())} ")
     #
     # def mouseDoubleClickEvent(self, e):
     #     self.label10.setText(f"event monitor:\nmouseDoubleClickEvent : {str(e.pos().x())} ,{str(e.pos().y())} ")
+
+    def keyPressEvent(self, e):
+        self.mouse_positions = []  # 키보드가 눌리면 사용자가 사용중인 것으로 간주하고 마우스 위치 값 목록 초기화
 
     # def keyPressEvent(self, e):
     #     # these keys refered from https://doc.qt.io/qtforpython-6/PySide6/QtCore/Qt.html
@@ -723,9 +707,7 @@ class RpaProgramMainWindow(QWidget):
     #     if e.key() == Qt.Key_Return:
     #         self.label11.setText(f"keyboard event monitor:\nKey_Return : Key_Return ")
     #         self.showMinimized()
-    #         # self.hide()
     #         park4139.press("space")
-    #         # self.show()
     #         self.showMaximized()
     #     elif e.key() == Qt.Key_0:
     #         self.label11.setText(f"keyboard event monitor:\nKey_0 : Key_0 ")
@@ -1667,16 +1649,1035 @@ class RpaProgramMainWindow(QWidget):
     #     #     self.label11.setText(f"keyboard event monitor:\nKey_ZoomOut : Key_ZoomOut ")
 
     def inputbox_changed(self):
-        park4139.commentize("inputbox 텍스트 change event 감지 되었습니다")
+        Park4139.commentize("inputbox 텍스트 change event 감지 되었습니다")
         print(self.inputbox.ment())
 
     def inputbox_edit_finished(self):
-        park4139.commentize("inputbox edit finish event 감지 되었습니다")
+        Park4139.commentize("inputbox edit finish event 감지 되었습니다")
 
     def inputbox_return_pressed(self):
-        park4139.commentize("inputbox return pressed event 감지 되었습니다")
+        Park4139.commentize("inputbox return pressed event 감지 되었습니다")
 
-    def get_button_name_with_shortcut(self, button_name_without_shortcut):
+    def get_btn_name_with_shortcut_name(self, button_name_without_shortcut):
+        # 버튼명과 shourtcut 명을 을 적당한 간격으로 띄워서 string 으로 반환하는 코드, 폰트 가 고정폭폰트 가 아니면 무용지물인 함수
+        numbers = []
+        for key, value in self.available_shortcut_list.items():
+            numbers.append(len(value) + len(key))
+        max_len_value = max(numbers)
+        button_name_with_short_cut = ""
+        for key, value in self.available_shortcut_list.items():
+            if key == button_name_without_shortcut:
+                space_between = " " * (max_len_value - len(key) - len(value) + 1)
+                # space_between = "\t"
+                # button_name_with_short_cut = button_name_with_short_cut + f"{key}{space_between}{value}".strip()
+                # button_name_with_short_cut = button_name_with_short_cut + f"{key}{space_between}( {value} )".strip()
+                button_name_with_short_cut = button_name_with_short_cut + f"{value}{space_between}( {key} )".strip()
+        print(button_name_with_short_cut)
+        return button_name_with_short_cut
+
+    def get_btn_name_promised(self, button_name_without_shortcut):
+        button_name_with_short_cut = ""
+        for key, value in self.available_shortcut_list.items():
+            if key == button_name_without_shortcut:
+                button_name_with_short_cut = button_name_with_short_cut + f"{key}".strip()
+        return button_name_with_short_cut
+
+    def get_shortcut_name_promised(self, button_name_without_shortcut):
+        button_name_with_short_cut = ""
+        for key, value in self.available_shortcut_list.items():
+            if key == button_name_without_shortcut:
+                button_name_with_short_cut = button_name_with_short_cut + f"{value}".strip()
+        return button_name_with_short_cut
+
+    # def show_available_shortcut_list(self):
+    #     # global max
+    #     # global 을 설정하면, 이 변수는 함수의 실행이 끝난 다음에도 없어지지 않는다.
+    #     # 이 값을 나중에 함수 끝나고도 또 쓸려면 이렇게 쓰면 되겠다. @staticmethod 의 경우에는 변수 간의 값에 간섭이 되지 않도록 굳이 쓰지 않는 것이 좋겠다.
+    #     # global 많이 쓰면 이는 변수가 전역화 되니까 메모리의 성능이 저하되는 것이 아닐까?
+    #     # 그렇다면 함수 내에서만 전역적으로 변수를 쓰는 경우에, global 을 쓰지 않는 것이 성능을 위해서는 좋은 선택이겠다. 굳이 함수가 끝난 뒤에 밖에서 써야한다면 global 을 써야 겠지만, 나는 무척이나 이게 헷갈릴 것 같다
+    #     # 그동안의 경험으로는 코드 맥락 상, global 선언을 하지 않아도 전역변수 처럼 작동 되는 것 같아 보인다.... 아니다 이게 global max 를 선언하지 않았다고 가정하면 max 는 show_available_shortcut_list() 가 종료되면 max 는 사라진다. 그런데 global max를 선언하면 max 는 유지된다!
+    #     # 혹시 객체의 인스턴스 같은 것을 global 을 통해서 변수에 저장하고 쓰면 싱글톤 처럼 쓸 수 있는 것일까? 메모리 효율은 많이 나빠질까?
+    #
+    #     numbers = []
+    #     for key_shortcut, value in self.available_shortcut_list.items():
+    #         numbers.append(len(value))
+    #     max_no: int
+    #     max_no = max(numbers)
+    #     for key_shortcut, value in self.available_shortcut_list.items():
+    #         print(f"{{0: <{max_no}}} : {key_shortcut}".format(value))
+
+    def rotate_window_size_mode(self):
+        if self.windows_size_mode == 0:
+            self.resize(self.display_width_default, self.display_height_default)
+            self.move_window_to_center()  # 불필요 하면 주석하는 게 나쁘지 않겠다
+            self.windows_size_mode = self.windows_size_mode + 1
+        elif self.windows_size_mode == 1:
+            self.setGeometry(0,0, int(self.display_width_default), int(self.display_height[0]))
+            # self.setWindowFlags(Qt.WindowStaysOnTopHint)  # 모든 창 앞에 위치하도록 설정
+            self.windows_size_mode = self.windows_size_mode + 1
+        elif self.windows_size_mode == 2:
+            self.showMaximized()
+            self.windows_size_mode = self.windows_size_mode + 1
+        elif self.windows_size_mode == 3:
+            self.setGeometry(1600-int(self.display_width_default), 0, int(self.display_width_default), int(self.display_height[0]))
+            self.windows_size_mode = 0
+
+    def set_shortcut(self, btn_name_promised, function):
+        # self.shortcut = QShortcut(QKeySequence(self.available_shortcut_list[btn_name_promised]), self)  # ctrl+1 2개 키들의 조합 설정
+        self.shortcut = QShortcut(self.available_shortcut_list[btn_name_promised], self)  # ctrl+n+d 3개 키들의 조합 설정 시도
+        self.shortcut.activated.connect(function)
+        pass
+
+    def get_btn(self, btn_name, function, btn_text_align="left"):
+        button = QPushButton(btn_name, self)  # alt f4 로 가이드 해도 되겠다. 이건 그냥 설정 되어 있는 부분.
+        button.clicked.connect(function)
+
+        # 2023년 12월 14일 (목) 16:28:15
+        # 결론, fixed width font로 시도해볼 수 있다 자릿 수를 맞출 수 있다.
+        # non-fixed width font 이슈 JAVA 에서도 구현했을 때 마딱드렸던 내용인데,
+        # 분명히 문장 전체 길이를 단어 사이의 공백의 수를 결정짓는 함수를 테스트 했음에도 자릿수가 맞지 않았는데
+        # 이는 고정 폭이 아님이기 때문이었다 따라서 고정 폭 폰트로 출력되는 콘솔에서는 정상, 비고정 폭 폰트로 출력되는 콘솔에서는 비정상,
+        # 이 경우에는 콘솔이 아니라 pyside6 로 만든 UI 에서 나타났다.
+        # 새벽에 이 문제를 만나서 잠깐 넋나갔는데 아침에 다시보니 그때 경험이 떠올라서 실험해보니 잘 해결되었다. 덕분에 pyside6에서 위젯에 폰트 적용하는 법도 터득
+
+        # pyside6 버튼 내부폰트 설정
+        # pyside6 built in fixed width font
+        # font = QFont("Monospace")
+        # font = QFont("Ubuntu Mono")
+        # font = QFont("Inconsolata")
+        # font = QFont("Monaco")
+        # font = QFont("Courier")
+        # font = QFont("Courier 10 Pitch")
+        # font = QFont("Courier Prime")
+        # font = QFont("Droid Sans Mono")
+        # font = QFont("Fira Mono")
+        # font = QFont("Hack")
+        # font = QFont("Menlo")
+        # font = QFont("Monofur")
+        # font = QFont("Noto Mono")
+        # font = QFont("PT Mono")
+        # font = QFont("Roboto Mono")
+        # font = QFont("Source Code Pro")
+        # font = QFont("Victor Mono")
+        # font = QFont("Courier New")
+        # font = QFont("Liberation Mono")
+        # font = QFont("DejaVu Sans Mono")
+        # font = QFont("Consolas")  # 그나마 가장 마음에 드는 폰트
+
+        # pyside6 버튼 외부폰트 설정
+        button.setFont(Park4139.get_font_for_pyside6(font_path=pkg_park4139.FONTS.GMARKETSANSTTFLIGHT_TTF))
+        if btn_text_align == "right":
+            button.setStyleSheet("QPushButton { text-align: right; color: rgba(255,255,255, 0.9); height: 20px; font-size: 10px}")
+            button.setFixedWidth(65)
+            # button.setMinimumWidth(button.sizeHint().width())
+        else:
+            button.setStyleSheet("QPushButton { text-align: left; color: rgba(255,255,255, 0.9); height: 20px; font-size: 10px}")
+            button.setFixedWidth(225)
+            # button.setMinimumWidth(button.sizeHint().width())
+        return button
+
+    def move_window_to_center(self):
+        center = QScreen.availableGeometry(app.primaryScreen()).center()
+        geo = self.frameGeometry()
+        geo.moveCenter(center)
+        self.move(geo.topLeft())
+
+    @rpa_program_method_decorator
+    def show_weather_from_web(self):
+        Park4139.get_comprehensive_weather_information_from_web()
+
+    @rpa_program_method_decorator
+    def run_no_paste_memo(self):
+        Park4139.annouce_service_launch()
+
+    @rpa_program_method_decorator
+    def should_i_reboot_this_computer(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents='시스템을 재시작할까요?', buttons=["재시작", "재시작하지 않기"])
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "재시작":
+                Park4139.reboot_this_computer()
+            else:
+                break
+
+    @QtCore.Slot()
+    def login(self):
+        Park4139.annouce_service_launch()
+        print(self.print_id)
+
+    @rpa_program_method_decorator
+    def should_i_show_animation_information_from_web(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="nyaa.si 에서 검색할 내용을 입력하세요", buttons=["입력", "입력하지 않기"], is_input_text_box=True)
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "입력":
+                Park4139.search_animation_data_from_web(dialog.box_for_editing_input_text.text())
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def should_i_exit_this_program(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="앱을 종료할까요?", buttons=["종료", "종료하지 않기"])
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "종료":
+                # app.quit()
+                Park4139.taskkill("python.exe")
+                sys.exit()
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def should_i_find_direction_via_naver_map(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="어디로 길을 찾아드릴까요?", buttons=["입력", "입력하지 않기"], is_input_text_box=True)
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "입력":
+                Park4139.find_direction_via_naver_map(dialog.box_for_editing_input_text.text())
+            else:
+                # self.show()
+                break
+
+    @rpa_program_method_decorator
+    def download_youtube_as_wav(self):
+        Park4139.annouce_service_launch()
+
+    @rpa_program_method_decorator
+    def should_i_download_youtube_as_webm(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="다운로드하고 싶은 URL을 제출해주세요?", buttons=["제출", "제출하지 않기"], is_input_text_box=True)
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "제출":
+                Park4139.download_from_youtube_to_webm(dialog.box_for_editing_input_text.text())
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def should_i_download_youtube_as_webm_alt(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="다운로드하고 싶은 URL을 제출해주세요?", buttons=["제출", "제출하지 않기"], is_input_text_box=True)
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "제출":
+                Park4139.download_from_youtube_to_webm_alt(dialog.box_for_editing_input_text.text())
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def download_youtube_as_webm_only_sound(self):
+        Park4139.annouce_service_launch()
+
+    def hide_windows_of_this_app(self):
+        self.hide()
+
+    @rpa_program_method_decorator
+    def should_i_shutdown_this_computer(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="시스템을 종료할까요?", buttons=["종료", "종료하지 않기"])
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "종료":
+                Park4139.shutdown_this_computer()
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def make_screenshot_custom(self):
+        while True:
+            Park4139.shoot_custom_screenshot()
+            break
+
+    @rpa_program_method_decorator
+    def make_screenshot_full(self):
+        while True:
+            Park4139.shoot_full_screenshot()
+            break
+
+    @rpa_program_method_decorator
+    def shoot_screenshot_for_rpa(self):
+        while True:
+            Park4139.shoot_img_for_rpa()
+            break
+
+    @rpa_program_method_decorator
+    def back_up_target(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="백업할 타겟경로를 입력하세요?", buttons=["입력", "입력하지 않기"], is_input_text_box=True)
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "입력":
+                Park4139.bkup(dialog.box_for_editing_input_text.text())
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def test(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="테스트를 시작할까요?", buttons=["시작하기", "시작하지 않기"])
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            if text_of_clicked_btn == "시작하기":
+                # _________________________________________  UP (TESTED SUCCESS) _________________________________________
+                import test_core
+                # _________________________________________ BELOW (NOT TESTED YET) _________________________________________
+                break
+            else:
+                break
+
+    @staticmethod
+    def do_nothing():
+        Park4139.commentize("def do_nothing():")
+
+    @rpa_program_method_decorator
+    def open_project_directory(self):
+        Park4139.get_cmd_output(f'explorer "{os.getcwd()}"')
+
+    @rpa_program_method_decorator
+    def should_i_enter_to_power_saving_mode(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="절전모드로 진입할까요?", buttons=["진입", "진입하지 않기"])
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "진입":
+                Park4139.enter_power_saving_mode()
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def should_i_translate_eng_to_kor(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="WRITE SOMETHING YOU WANT TO TRANSLATE \n(FROM ENG TO KOREAN)", buttons=["Translate this", "Don't"], is_input_text_box=True)
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "Translate this":
+                Park4139.translate_eng_to_kor(dialog.box_for_editing_input_text.text())
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def translate_kor_to_eng(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents='번역하고 싶은 내용을 입력하세요\n(한글에서 영어로)', buttons=["번역해줘", "번역하지 않기"], is_input_text_box=True)
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "번역해줘":
+                Park4139.translate_kor_to_eng(dialog.box_for_editing_input_text.text())
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def should_i_empty_trash_can(self):
+        while True:
+            # Park4139.commentize(rf'휴지통 용량확인 pyautogui RPA')
+            # ment = f'현재 휴지통이 10기가 바이트 이상입니다 쓰레기통을 비울까요' # 이건 wrapping 할 로직.
+            dialog = pkg_park4139.CustomDialog(contents='쓰레기통을 비울까요?', buttons=["비워줘", "비우지 말아줘"])
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "비워줘":
+                Park4139.empty_recycle_bin()
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def run_cmd_exe(self):
+        Park4139.run_cmd_exe()
+
+    @rpa_program_method_decorator
+    def ask_something_to_ai(self):
+        previous_question = None
+        if previous_question == None:
+            previous_question = clipboard.paste()
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents='AI 에게 할 질문을 입력하세요', buttons=["질문해줘", "질문하지 않기"], is_input_text_box=True, input_text_default=previous_question)
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "질문해줘":
+                Park4139.ask_to_web(dialog.box_for_editing_input_text.text())
+            else:
+                break
+            previous_question = dialog.box_for_editing_input_text.text()
+
+    @rpa_program_method_decorator
+    def connect_to_rdp1(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents='rdp1에 원격접속할까요?', buttons=["접속해줘", "접속하지 않기"])
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            Park4139.commentize("text_of_clicked_btn")
+            Park4139.debug_as_cli(text_of_clicked_btn)
+            if text_of_clicked_btn == "접속해줘":
+                Park4139.connect_remote_rdp1()
+            else:
+                break
+
+    @QtCore.Slot()
+    def print_id(self):
+        print(self.id)
+
+    @rpa_program_method_decorator
+    def record_macro(self):
+        while True:
+            dialog = pkg_park4139.CustomDialog(contents="매크로 레코드를 새로 시작할까요?", buttons=["새로 시작하기", "이어서 시작하기", "시작하지 않기"])
+            dialog.exec_()
+            text_of_clicked_btn = dialog.text_of_clicked_btn
+            if text_of_clicked_btn == "새로 시작하기":
+                macro_window = MacroWindow()
+                macro_window.show()
+                macro_window.activateWindow()
+                break
+            elif text_of_clicked_btn == "이어서 시작하기":
+                if os.path.exists(Park4139.MACRO_LOG):
+                    Park4139.move_target_to_trash_bin(Park4139.MACRO_LOG)
+            else:
+                break
+
+    @rpa_program_method_decorator
+    def download_video_from_web1(self):
+        while True:
+            # Park4139.press("ctrl", "0")
+
+            file_png = rf"{os.getcwd()}\$cache_png\download_video_via_chrome_extensions.png"
+            Park4139.click_center_of_img_recognized_by_mouse_left(img_abspath=file_png, recognize_loop_limit_cnt=10)
+
+            Park4139.sleep(1000)
+
+            Park4139.press("tab")
+            Park4139.sleep(30)
+
+            Park4139.press("enter")
+            Park4139.sleep(30)
+
+            Park4139.press("ctrl", "shift", "tab")
+
+            Park4139.press("ctrl", "0")
+            Park4139.press("ctrl", "-")
+            Park4139.press("ctrl", "-")
+            break
+
+    @rpa_program_method_decorator
+    def download_video_from_web2(self):
+        while True:
+            file_png = rf"{os.getcwd()}\$cache_png\download_video_via_chrome_extensions1.png"
+            is_image_finded = Park4139.click_center_of_img_recognized_by_mouse_left(img_abspath=file_png, recognize_loop_limit_cnt=100)
+            if is_image_finded:
+                Park4139.sleep(30)
+                Park4139.press("ctrl", "f")
+                Park4139.press("end")
+                Park4139.press("ctrl", "a")
+                Park4139.press("backspace")
+                Park4139.write_fast("save")
+                Park4139.press("enter")
+                Park4139.press("enter")
+                Park4139.press("esc")
+                Park4139.press("enter")
+                file_png = rf"{os.getcwd()}\$cache_png\download_video_via_chrome_extensions2.png"
+                is_image_finded = Park4139.click_center_of_img_recognized_by_mouse_left(img_abspath=file_png, recognize_loop_limit_cnt=100)
+                if is_image_finded:
+                    Park4139.press("shift", "w")
+                else:
+                    Park4139.speak("이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다")
+            else:
+                Park4139.speak("이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다")
+            break
+        pass
+
+
+
+    def toogle_rpa_window(self):
+        # Park4139.debug_as_cli(f"def {inspect.currentframe().f_code.co_name}() is called...")
+        if self.isHidden() and not self.isVisible():
+            # console_blurred 프로그램 창 활성화
+            # self.activateWindow() 와 self.show() 의 위치는 서로 바뀌면 의도된대로 동작을 하지 않는다
+            self.show()
+            self.activateWindow()
+        else:
+            self.hide()
+
+    def run_stating_scheduler_without_confirm(self):
+        """      이 함수는 스케쥴러를 실행시키는 함수 입니다 mkr    """
+        # 비동기 이벤트 함수 설정
+        async def run_scheduler():
+            # Park4139.speak_cheer_up_ment_each_day(Park4139.get_time_as_('weekday'))
+            # schedule.every(30).minutes.do(partial(Park4139.speak_after_x_min, 30))
+            # schedule.every().tuesday.at("15:00").do(Park4139.speak_today_time_info)
+            # schedule.every().wednesday.at("15:00").do(Park4139.speak_today_time_info)
+            # schedule.every().thursday.at("15:00").do(Park4139.speak_today_time_info)
+            # schedule.every().friday.at("15:00").do(Park4139.speak_today_time_info)
+            # schedule.every().saturday.at("15:00").do(Park4139.speak_today_time_info)
+            # schedule.every().sunday.at("15:00").do(Park4139.speak_today_time_info)
+            # schedule.every(1).hour.do(Park4139.speak_server_hh_mm)
+            # schedule.every(1).day.do(Park4139.speak_server_hh_mm)
+            # schedule.every(1).day.at("12:30").do(Park4139.speak_server_hh_mm)
+            # while True:
+                # schedule.run_pending()
+                # Park4139.debug_as_cli(f"async def {inspect.currentframe().f_code.co_name}() is running...")
+                # await Park4139.async_sleep(1000)
+            loop_cnt = 0
+            PARK4139_ARCHIVE_LOG = Park4139.PARK4139_ARCHIVE_TOML
+            key = "park4139_archive_log_line_cnt"
+            while True:
+                # 루프마다 == 가능한 짧은 시간 마다
+                yyyy = Park4139.get_time_as_('%Y')
+                MM = Park4139.get_time_as_('%m')
+                dd = Park4139.get_time_as_('%d')
+                HH = Park4139.get_time_as_('%H')
+                mm = Park4139.get_time_as_('%M')
+                ss = Park4139.get_time_as_('%S')
+                server_time = Park4139.get_time_as_(rf'%Y-%m-%d %H:%M:%S')
+                # 한번만
+                if loop_cnt == 0:
+                    # do_run_targets_promised()
+
+                    # park4139.commentize("로컬 데이터베이스 접근 테스트를 시도합니다")
+                    if not Park4139.is_accesable_local_database(db_template=Park4139.db_template, db_abspath=Park4139.DB_TOML):
+                        Park4139.commentize("로컬 데이터베이스에 접근이 가능하도록 설정합니다")
+
+                    Park4139.classify_targets_between_smallest_targes_biggest_targets()
+
+                    Park4139.monitor_target_edited_and_bkup(target_abspath=PARK4139_ARCHIVE_LOG, key=key)
+
+                    # park4139.commentize(title = '전역 pkg_park4139 업데이트')
+                    # 이 메소드는 프로젝트 내에 지역적으로 위치한 pkg_park4139 하나만 관리해도
+                    # global site-packages에 위치한 pkg_park4139 동기화를 시켜 pycharm 자동완성 기능 가능.
+                    # 이제는 더이상 필요없는 함수가 되었는데 타겟의 업데이트가 필요한 경우 상속하거나 변형해 쓰면 되겠다
+                    # park4139.update_global_pkg_park4139()
+
+                # 루프 카운트 갱신
+                loop_cnt = loop_cnt + 1
+                # print(f"loop_cnt : {loop_cnt}")
+                print(loop_cnt)
+
+                # 0시에서 24시 사이,
+                if 0 <= int(HH) <= 24:
+                    # 6시 30분
+                    if int(HH) == 6 and int(mm) == 30:
+                        Park4139.do_routine_06_30()
+                    # 7시 30분
+                    if int(HH) == 7 and int(mm) == 30:
+                        Park4139.do_routine_07_30()
+                    # 8시 50분
+                    if int(HH) == 8 and int(mm) == 50:
+                        Park4139.do_routine_08_50()
+                    if int(HH) == 9 and int(mm) == 0:
+                        Park4139.do_routine_09_00()
+                    # 11시 30분
+                    if int(HH) == 11 and int(mm) == 30:
+                        Park4139.do_routine_11_30()
+                    if int(HH) == 13 and int(mm) == 00:  # 0이 아닌 00 으로도 동작하는 지 실험
+                        Park4139.do_routine_13_00()
+                    # 22시 10분
+                    if int(HH) == 22 and int(mm) == 10:
+                        Park4139.do_routine_22_10()
+                    # 22시 30분
+                    if int(HH) == 22 and int(mm) == 30:
+                        Park4139.do_routine_22_40()
+                    # 24시이면
+                    if int(HH) == 24 and int(mm) == 0 and int(ss) == 0:
+                        Park4139.do_routine_24_00()
+                        # 5초 마다
+                    if int(ss) % 5 == 0:
+                        if loop_cnt == 1:
+                            PARK4139_ARCHIVE_LOG = rf'{Park4139.PROJECT_DIRECTORY}\park4139_archive.log'
+                            key = "park4139_archive_log_line_cnt"
+                            Park4139.monitor_target_edited_and_bkup(target_abspath=PARK4139_ARCHIVE_LOG, key=key)
+
+                    # 15초 마다
+                    if int(ss) % 15 == 0:
+                        Park4139.do_random_schedules()
+
+                    # 30분 마다
+                    if int(mm) % 30 == 0:
+                        Park4139.do_routine_per_30_mins(30)
+                    # 60분 마다
+                    if int(mm) % 60 == 0:
+                        Park4139.do_routine_per_60_mins(60)
+                        pass
+
+                # 0시에서 4시 사이, 30분 마다
+                # if 0 <= int(HH) <= 4 and int(mm) % 30 == 0:
+                #     pass
+
+                # 0시에서 4시 사이, 30초 마다
+                if 0 <= int(HH) <= 4:
+                    if int(ss) % 30 == 0:
+                        Park4139.do_routine_that_to_make_developer_go_to_sleep()
+
+                # 루프 휴식
+                Park4139.sleep(milliseconds=1000)
+            # 1년에 한번 수행 아이디어
+            # random_schedule.json 에서 leaved_max_count를 읽어온다
+            # leaved_max_count=1 이면 년에 1번 수행 하도록
+            # leaved_max_count=10 이면 년에 10번 수행 하도록
+            # leaved_max_count=0 이면 올해에는 더이상 수행하지 않음
+            # leaved_max_count 를 random_schedule_tb.toml 에 저장
+
+            # - 1시간 뒤 시스템 종료 예약 기능
+            # - 즉시 시스템 종료 시도 기능
+            # - 시간 시현기능 기능(autugui 이용)
+            #   ment ='pc 정밀검사를 한번 수행해주세요'
+            #   commentize(ment)
+            # - 하드코딩된 스케줄 작업 수행 기능
+            # - 미세먼지 웹스크래핑 기능
+            # - 초미세먼지 웹스크래핑 기능
+            # - 종합날씨 웹스크래핑 기능
+            # - 습도 웹스크래핑 기능
+            # - 체감온도 웹스크래핑 기능
+            # - 현재온도 웹스크래핑 기능
+            # - 음악재생 기능
+            # - 영상재생 기능
+
+        # 비동기 이벤트 루프 설정
+        def run_loop_of_run_scheduler():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(run_scheduler())
+
+        # 비동기 이벤트 루프 실행할 쓰레드 설정
+        scheduler_thread = threading.Thread(target=run_loop_of_run_scheduler)
+        scheduler_thread.start()
+
+
+class MacroWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        #  매크로 창 전역 변수 설정
+
+        self.previus_pressed_keys = []
+        self.display_width = Park4139.get_display_info()['width'],
+        self.display_height = Park4139.get_display_info()['height'],
+        # self.display_width_default = int(int(self.display_width[0]) * 0.106)
+        self.display_width_default = int(int(self.display_width[0]) * 0.06)
+        self.display_height_default = int(int(self.display_height[0]) * 0.2)
+
+        # 마우스 위치, 클릭 정보, 시간 정보를 저장할 리스트
+        # self.positions = []
+
+        # 녹화 시작 시간
+        self.time_recording_start = time.time()
+        # self.time_recording_start_rel = 0.0
+        self.elapsed_full_recording_time = 0.0
+        self.previous_time = time.time()
+        self.time_recording_end = 0.0
+        #  메인창 설정
+        self.setWindowTitle('.')
+        self.setWindowIcon(QIcon(Park4139.ICON_PNG))  # 메인창 아이콘 설정
+        # self.setAttribute(Qt.WA_TranslucentBackground) # 메인창 블러 설정
+        # self.setWindowFlags(Qt.WindowType.FramelessWindowHint) # 메인창 최상단 프레임레스 설정
+        GlobalBlur(self.winId(), hexColor=False, Acrylic=False, Dark=True, QWidget=self)
+        self.setWindowFlags(Qt.WindowTitleHint | Qt.WindowCloseButtonHint)  # 최대화 최소화 버튼 숨기기
+        self.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
+        self.scale = 1 / 10
+        self.windows_size_mode = 0  # 창크기 모드 설정  #0 ~ 3
+        self.rotate_window_size_mode()
+
+        # label 설정
+        self.label = QLabel(self)
+        self.label.setStyleSheet("color: rgba(255,255,255, 0.9);")
+        self.label.setText(f"녹화 중...\n녹화경과시간: None\n")
+
+        # 단축키 설정
+        self.available_shortcut_list = {
+            'MACRO EXCUTE': 'Ctrl+E',
+            'MACRO EXIT': 'Ctrl+Q',
+        }
+        # self.set_shortcut('MACRO RECORD',self.record_macro)
+        self.set_shortcut('MACRO EXCUTE', self.excute_macro)
+        self.set_shortcut('MACRO EXIT', self.exit_macro)
+
+        # 버튼 설정
+        btn_to_excute_macro = self.get_btn(self.get_btn_name_with_shortcut('MACRO EXCUTE'), self.excute_macro)
+        btn_to_exit_macro = self.get_btn(self.get_btn_name_with_shortcut('MACRO EXIT'), self.exit_macro)
+
+        # GRID SETTING
+        grid = QtWidgets.QGridLayout(self)
+        btns = [
+            self.label,
+            btn_to_excute_macro,
+            btn_to_exit_macro
+        ]
+        cnt = 0
+        for i in btns:
+            grid.addWidget(i, cnt, 0)
+            cnt = cnt + 1
+
+        # 레이아웃 설정
+        layout = QGridLayout(self)
+        layout.addLayout(grid, 0, 0)
+
+        # 단일 단축키가 같이 눌리는 문제 ( ctrl + v 를 누르면   ctrl + v 에 바인딩된 함수만 호출되길 기대하는데, ctrl 에 바인딩된 함수도 호출되는 문제 )
+        # 이벤트를 나누어 만들어 하나의 이벤트가 호출되면 다른 하나의 이벤트는 호출되지 않도록 설정 시도
+        self.is_processing_event = False
+
+        # Condition 객체 생성
+        # self.condition = threading.Condition()
+
+        # 이벤트 우선순위 설정
+        # self.is_event_shortcut_3_processing = False # highest priority
+        # self.is_event_shortcut_1_processing = False
+
+        # 마우스 이동 이벤트 핸들러 설정
+        listener = pynput.mouse.Listener(on_move=self.on_mouse_move)
+        listener.start()
+
+        # 마우스 버튼 클릭 이벤트 핸들러 설정
+        listener2 = pynput.mouse.Listener(on_click=self.on_mouse_btn_clicked)
+        listener2.start()
+
+        # 키보드 이벤트 핸들러 설정 ( 3개 조합 단축키 , 2개 조합 단축키 , 단일 단축키 모두가능)
+
+        def for_canonical_up(f):
+            return lambda k: f(self.listener_shorcuts_up.canonical(k))
+
+        def for_canonical_down(f):
+            return lambda k: f(self.listener_shorcuts_down.canonical(k))
+
+        single_keys_promised = {
+            "<alt>": partial(self.on_keys_down, "<alt>"),
+            "<alt_gr>": partial(self.on_keys_down, "<alt_gr>"),
+            # "<alt_l>": partial(on_activate_h, "<alt_l>"),
+            # "<alt_r>": partial(on_activate_h, "<alt_r>"),
+            "<backspace>": partial(self.on_keys_down, "<backspace>"),
+            "<caps_lock>": partial(self.on_keys_down, "<caps_lock>"),
+            "<cmd>": partial(self.on_keys_down, "<cmd>"),
+            # "<cmd_l>": partial(on_activate_h, "<cmd_l>"),
+            # "<cmd_r>": partial(on_activate_h, "<cmd_r>"),
+            "<ctrl>": partial(self.on_keys_down, "<ctrl>"),
+            # "<ctrl_l>": partial(self.on_keys_down, "<ctrl_l>"),
+            # "<ctrl_r>": partial(self.on_keys_down, "<ctrl_r>"),
+            "<delete>": partial(self.on_keys_down, "<delete>"),
+            "<down>": partial(self.on_keys_down, "<down>"),
+            "<end>": partial(self.on_keys_down, "<end>"),
+            "<enter>": partial(self.on_keys_down, "<enter>"),
+            "<esc>": partial(self.on_keys_down, "<esc>"),
+            "<f1>": partial(self.on_keys_down, "<f1>"),
+            "<home>": partial(self.on_keys_down, "<home>"),
+            "<insert>": partial(self.on_keys_down, "<insert>"),
+            "<left>": partial(self.on_keys_down, "<left>"),
+            "<media_next>": partial(self.on_keys_down, "<media_next>"),
+            "<media_play_pause>": partial(self.on_keys_down, "<media_play_pause>"),
+            "<media_previous>": partial(self.on_keys_down, "<media_previous>"),
+            "<media_volume_down>": partial(self.on_keys_down, "<media_volume_down>"),
+            "<media_volume_mute>": partial(self.on_keys_down, "<media_volume_mute>"),
+            "<media_volume_up>": partial(self.on_keys_down, "<media_volume_up>"),
+            "<menu>": partial(self.on_keys_down, "<menu>"),
+            "<num_lock>": partial(self.on_keys_down, "<num_lock>"),
+            "<page_down>": partial(self.on_keys_down, "<page_down>"),
+            "<page_up>": partial(self.on_keys_down, "<page_up>"),
+            "<pause>": partial(self.on_keys_down, "<pause>"),
+            "<print_screen>": partial(self.on_keys_down, "<print_screen>"),
+            "<right>": partial(self.on_keys_down, "<right>"),
+            "<scroll_lock>": partial(self.on_keys_down, "<scroll_lock>"),
+            "<shift>": partial(self.on_keys_down, "<shift>"),
+            # "<shift_l>": partial(on_activate_h, "<shift_l>"),
+            # "<shift_r>": partial(on_activate_h, "<shift_r>"),
+            "<space>": partial(self.on_keys_down, "<space>"),
+            "<tab>": partial(self.on_keys_down, "<tab>"),
+            "<up>": partial(self.on_keys_down, "<up>"),
+            "a": partial(self.on_keys_down, "a"),
+            "b": partial(self.on_keys_down, "b"),
+            "c": partial(self.on_keys_down, "c"),
+            "d": partial(self.on_keys_down, "d"),
+            "e": partial(self.on_keys_down, "e"),
+            "f": partial(self.on_keys_down, "f"),
+            "g": partial(self.on_keys_down, "g"),
+            "h": partial(self.on_keys_down, "h"),
+            "i": partial(self.on_keys_down, "i"),
+            "j": partial(self.on_keys_down, "j"),
+            "k": partial(self.on_keys_down, "k"),
+            "l": partial(self.on_keys_down, "l"),
+            "m": partial(self.on_keys_down, "m"),
+            "n": partial(self.on_keys_down, "n"),
+            "o": partial(self.on_keys_down, "o"),
+            "p": partial(self.on_keys_down, "p"),
+            "q": partial(self.on_keys_down, "q"),
+            "r": partial(self.on_keys_down, "r"),
+            "s": partial(self.on_keys_down, "s"),
+            "t": partial(self.on_keys_down, "t"),
+            "u": partial(self.on_keys_down, "u"),
+            "v": partial(self.on_keys_down, "v"),
+            "w": partial(self.on_keys_down, "w"),
+            "x": partial(self.on_keys_down, "x"),
+            "y": partial(self.on_keys_down, "y"),
+            "z": partial(self.on_keys_down, "z"),
+        }
+
+        shortcut_keys_up_promised = {
+            "<ctrl>+<alt>": partial(self.on_keys_up, "<ctrl>+<alt>"),
+            "<ctrl>+<alt_gr>": partial(self.on_keys_up, "<ctrl>+<alt_gr>"),
+            # "<ctrl>+<alt_l>": partial(on_activate_h, "<ctrl>+<alt_l>"),
+            # "<ctrl>+<alt_r>": partial(on_activate_h, "<ctrl>+<alt_r>"),
+            "<ctrl>+<backspace>": partial(self.on_keys_up, "<ctrl>+<backspace>"),
+            "<ctrl>+<caps_lock>": partial(self.on_keys_up, "<ctrl>+<caps_lock>"),
+            "<ctrl>+<cmd>": partial(self.on_keys_up, "<ctrl>+<cmd>"),
+            # "<ctrl>+<cmd_l>": partial(on_activate_h, "<ctrl>+<cmd_l>"),
+            # "<ctrl>+<cmd_r>": partial(on_activate_h, "<ctrl>+<cmd_r>"),
+            # "<ctrl>+<ctrl>": partial(on_activate_h, "<ctrl>+<ctrl>"),
+            "<ctrl>+<ctrl_l>": partial(self.on_keys_up, "<ctrl>+<ctrl_l>"),
+            "<ctrl>+<ctrl_r>": partial(self.on_keys_up, "<ctrl>+<ctrl_r>"),
+            "<ctrl>+<delete>": partial(self.on_keys_up, "<ctrl>+<delete>"),
+            "<ctrl>+<down>": partial(self.on_keys_up, "<ctrl>+<down>"),
+            "<ctrl>+<end>": partial(self.on_keys_up, "<ctrl>+<end>"),
+            "<ctrl>+<enter>": partial(self.on_keys_up, "<ctrl>+<enter>"),
+            "<ctrl>+<esc>": partial(self.on_keys_up, "<ctrl>+<esc>"),
+            "<ctrl>+<f1>": partial(self.on_keys_up, "<ctrl>+<f1>"),
+            "<ctrl>+<home>": partial(self.on_keys_up, "<ctrl>+<home>"),
+            "<ctrl>+<insert>": partial(self.on_keys_up, "<ctrl>+<insert>"),
+            "<ctrl>+<left>": partial(self.on_keys_up, "<ctrl>+<left>"),
+            "<ctrl>+<media_next>": partial(self.on_keys_up, "<ctrl>+<media_next>"),
+            "<ctrl>+<media_play_pause>": partial(self.on_keys_up, "<ctrl>+<media_play_pause>"),
+            "<ctrl>+<media_previous>": partial(self.on_keys_up, "<ctrl>+<media_previous>"),
+            "<ctrl>+<media_volume_down>": partial(self.on_keys_up, "<ctrl>+<media_volume_down>"),
+            "<ctrl>+<media_volume_mute>": partial(self.on_keys_up, "<ctrl>+<media_volume_mute>"),
+            "<ctrl>+<media_volume_up>": partial(self.on_keys_up, "<ctrl>+<media_volume_up>"),
+            "<ctrl>+<menu>": partial(self.on_keys_up, "<ctrl>+<menu>"),
+            "<ctrl>+<num_lock>": partial(self.on_keys_up, "<ctrl>+<num_lock>"),
+            "<ctrl>+<page_down>": partial(self.on_keys_up, "<ctrl>+<page_down>"),
+            "<ctrl>+<page_up>": partial(self.on_keys_up, "<ctrl>+<page_up>"),
+            "<ctrl>+<pause>": partial(self.on_keys_up, "<ctrl>+<pause>"),
+            "<ctrl>+<print_screen>": partial(self.on_keys_up, "<ctrl>+<print_screen>"),
+            "<ctrl>+<right>": partial(self.on_keys_up, "<ctrl>+<right>"),
+            "<ctrl>+<scroll_lock>": partial(self.on_keys_up, "<ctrl>+<scroll_lock>"),
+            "<ctrl>+<shift>": partial(self.on_keys_up, "<ctrl>+<shift>"),
+            # "<ctrl>+<shift_l>": partial(on_activate_h, "<ctrl>+<shift_l>"),
+            # "<ctrl>+<shift_r>": partial(on_activate_h, "<ctrl>+<shift_r>"),
+            "<ctrl>+<space>": partial(self.on_keys_up, "<ctrl>+<space>"),
+            "<ctrl>+<tab>": partial(self.on_keys_up, "<ctrl>+<tab>"),
+            "<ctrl>+<up>": partial(self.on_keys_up, "<ctrl>+<up>"),
+            "<ctrl>+a": partial(self.on_keys_up, "<ctrl>+a"),
+            "<ctrl>+b": partial(self.on_keys_up, "<ctrl>+b"),
+            "<ctrl>+c": partial(self.on_keys_up, "<ctrl>+c"),
+            "<ctrl>+d": partial(self.on_keys_up, "<ctrl>+d"),
+            "<ctrl>+e": partial(self.on_keys_up, "<ctrl>+e"),
+            "<ctrl>+f": partial(self.on_keys_up, "<ctrl>+f"),
+            "<ctrl>+g": partial(self.on_keys_up, "<ctrl>+g"),
+            "<ctrl>+h": partial(self.on_keys_up, "<ctrl>+h"),
+            "<ctrl>+i": partial(self.on_keys_up, "<ctrl>+i"),
+            "<ctrl>+j": partial(self.on_keys_up, "<ctrl>+j"),
+            "<ctrl>+k": partial(self.on_keys_up, "<ctrl>+k"),
+            "<ctrl>+l": partial(self.on_keys_up, "<ctrl>+l"),
+            "<ctrl>+m": partial(self.on_keys_up, "<ctrl>+m"),
+            "<ctrl>+n": partial(self.on_keys_up, "<ctrl>+n"),
+            "<ctrl>+o": partial(self.on_keys_up, "<ctrl>+o"),
+            "<ctrl>+p": partial(self.on_keys_up, "<ctrl>+p"),
+            "<ctrl>+q": partial(self.on_keys_up, "<ctrl>+q"),
+            "<ctrl>+r": partial(self.on_keys_up, "<ctrl>+r"),
+            "<ctrl>+s": partial(self.on_keys_up, "<ctrl>+s"),
+            "<ctrl>+t": partial(self.on_keys_up, "<ctrl>+t"),
+            "<ctrl>+u": partial(self.on_keys_up, "<ctrl>+u"),
+            "<ctrl>+v": partial(self.on_keys_up, "<ctrl>+v"),
+            "<ctrl>+w": partial(self.on_keys_up, "<ctrl>+w"),
+            "<ctrl>+x": partial(self.on_keys_up, "<ctrl>+x"),
+            "<ctrl>+y": partial(self.on_keys_up, "<ctrl>+y"),
+            "<ctrl>+z": partial(self.on_keys_up, "<ctrl>+z"),
+            # "<ctrl>": partial(self.on_keys_up, "<ctrl>"),
+            "<ctrl>+<alt>+a": partial(self.on_keys_up, "<ctrl>+<alt>+a"),
+        }
+
+        # shortcut_keys_down_promised = {
+        #     "<ctrl>+<alt>": partial(self.on_keys_down, "<ctrl>+<alt>"),
+        #     "<ctrl>+<alt_gr>": partial(self.on_keys_down, "<ctrl>+<alt_gr>"),
+        #     # "<ctrl>+<alt_l>": partial(on_activate_h, "<ctrl>+<alt_l>"),
+        #     # "<ctrl>+<alt_r>": partial(on_activate_h, "<ctrl>+<alt_r>"),
+        #     "<ctrl>+<backspace>": partial(self.on_keys_down, "<ctrl>+<backspace>"),
+        #     "<ctrl>+<caps_lock>": partial(self.on_keys_down, "<ctrl>+<caps_lock>"),
+        #     "<ctrl>+<cmd>": partial(self.on_keys_down, "<ctrl>+<cmd>"),
+        #     # "<ctrl>+<cmd_l>": partial(on_activate_h, "<ctrl>+<cmd_l>"),
+        #     # "<ctrl>+<cmd_r>": partial(on_activate_h, "<ctrl>+<cmd_r>"),
+        #     # "<ctrl>+<ctrl>": partial(on_activate_h, "<ctrl>+<ctrl>"),
+        #     "<ctrl>+<ctrl_l>": partial(self.on_keys_down, "<ctrl>+<ctrl_l>"),
+        #     "<ctrl>+<ctrl_r>": partial(self.on_keys_down, "<ctrl>+<ctrl_r>"),
+        #     "<ctrl>+<delete>": partial(self.on_keys_down, "<ctrl>+<delete>"),
+        #     "<ctrl>+<down>": partial(self.on_keys_down, "<ctrl>+<down>"),
+        #     "<ctrl>+<end>": partial(self.on_keys_down, "<ctrl>+<end>"),
+        #     "<ctrl>+<enter>": partial(self.on_keys_down, "<ctrl>+<enter>"),
+        #     "<ctrl>+<esc>": partial(self.on_keys_down, "<ctrl>+<esc>"),
+        #     "<ctrl>+<f1>": partial(self.on_keys_down, "<ctrl>+<f1>"),
+        #     "<ctrl>+<home>": partial(self.on_keys_down, "<ctrl>+<home>"),
+        #     "<ctrl>+<insert>": partial(self.on_keys_down, "<ctrl>+<insert>"),
+        #     "<ctrl>+<left>": partial(self.on_keys_down, "<ctrl>+<left>"),
+        #     "<ctrl>+<media_next>": partial(self.on_keys_down, "<ctrl>+<media_next>"),
+        #     "<ctrl>+<media_play_pause>": partial(self.on_keys_down, "<ctrl>+<media_play_pause>"),
+        #     "<ctrl>+<media_previous>": partial(self.on_keys_down, "<ctrl>+<media_previous>"),
+        #     "<ctrl>+<media_volume_down>": partial(self.on_keys_down, "<ctrl>+<media_volume_down>"),
+        #     "<ctrl>+<media_volume_mute>": partial(self.on_keys_down, "<ctrl>+<media_volume_mute>"),
+        #     "<ctrl>+<media_volume_up>": partial(self.on_keys_down, "<ctrl>+<media_volume_up>"),
+        #     "<ctrl>+<menu>": partial(self.on_keys_down, "<ctrl>+<menu>"),
+        #     "<ctrl>+<num_lock>": partial(self.on_keys_down, "<ctrl>+<num_lock>"),
+        #     "<ctrl>+<page_down>": partial(self.on_keys_down, "<ctrl>+<page_down>"),
+        #     "<ctrl>+<page_up>": partial(self.on_keys_down, "<ctrl>+<page_up>"),
+        #     "<ctrl>+<pause>": partial(self.on_keys_down, "<ctrl>+<pause>"),
+        #     "<ctrl>+<print_screen>": partial(self.on_keys_down, "<ctrl>+<print_screen>"),
+        #     "<ctrl>+<right>": partial(self.on_keys_down, "<ctrl>+<right>"),
+        #     "<ctrl>+<scroll_lock>": partial(self.on_keys_down, "<ctrl>+<scroll_lock>"),
+        #     "<ctrl>+<shift>": partial(self.on_keys_down, "<ctrl>+<shift>"),
+        #     # "<ctrl>+<shift_l>": partial(on_activate_h, "<ctrl>+<shift_l>"),
+        #     # "<ctrl>+<shift_r>": partial(on_activate_h, "<ctrl>+<shift_r>"),
+        #     "<ctrl>+<space>": partial(self.on_keys_down, "<ctrl>+<space>"),
+        #     "<ctrl>+<tab>": partial(self.on_keys_down, "<ctrl>+<tab>"),
+        #     "<ctrl>+<up>": partial(self.on_keys_down, "<ctrl>+<up>"),
+        #     "<ctrl>+a": partial(self.on_keys_down, "<ctrl>+a"),
+        #     "<ctrl>+b": partial(self.on_keys_down, "<ctrl>+b"),
+        #     "<ctrl>+c": partial(self.on_keys_down, "<ctrl>+c"),
+        #     "<ctrl>+d": partial(self.on_keys_down, "<ctrl>+d"),
+        #     "<ctrl>+e": partial(self.on_keys_down, "<ctrl>+e"),
+        #     "<ctrl>+f": partial(self.on_keys_down, "<ctrl>+f"),
+        #     "<ctrl>+g": partial(self.on_keys_down, "<ctrl>+g"),
+        #     "<ctrl>+h": partial(self.on_keys_down, "<ctrl>+h"),
+        #     "<ctrl>+i": partial(self.on_keys_down, "<ctrl>+i"),
+        #     "<ctrl>+j": partial(self.on_keys_down, "<ctrl>+j"),
+        #     "<ctrl>+k": partial(self.on_keys_down, "<ctrl>+k"),
+        #     "<ctrl>+l": partial(self.on_keys_down, "<ctrl>+l"),
+        #     "<ctrl>+m": partial(self.on_keys_down, "<ctrl>+m"),
+        #     "<ctrl>+n": partial(self.on_keys_down, "<ctrl>+n"),
+        #     "<ctrl>+o": partial(self.on_keys_down, "<ctrl>+o"),
+        #     "<ctrl>+p": partial(self.on_keys_down, "<ctrl>+p"),
+        #     "<ctrl>+q": partial(self.on_keys_down, "<ctrl>+q"),
+        #     "<ctrl>+r": partial(self.on_keys_down, "<ctrl>+r"),
+        #     "<ctrl>+s": partial(self.on_keys_down, "<ctrl>+s"),
+        #     "<ctrl>+t": partial(self.on_keys_down, "<ctrl>+t"),
+        #     "<ctrl>+u": partial(self.on_keys_down, "<ctrl>+u"),
+        #     "<ctrl>+v": partial(self.on_keys_down, "<ctrl>+v"),
+        #     "<ctrl>+w": partial(self.on_keys_down, "<ctrl>+w"),
+        #     "<ctrl>+x": partial(self.on_keys_down, "<ctrl>+x"),
+        #     "<ctrl>+y": partial(self.on_keys_down, "<ctrl>+y"),
+        #     "<ctrl>+z": partial(self.on_keys_down, "<ctrl>+z"),
+        #     # "<ctrl>": partial(self.on_keys_down, "<ctrl>"),
+        #     "<ctrl>+<alt>+a": partial(self.on_keys_down, "<ctrl>+<alt>+a"),
+        # }
+
+        #
+        # with pynput.keyboard.GlobalHotKeys(shortcuts_1_promised) as foo:
+        #     foo.join()
+
+        # foo =  pynput.keyboard.GlobalHotKeys(shortcut_keys_up_promised)
+        # foo.start()
+        #
+
+        self.keyboard_main_listener = pynput.keyboard.Listener(on_press=self.on_keys_down, on_release=self.on_keys_up)
+        self.keyboard_main_listener.start()
+
+        # with pynput.keyboard.GlobalHotKeys(shortcut_keys_up_promised) as foo:
+        #     foo.join()
+        #
+        # self.listener_shorcuts_down = pynput.keyboard.Listener(on_release=for_canonical_down(pynput.keyboard.HotKey.release))
+        # self.listener_shorcuts_down.join()
+        #
+        # with pynput.keyboard.GlobalHotKeys(shortcut_keys_down_promised) as foo:
+        #     foo.join()
+        #
+        # self.listener_shorcuts_up = pynput.keyboard.Listener(on_press=for_canonical_up(pynput.keyboard.HotKey.press))
+        # self.listener_shorcuts_up.join()
+
+        # hotkey = keyboard.HotKey(keyboard.HotKey.parse('<ctrl>+<alt>+h'), on_activate)
+        # with keyboard.Listener(on_press=for_canonical_up(hotkey.press), on_release=for_canonical_up(hotkey.release)) as l:
+        #     l.join()
+
+        # self.HOTKEYS = [
+        #     pynput.keyboard.HotKey(pynput.keyboard.HotKey.parse('<ctrl>+<shift>+a'), partial(print,'' ))
+        # ]
+        #
+        # with pynput.keyboard.Listener(on_press=self.on_keys_up,on_release=self.on_keys_down) as l:
+        #     l.join()
+
+        # 충돌이 문제가 아니고 두 이벤트가 중복이 되면 안되고 이벤트에 우선순위를 더 두어서 두 이벤트 호출 시 우선순위가 높은 이벤트만 실행되도록
+
+        # self.is_processing_event = False
+
+        # 이벤트 핸들러 스레드 생성
+        # event1_thread = threading.Thread(target=self.listener3)
+        # event2_thread = threading.Thread(target=self.listner_2_combination_shorcuts)
+
+        # 이벤트 핸들러 스레드 시작
+        # event1_thread.start()
+        # event2_thread.start()
+
+        # 키보드 이벤트 핸들러 설정 ( 단일 단축키 )
+        # self.listener3 = pynput.keyboard.Listener(on_press=self.on_keboard_press, suppress=True)
+        # self.listener3.start()
+
+        # 모니터링 이벤트 설정
+        # self.mouse_positions = []
+        # self.previous_position = None
+        # self.current_position = None
+        # self.timer = QTimer()
+        # self.timer.timeout.connect(self.on_left_mouse_btn_clicked)
+        # self.timer.start(900)
+
+        # 녹화 경과시간 업데이트
+        self.timer2 = QTimer()
+        self.timer2.timeout.connect(self.update_label)
+        self.timer2.start(1000)
+
+        Park4139.speak("매크로녹화를 시작합니다")
+
+        # 매크로녹화시작 로깅
+        log_title = "매크로녹화시작"
+        contents = f"{Park4139.line_length_promised}{Park4139.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title}"
+        Park4139.debug_as_cli(contents)
+        self.save_macro_log(contents=contents)
+
+        self.show()
+        self.activateWindow()
+
+        # event_loop = QEventLoop()
+        # event_loop.exec()
+
+    def on_mouse_move(self, x, y):  # 아주 빠르게 감지
+        # 이방식으로 매크로 중지를 할까?
+        # print(f"마우스 이동 - X: {x}, Y: {y}")
+        # print("마우스가 움직였습니다")
+        # 상단 네비게이션
+        if 0 <= x <= 3440 and 0 <= y <= 25:
+            # console_blurred 프로그램 창 활성화
+            # self.activateWindow() 와 self.show() 의 위치는 서로 바뀌면 의도된대로 동작을 하지 않는다
+            self.show()
+            self.activateWindow()
+        else:
+            pass
+
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.MouseMove:
+            x = event.globalX()
+            y = event.globalY()
+            print(f"pyside6 창 외부 마우스 이동 감지 시도 - X: {x}, Y: {y}")
+        return super().eventFilter(obj, event)
+
+        # if event.type() == QEvent.MouseButtonPress and not self.rect().contains(event.pos()):
+        #     print("pyside6 창 외부 클릭 되었습니다")
+        # return super().eventFilter(obj, event)
+
+    def get_btn_name_with_shortcut(self, button_name_without_shortcut):
         numbers = []
         for key, value in self.available_shortcut_list.items():
             numbers.append(len(value) + len(key))
@@ -1698,96 +2699,34 @@ class RpaProgramMainWindow(QWidget):
         print(button_name_with_short_cut)
         return button_name_with_short_cut
 
-    # def show_available_shortcut_list(self):
-    #     # global max
-    #     # global 을 설정하면, 이 변수는 함수의 실행이 끝난 다음에도 없어지지 않는다.
-    #     # 이 값을 나중에 함수 끝나고도 또 쓸려면 이렇게 쓰면 되겠다. @staticmethod 의 경우에는 변수 간의 값에 간섭이 되지 않도록 굳이 쓰지 않는 것이 좋겠다.
-    #     # global 많이 쓰면 이는 변수가 전역화 되니까 메모리의 성능이 저하되는 것이 아닐까?
-    #     # 그렇다면 함수 내에서만 전역적으로 변수를 쓰는 경우에, global 을 쓰지 않는 것이 성능을 위해서는 좋은 선택이겠다. 굳이 함수가 끝난 뒤에 밖에서 써야한다면 global 을 써야 겠지만, 나는 무척이나 이게 헷갈릴 것 같다
-    #     # 그동안의 경험으로는 코드 맥락 상, global 선언을 하지 않아도 전역변수 처럼 작동 되는 것 같아 보인다.
-    #     # 혹시 객체의 인스턴스 같은 것을 global 을 통해서 변수에 저장하고 쓰면 싱글톤 처럼 쓸 수 있는 것일까? 메모리 효율은 많이 나빠질까?
-    #
-    #     numbers = []
-    #     for key_shortcut, value in self.available_shortcut_list.items():
-    #         numbers.append(len(value))
-    #     max_no: int
-    #     max_no = max(numbers)
-    #     for key_shortcut, value in self.available_shortcut_list.items():
-    #         print(f"{{0: <{max_no}}} : {key_shortcut}".format(value))
-
     def rotate_window_size_mode(self):
         if self.windows_size_mode == 0:
+            self.setGeometry(0, 0, int(self.display_width_default * self.scale), int(self.display_height[0]))
+            # self.setWindowFlags(Qt.WindowStaysOnTopHint)  # 모든 창 앞에 위치하도록 설정
+            self.windows_size_mode = self.windows_size_mode + 1
+        elif self.windows_size_mode == 1:
             self.resize(self.display_width_default, self.display_height_default)
             self.move_window_to_center()  # 불필요 하면 주석하는 게 나쁘지 않겠다
             self.windows_size_mode = self.windows_size_mode + 1
-        elif self.windows_size_mode == 1:
-            self.showMaximized()
-            self.windows_size_mode = self.windows_size_mode + 1
         elif self.windows_size_mode == 2:
-            self.setGeometry(1000, 0, int(self.display_width_default), int(self.display_height[0]))
+            self.showMaximized()
             self.windows_size_mode = self.windows_size_mode + 1
         elif self.windows_size_mode == 3:
             self.setGeometry(1500, 0, int(self.display_width_default), int(self.display_height[0]))
-            self.windows_size_mode = self.windows_size_mode + 1
-        elif self.windows_size_mode == 4:
-            self.setGeometry(0, 0, int(self.display_width_default * self.scale), int(self.display_height[0]))
-            self.windows_size_mode = 0
-        # elif self.windows_size_mode == 5:
-        #     self.hide()
-        #     self.windows_size_mode = self.windows_size_mode + 1
-        #     self.show()
-        # park4139.speak_fast("창이 최소화 되었습니다")
-        # park4139.press("win", "1")
-
-        elif self.windows_size_mode == 6:  # unreachable code
-            park4139.press("win", "1")
             self.windows_size_mode = 0
 
     def set_shortcut(self, btn_name_promised, function):
-        self.shortcut = QShortcut(QKeySequence(self.available_shortcut_list[btn_name_promised]), self)
+        self.shortcut = QShortcut(self.available_shortcut_list[btn_name_promised], self)  # ctrl+n+d 3개 키들의 조합 설정 시도
         self.shortcut.activated.connect(function)
         pass
 
     def get_btn(self, btn_name, function):
-        # button = QPushButton(btn_name, self)  # alt f4 로 가이드 해도 되겠다. 이건 그냥 설정 되어 있는 부분.
-        button = QLabel(btn_name, self)  # 원래는 버튼이나 임시로 Label 로 변경.
-        # button.clicked.connect(function)
-        # button.setStyleSheet("color: rgba(255,255,255, 0.9);")
-        # button.setStyleSheet("QPushButton { text-align: left; color: rgba(255,255,255, 0.9); height: 20px ; font-size: 10px}")
+        button = QPushButton(btn_name, self)
+        button.clicked.connect(function)
 
-        # 2023년 12월 14일 (목) 16:28:15
-        # 결론, fixed width font로 시도해볼 수 있다 자릿 수를 맞출 수 있다.
-        # non-fixed width font 이슈 JAVA 에서도 구현했을 때 마딱드렸던 내용인데,
-        # 분명히 문장 전체 길이를 단어 사이의 공백의 수를 결정짓는 함수를 테스트 했음에도 자릿수가 맞지 않았는데
-        # 이는 고정 폭이 아님이기 때문이었다 따라서 고정 폭 폰트로 출력되는 콘솔에서는 정상, 비고정 폭 폰트로 출력되는 콘솔에서는 비정상,
-        # 이 경우에는 콘솔이 아니라 pyside6 로 만든 UI 에서 나타났다.
-        # 새벽에 이 문제를 만나서 잠깐 넋나갔는데 아침에 다시보니 그때 경험이 떠올라서 실험해보니 잘 해결되었다. 덕분에 pyside6에서 위젯에 폰트 적용하는 법도 터득
-
-        # fixed width font
-        # font = QtGui.QFont("Monospace")
-        # font = QtGui.QFont("Ubuntu Mono")
-        # font = QtGui.QFont("Inconsolata")
-        # font = QtGui.QFont("Monaco")
-        # font = QtGui.QFont("Courier")
-        # font = QtGui.QFont("Courier 10 Pitch")
-        # font = QtGui.QFont("Courier Prime")
-        # font = QtGui.QFont("Droid Sans Mono")
-        # font = QtGui.QFont("Fira Mono")
-        # font = QtGui.QFont("Hack")
-        # font = QtGui.QFont("Menlo")
-        # font = QtGui.QFont("Monofur")
-        # font = QtGui.QFont("Noto Mono")
-        # font = QtGui.QFont("PT Mono")
-        # font = QtGui.QFont("Roboto Mono")
-        # font = QtGui.QFont("Source Code Pro")
-        # font = QtGui.QFont("Victor Mono")
-        # font = QtGui.QFont("Courier New")
-        # font = QtGui.QFont("Liberation Mono")
-        # font = QtGui.QFont("DejaVu Sans Mono")
-        font = QtGui.QFont("Consolas")  # 그나마 가장 마음에 드는 폰트
-        font.setFixedPitch(True)
-        button.setFont(font)
-        button.setStyleSheet("QLabel { text-align: left; color: rgba(255,255,255, 0.9); height: 20px ; font-size: 10px}")
+        # 폰트 설정
+        button.setFont(Park4139.get_font_for_pyside6(font_path=pkg_park4139.FONTS.RUBIKDOODLESHADOW_REGULAR_TTF))  # 입체감있는 귀여운 영어 폰트
+        button.setStyleSheet("QPushButton { text-align: left; color: rgba(255,255,255, 0.9); height: 20px ; font-size: 10px}")
         # button.setLayoutDirection(QtCore.Qt.)
         return button
 
@@ -1797,202 +2736,232 @@ class RpaProgramMainWindow(QWidget):
         geo.moveCenter(center)
         self.move(geo.topLeft())
 
-    def show_weather_from_web(self):
-        park4139.annouce_service_launch()
+    def excute_macro(self):
+        pass
 
-    def run_no_paste_memo(self):
-        park4139.annouce_service_launch()
+    def exit_macro(self):
+        # 매크로녹화종료 로깅
+        log_title = "매크로녹화종료"
+        self.time_recording_end = self.elapsed_full_recording_time
+        contents = f"{Park4139.line_length_promised}{Park4139.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title}"
+        Park4139.debug_as_cli(contents)
+        self.save_macro_log(contents=contents)
 
-    # def show_shortcuts(self):
-    #     self.show_available_shortcut_list()
+        # 매크로 로그 확인
+        Park4139.speak("저장된 매크로 로그를 확인합니다")
+        Park4139.explorer(Park4139.MACRO_LOG)
 
-    def reboot_this_computer(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='시스템을 재시작할까요?', buttons=["재시작", "재시작하지 않기"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.reboot_this_computer)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+    # @Slot() # 최신 버전의 PySide6에서는 @Slot() 데코레이터를 사용하지 않고도 Slot 메서드를 정의할 수 있습니다. 이렇게 되면 자동으로 Slot으로 인식됩니다. 즉 최신버전 pyside6 에서는 쓸 필요 없다.
+    def update_label(self):
+        try:
+            self.elapsed_full_recording_time = int(time.time() - self.time_recording_start)
+            self.label.setText(f"녹화 중...\n녹화경과시간: {self.elapsed_full_recording_time} secs \n")
+        except:
+            traceback.print_exc(file=sys.stdout)
 
-    @QtCore.Slot()
-    def login(self):
-        park4139.annouce_service_launch()
-        print(self.print_id)
+    def on_mouse_btn_clicked(self, x, y, button, pressed):
 
-    def show_animation_data_from_web(self):
-        park4139.search_animation_data_from_web()
+        # 현재 시간과 녹화 시작 시간의 차이 계산
+        current_time = time.time()
+        elapsed_time = int((current_time - self.previous_time) * 1000)
+        # print(f"current_time : {current_time}")
+        # print(f"self.previous_time : {self.previous_time}")
 
-    def should_i_exit_this_program(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='앱을 종료할까요?', buttons=["종료", "종료하지 않기"], default="", countdown=0, shared_obj=self.shared_obj, function=app.quit) #function 타입힌팅을 function 만 받으려고 해서 해두었는데 app.quit 도 메소드이지 않을까 했는데 아닌가 보다, app.quit 호출 시 AttributeError 에러가 발생한다. 일단 AttributeError 예외 발생 시 동작되도록 처리를 해두었다
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+        # x, y = pyautogui.position() # parameter 에서 오는 값과 동일하므로 대안으로 남겨둠.
 
+        if button == pynput.mouse.Button.left and pressed:
+            log_title = "마우스좌측버튼클릭"
+            info = f"  Park4139.sleep({elapsed_time})   %%%FOO%%%    Park4139.click_mouse_left_btn(abs_x={x},abs_y={y}) "
+            Park4139.debug_as_cli(info)
+            self.save_macro_log(contents=f"{Park4139.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title} {info}")
+        elif button == pynput.mouse.Button.right and pressed:
+            log_title = "마우스우측버튼클릭"
+            info = f"  Park4139.sleep({elapsed_time})   %%%FOO%%%    Park4139.click_mouse_right_btn(abs_x={x},abs_y={y}) "
+            Park4139.debug_as_cli(info)
+            self.save_macro_log(contents=f"{Park4139.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title} {info}")
 
-    @rpa_program_method_decorator
-    def download_youtube_as_wav(self):
-        park4139.annouce_service_launch()
+        # 현재시간을 이전시간에 저장
+        self.previous_time = current_time
 
-    def should_i_download_youtube_as_webm(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='다운로드하고 싶은 URL을 제출해주세요', buttons=["제출", "제출하지 않기"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.download_from_youtube_to_webm)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+    def save_macro_log(self, contents: str):
+        macro_log = Park4139.MACRO_LOG
+        if not os.path.exists(os.path.dirname(macro_log)):
+            os.makedirs(os.path.dirname(macro_log))
+        with open(macro_log, "a", encoding="utf-8") as f:
+            f.write(f"{contents}\n")
 
-    def should_i_download_youtube_as_webm_alt(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='다운로드하고 싶은 URL을 제출해주세요.', buttons=["제출", "제출하지 않기"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.download_from_youtube_to_webm_alt)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+    def on_keboard_press(self, key):
+        # global is_processing_event
+        # if self.is_processing_event != False:
+        print(f'키보드 입력: {key}')
 
-    @rpa_program_method_decorator
-    def download_youtube_as_webm_only_sound(self):
-        park4139.annouce_service_launch()
+        # isinstance()
+        # all(list) # (iterable) 객체의 모든 요소가 참(True)인지 확인
+        # all(dict) # (iterable) 객체의 모든 요소가 참(True)인지 확인
+        # all(tuple) # (iterable) 객체의 모든 요소가 참(True)인지 확인
 
-    @rpa_program_method_decorator
-    def collect_imgs_for_rpa_setting(self):
-        park4139.get_img_for_rpa()
+    def on_keys_down(self, key):
+        # 현재 시간과 녹화 시작 시간의 차이 계산
+        current_time = time.time()
+        elapsed_time = int((current_time - self.previous_time) * 1000)
 
-    @rpa_program_method_decorator
-    def hide_windows_of_this_app(self):
-        self.hide()
+        # for hotkey in self.HOTKEYS:
+        #     hotkey.release(self.keyboard_listener1.canonical(key))
+        #     print(f"key : {key}")
 
-    @rpa_program_method_decorator
-    def shutdown_this_computer(self):
-        park4139.shutdown_this_computer()
+        # 키이름 여러 형식으로 출력
+        # try:
+        #     print(key)
+        #     print(key.value)
+        #     print(key.value.vk)
+        # except:
+        #     print(key)
+        #     pass
 
-    @rpa_program_method_decorator
-    def make_screenshot_custom(self):
-        park4139.get_custom_screenshot()
+        # 키이름 전처리
+        key: str = str(key)
+        key: str = key.lower()
+        key: str = key.replace("\'", "")
+        key: str = key.replace("\"", "")
+        key: str = key.replace("key.", "")
+        key: str = key.replace("<25>", "한자 or ctrl_r")
+        key: str = key.replace("<21>", "한영 or alt_r")
+        key: str = key.replace("12", "텐키 5")  # 텐키
+        key: str = key.replace("cmd", "win")
+        key: str = key.replace("page", "pg")
+        key: str = key.replace("down", "dn")
+        if key != "num_lock":
+            key: str = key.replace("_l", "")
+        key: str = key.replace("_r", "")
 
-    @rpa_program_method_decorator
-    def make_screenshot_full(self):
-        park4139.get_full_screenshot()
+        key: str = key.replace(" ", "")
+        key: str = key.replace("<", "")
+        key: str = key.replace(">", "")
+        # key: str = key.replace("_", "")
 
-    def back_up_target(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='백업할 타겟경로를 입력하세요', buttons=["제출하기"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.bkup)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+        # 전처리 후 출력
+        # print(str(key))
 
-    @rpa_program_method_decorator
-    def test1(self):
-        park4139.speak("test")
+        # if key == "ctrl+alt":
+        log_title = "키보드인풋"
+        info = f"Park4139.sleep({elapsed_time})\nPark4139.keyDown('{key}') "
+        Park4139.debug_as_cli(info)
+        self.save_macro_log(contents=f"{Park4139.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title} {info}")
 
-    @staticmethod
-    def do_nothing():
-        park4139.commentize("def do_nothing():")
+        # 현재시간을 이전시간에 저장
+        self.previous_time = current_time
 
-    @rpa_program_method_decorator
-    def test2(self):
-        park4139.speak("test")
+        # if self.store = []
+        # global is_processing_event
+        # if self.is_processing_event == False:
+        # self.is_processing_event = True
+        # self.is_processing_event = False
 
+        # pynput.keyboard.Listener()는 다시 self.listener3.start() 할 수 없다.
+        # 새로 만들어야 한다
+        # if self.listener3.is_alive():
+        #     self.listener3.stop()
+        # else:
 
-    def open_project_directory(self):
-        park4139.get_cmd_output(f'explorer "{os.getcwd()}"')
+        # self.listener3 = pynput.keyboard.Listener(on_press=self.on_keboard_press)
+        # self.listener3.start()
 
-    def should_i_enter_to_power_saving_mode(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='절전모드로 진입할까요', buttons=["진입하기", "진입하지 않기", "다시물어봐줄래"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.enter_power_saving_mode)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+        # self.condition.notify()  # event1에게 동작 신호 보내기
 
-    def should_i_translate_eng_to_kor(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='WRITE SOMETHING YOU WANT TO TRANSLATE \n(FROM ENG TO KOREAN)', buttons=["Translate this", "Don't", "Could you ask me again"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.translate_eng_to_kor)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+    def on_single_key_pressed(self, key):
 
-    def translate_kor_to_eng(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment=f'번역하고 싶은 내용을 입력하세요\n(한글에서 영어로)', buttons=["번역해줘", "번역하지 않기", "다시물어봐줄래"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.translate_kor_to_eng)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+        # 현재 시간과 녹화 시작 시간의 차이 계산
+        current_time = time.time()
+        elapsed_time = int((current_time - self.previous_time) * 1000)
 
-    def should_i_empty_trash_can(self):
-        while True:
-            if self.prompt_window is None:
-                # Park4139.commentize(rf'휴지통 용량확인 pyautogui RPA')
-                # ment = f'현재 휴지통이 10기가 바이트 이상입니다 쓰레기통을 비울까요' # 이건 wrapping 할 로직.
-                self.prompt_window = PromptWindow(ment='쓰레기통을 비울까요', buttons=["비우기", "비우지 않기", "다시물어봐줄래"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.empty_recycle_bin)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+        # print(str(key))
+        if pynput.keyboard.GlobalHotKeys.name == "<ctrl>":
+            log_title = "키보드단일키인풋"
+            info = f"  Park4139.sleep({elapsed_time})   %%%FOO%%%    Park4139.press({str(key)}) "
+            Park4139.debug_as_cli(info)
+            self.save_macro_log(contents=f"{Park4139.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title} {info}")
 
-    @rpa_program_method_decorator
-    def run_cmd_exe(self):
-        park4139.run_cmd_exe()
+        # 현재시간을 이전시간에 저장
+        self.previous_time = current_time
 
-    def ask_something_to_ai_via_web(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='AI 에게 할 질문을 입력하세요', buttons=["제출하기"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.ask_to_web)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+        # try:
+        #     # alphanumeric key
+        #     print('{0}'.format(key.char))
+        # except AttributeError:
+        #     # special key
+        #     print('{0}'.format(key.char))
 
-    def connect_to_another_computer_as_rdp1(self):
-        while True:
-            if self.prompt_window is None:
-                self.prompt_window = PromptWindow(ment='rdp1에 원격접속할까요?', buttons=["그래", "아니"], default="", countdown=0, shared_obj=self.shared_obj, function=park4139.connect_remote_rdp1)
-                self.prompt_window.show()
-                self.showMinimized()
-                break
-            else:
-                self.prompt_window = None
+    def on_keys_up(self, key):
+        # 현재 시간과 녹화 시작 시간의 차이 계산
+        current_time = time.time()
+        elapsed_time = int((current_time - self.previous_time) * 1000)
 
-    @QtCore.Slot()
-    def print_id(self):
-        print(self.id)
+        # for hotkey in self.HOTKEYS:
+        #     if hotkey
+        #     hotkey.press(self.keyboard_listener1.canonical(key))
+        #     print(f"key : {key}")
+
+        # 키이름 전처리
+        key: str = str(key)
+        key: str = key.lower()
+        key: str = key.replace("\'", "")
+        key: str = key.replace("\"", "")
+        key: str = key.replace("key.", "")
+        key: str = key.replace("<25>", "한자 or ctrl_r")
+        key: str = key.replace("<21>", "한영 or alt_r")
+        key: str = key.replace("12", "텐키 5")  # 텐키
+        key: str = key.replace("cmd", "win")
+        key: str = key.replace("page", "pg")
+        key: str = key.replace("down", "dn")
+        if key != "num_lock":
+            key: str = key.replace("_l", "")
+        key: str = key.replace("_r", "")
+
+        key: str = key.replace(" ", "")
+        key: str = key.replace("<", "")
+        key: str = key.replace(">", "")
+        # key: str = key.replace("_", "")
+
+        # 전처리 후 출력
+        # print(str(key))
+
+        log_title = "키보드릴리즈"
+        info = f"Park4139.sleep({elapsed_time})\nPark4139.keyUp('{key}') "
+        Park4139.debug_as_cli(info)
+        self.save_macro_log(contents=f"{Park4139.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title} {info}")
+
+        # 현재시간을 이전시간에 저장
+        self.previous_time = current_time
+        pass
 
 
 def run_console_blurred():
+    # pyautogui 페일세이프 모드 설정
+    # pyautogui.FAILSAFE = False
+    pyautogui.FAILSAFE = True
+
     global app
-    # global 로 app을 설정 하고 싶진 않았지만 app.primaryScreen(), app.quit() 동작에 필요했다.
-    # 두 메소드에 대한 대체 방법이 있다면 global 없애고 싶다
-    # if __name__ == '__main__':
     app = QApplication(sys.argv)
+    # global 로 app을 설정 하고 싶진 않았지만 app.primaryScreen() 동작에 필요했다.
+    # app.primaryScreen()의 기능에 대한 대체 방법이 있다면 global app 없애고 싶다, 공유객체로 해소가 될 것 같은데 더 쉬운 방법을 못찾았다
+
+    # 프로그램 실행 디렉토리 사용자에게 확인
+    # dialog = pkg_park4139.CustomDialogReplica(contents=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{Park4139.PROJECT_DIRECTORY}", buttons=["실행", "실행하지 않기"], closing_timer=True)
+    dialog = pkg_park4139.CustomDialog(contents=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{Park4139.PROJECT_DIRECTORY}", buttons=["실행", "실행하지 않기"], starting_timer=True)
+    dialog.exec_()
+    text_of_clicked_btn = dialog.text_of_clicked_btn
+    if text_of_clicked_btn == "실행":
+        print(Park4139.PROJECT_DIRECTORY)
+        os.chdir(Park4139.PROJECT_DIRECTORY)
+    if text_of_clicked_btn == "실행하지 않기":
+        sys.exit()
 
     # 창 간 통신 설정
-    shared_obj = SharedObject()
-
-    rpa_program_main_window = RpaProgramMainWindow(shared_obj=shared_obj)
+    # shared_obj = SharedObject()
+    # rpa_program_main_window = RpaProgramMainWindow(shared_obj=shared_obj)
+    rpa_program_main_window = RpaProgramMainWindow()  # 공유객체인 shared_obj 가 사용되는 곳이 없고 불필요할 것으로 판단하여 제거
+    rpa_program_main_window.setMouseTracking(True)  # pyside6 창 밖에서도 마우스 추적 가능 설정 # 마우스 움직임 이벤트 감지 허용 설정
     rpa_program_main_window.show()
-
     rpa_program_main_window.activateWindow()
 
     sys.exit(app.exec_())
@@ -2001,10 +2970,11 @@ def run_console_blurred():
 if __name__ == '__main__':
     try:
         while (True):
-            # pyautogui 는 라이브러리 레벨 같고, pyside6 는 framework 레벨 같았다.
+            # 자동화 프로그램 실행
+            Park4139.speak("자동화 프로그램을 실행 시도합니다")
             run_console_blurred()
+
+            break
     except Exception as e:
-        print(str(e))
-        park4139.trouble_shoot("%%%FOO%%%")
-        traceback.print_exc(file=sys.stdout)
-        park4139.pause()
+        Park4139.trouble_shoot("%%%FOO%%%")
+        # Park4139.pause()
