@@ -2106,9 +2106,9 @@ class RpaProgramMainWindow(QWidget):
                 if is_image_finded:
                     Park4139.press("shift", "w")
                 else:
-                    Park4139.speak("이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다")
+                    Park4139.speak(ment = "이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다")
             else:
-                Park4139.speak("이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다")
+                Park4139.speak(ment = "이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다")
             break
         pass
 
@@ -2144,7 +2144,7 @@ class RpaProgramMainWindow(QWidget):
                 # Park4139.debug_as_cli(f"async def {inspect.currentframe().f_code.co_name}() is running...")
                 # await Park4139.async_sleep(1000)
             loop_cnt = 0
-            PARK4139_ARCHIVE_LOG = Park4139.PARK4139_ARCHIVE_TOML
+            PARK4139_ARCHIVE_TOML = Park4139.PARK4139_ARCHIVE_TOML
             key = "park4139_archive_log_line_cnt"
             while True:
                 # 루프마다 == 가능한 짧은 시간 마다
@@ -2165,7 +2165,7 @@ class RpaProgramMainWindow(QWidget):
 
                     Park4139.classify_targets_between_smallest_targes_biggest_targets()
 
-                    Park4139.monitor_target_edited_and_bkup(target_abspath=PARK4139_ARCHIVE_LOG, key=key)
+                    Park4139.monitor_target_edited_and_bkup(Park4139.PARK4139_ARCHIVE_TOML, key=key)
 
                     # park4139.commentize(title = '전역 pkg_park4139 업데이트')
                     # 이 메소드는 프로젝트 내에 지역적으로 위치한 pkg_park4139 하나만 관리해도
@@ -2208,9 +2208,7 @@ class RpaProgramMainWindow(QWidget):
                         # 5초 마다
                     if int(ss) % 5 == 0:
                         if loop_cnt == 1:
-                            PARK4139_ARCHIVE_LOG = rf'{Park4139.PROJECT_DIRECTORY}\park4139_archive.log'
-                            key = "park4139_archive_log_line_cnt"
-                            Park4139.monitor_target_edited_and_bkup(target_abspath=PARK4139_ARCHIVE_LOG, key=key)
+                            Park4139.monitor_target_edited_and_bkup(Park4139.PARK4139_ARCHIVE_TOML, key = "park4139_archive_log_line_cnt")
 
                     # 15초 마다
                     if int(ss) % 15 == 0:
@@ -2639,7 +2637,7 @@ class MacroWindow(QWidget):
         self.timer2.timeout.connect(self.update_label)
         self.timer2.start(1000)
 
-        Park4139.speak("매크로녹화를 시작합니다")
+        Park4139.speak(ment = "매크로녹화를 시작합니다")
 
         # 매크로녹화시작 로깅
         log_title = "매크로녹화시작"
@@ -2748,7 +2746,7 @@ class MacroWindow(QWidget):
         self.save_macro_log(contents=contents)
 
         # 매크로 로그 확인
-        Park4139.speak("저장된 매크로 로그를 확인합니다")
+        Park4139.speak(ment = "저장된 매크로 로그를 확인합니다")
         Park4139.explorer(Park4139.MACRO_LOG)
 
     # @Slot() # 최신 버전의 PySide6에서는 @Slot() 데코레이터를 사용하지 않고도 Slot 메서드를 정의할 수 있습니다. 이렇게 되면 자동으로 Slot으로 인식됩니다. 즉 최신버전 pyside6 에서는 쓸 필요 없다.
@@ -2971,7 +2969,7 @@ if __name__ == '__main__':
     try:
         while (True):
             # 자동화 프로그램 실행
-            Park4139.speak("자동화 프로그램을 실행 시도합니다")
+            Park4139.speak(ment = "자동화 프로그램을 실행 시도합니다")
             run_console_blurred()
 
             break
