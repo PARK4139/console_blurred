@@ -513,29 +513,7 @@ with open(file_path, 'w') as outfile:
     json.dump(json_dict, outfile, indent=4)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 크롤링 기능 기획
-Park4139.commentize('웹크롤링을 시도합니다 잠시만 기다려주세요')
-url = "https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&qvt=0&query=%EC%A0%84%EA%B5%AD%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80"
-# 미세먼지 정보입니다
-# 관측지점 가쥰 ㅐㅐㅐ
-# 현재 초미세먼지
-# # Park4139.commentize('38 mg 으로')
-# 좋음입니다
-#
-#
-# 미세먼지 오후예보 정보입니다
-# 관측지점 가쥰 ㅐㅐㅐ
-# 초미세먼지 오전예보
-# # Park4139.commentize('38 mg 으로')
-# 좋음입니다
-#
-# 미세먼지 오전예보 정보입니다
-# 관측지점 가쥰 ㅐㅐㅐ
-# 초미세먼지 오전예보
-# # Park4139.commentize('38 mg 으로')
-# 좋음입니다
 
-
-# 그의 이상한 메모
 #
 #
 # https://animeta.net/table/2023Q4/
@@ -737,100 +715,6 @@ url = "https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&qvt=0&que
 # print(s)
 
 
-# 매크로 관련 작성 코드
-# # class MacroWindow(QMainWindow):
-# class MacroWindow(QDial):
-#     def __init__(self):
-#         super(MainWindow, self).__init__()
-#         # wiget test")
-#         layout = QVBoxLayout()
-#         widgets = {
-#             "label": QLabel("________7"),
-#             "CheckBox": QCheckBox(), 괄호가 없어서 그런거영쎠으 괄호 추가하자
-#             "ComboBox": QComboBox(),
-#             "DateEdit": QDateEdit(),
-#             "DateTimeEdit": QDateTimeEdit(),
-#             "Dial": QDial(),
-#             "DoubleSpinBox": QDoubleSpinBox(),
-#             "FontComboBox": QFontComboBox(),
-#             "LCDNumber": QLCDNumber(),
-#             "LineEdit": QLineEdit(),
-#             "ProgressBar": QProgressBar(),
-#             "PushButton": QPushButton(),
-#             "RadioButton": QRadioButton(),
-#             "Slider": QSlider(),
-#             "SpinBox": QSpinBox(),
-#             "TimeEdit": QTimeEdit(),
-#         }
-
-
-#
-#         print(Park4139.get_length_by_using_(widgets))
-
-#
-#         for i in range(0, Park4139.get_length_by_using_(widgets)):
-#             print(str(Park4139.get_keys_by_using_(widgets, 'as_list')[i]) + "\t" + str(i))
-#             # layout.addWidget(widgets[str(Park4139.get_keys_by_using_(widgets,'as_list')[i])])
-#         매크로 프로그램
-#         # btn")
-#         btn = QAction("________1", self)
-#         btn.setStatusTip("________2")
-#         btn.triggered.connect(self.btn_act1)
-#         btn.setCheckable(True)  # toggle mode
-#         # btn1")
-#         btn1_icon = QIcon(r"C:\Users\JungHoonPark\Desktop\prj_pyGUI\imgs\icons\fugue-icons-3.5.6\icons\balloon-left.png")
-#         btn1 = QAction(btn1_icon, "________3", self)
-#         btn1.setStatusTip("________4")
-#         btn1.triggered.connect(self.btn_act1)
-#         btn1.setCheckable(True)  # toggle mode
-#         btn_test = QAction("play macro", self)
-#         btn_test.setStatusTip("mouse pointer is hovered at record macro")
-#         btn_test.triggered.connect(self.btn_act0)
-#         btn_test.setStatusTip("mouse pointer is hovered at record macro")
-#         # menu bar")
-#         menu = self.menuBar()
-#         menu1 = menu.addMenu("________10")
-#         menu1.addAction(btn)
-#         menu1.addAction(btn1)
-#         menu1.addAction(btn2)
-#         menu1.addAction(btn4)
-#         menu2 = menu.addMenu("________13")
-#         menu2.addAction(btn)
-#         menu2.addAction(btn1)
-#         menu2.addAction(btn2)
-#         menu2.addAction(btn4)
-#         menu2 = menu.addMenu("________14")
-#         menu2.addAction(btn)
-#         menu2.addAction(btn1)
-#         menu2.addAction(btn2)
-#         menu2.addAction(btn4)
-#         menu2 = menu.addMenu("________15")
-#         menu2.addAction(btn)
-#         menu2.addAction(btn1)
-#         menu2.addAction(btn2)
-#         menu2.addAction(btn4)
-#         menu2 = menu.addMenu("macro")
-#         menu2.addAction(btn5)
-#         menu2.addAction(btn6)
-#         menu2.addAction(btn7)
-#         menu3 = menu.addMenu("setting")
-#         menu3.addAction(btns["preference"])
-#         # tool bar")
-#         tool_bar = QToolBar("________0")
-#         tool_bar.setIconSize(QSize(16, 16))
-#         self.addToolBar(tool_bar)
-#         tool_bar.addAction(btn)
-#         tool_bar.addSeparator()
-#         tool_bar.addAction(btn)
-#         tool_bar.addSeparator()
-#         tool_bar.addAction(btn2)
-#         tool_bar.addSeparator()
-#         tool_bar.addWidget(btn3)
-#         tool_bar.addSeparator()
-#         tool_bar.addWidget(QCheckBox())
-#         # status_bar")
-#         self.setStatusBar(QStatusBar(self))
-
 
 # # 아주 유용한 문자열 교체(swap_targets)/넘버링 테스트")
 # text_a='''
@@ -847,7 +731,6 @@ url = "https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&qvt=0&que
 info = {
     '모니터_크기': pyautogui.size(),
 }
-
 # 튜플을 그냥 print로 출력")
 print(info)
 # 튜플을 구조화 하여 예쁘게 출력")
@@ -946,3 +829,25 @@ with keyboard.Listener(
 #         drag.setHotSpot(event.pos() - self.rect().topLeft())
 #
 #         drag.exec_(Qt.MoveAction)
+
+
+
+# 실험 필요
+# 변수명 출력함수
+# def Park4139.debug_as_cli(variable):
+#     def namestr(obj, namespace):
+
+#         get_name = [name for name in namespace if namespace[name] is obj]
+#         return get_name[0]
+#     def Change(variable):
+
+#         Park4139.debug_as_cli(namestr(variable, globals()), "=", variable)
+#     Park4139.debug_as_cli(f'{Change(variable)} : {variable}')
+
+
+# 파이선 폴더 동기화 시켜도록 시도해보자
+
+
+# 재귀 한도 설정
+        # import sys
+        # sys.setrecursionlimit(10 ** 5)
