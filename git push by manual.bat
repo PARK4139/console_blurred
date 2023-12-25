@@ -20,7 +20,7 @@ cls
 :: COMMIT MENT SETTING
 ::set commit_ment=%yyyyMMddHHmmss%
 ::set commit_ment=Test Push
-set commit_ment=Refer to README.md (commited at %yyyyMMddHHmmss%)
+set commit_ment=REFER TO README.md (commited at %yyyyMMddHHmmss%)
 
 
 :: GIT PUSH

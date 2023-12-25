@@ -300,7 +300,7 @@ class RpaProgramMainWindow(QWidget):
             'KOR TO ENG': 'Ctrl+E',
             'RECORD MACRO': 'Ctrl+M',
             'TEST': 'Ctrl+1',
-            'UP AND DOWN GAME': 'Esc+F1',
+            'UP AND DOWN GAME': 'F1',
 
             #  Alt 단축키 설정(시스템 제어 관련)
             'DOWNLOAD VIDEO FROM WEB1': 'Alt+F1',
@@ -2273,36 +2273,31 @@ class RpaProgramMainWindow(QWidget):
 
     def run_up_and_down_game(self):
         correct_answer: int = random.randint(0, 100)
-        user_input: str
-        left_oportunity: int = 10
-        dialog = pkg_park4139.CustomDialog(contents=f"<up and down game>\nfind correct no.\ntype number between 1 to 100.\n(left chance : {str(left_oportunity)})", buttons=["start"])
+        left_oportunity: int = 5
+        dialog = pkg_park4139.CustomDialog(contents=f"<up and down game>\nfind correct no.\ntype number between 1 to 100.\n(left chance : {left_oportunity})", buttons=["start", "exit"], is_input_text_box=True)
         dialog.exec_()
+        user_input = int(dialog.box_for_editing_input_text.text())
         text_of_clicked_btn = dialog.text_of_clicked_btn
-        Park4139.debug_as_cli(text_of_clicked_btn)
         if text_of_clicked_btn == "start":
             while left_oportunity >= 0:
-                if user_input == correct_answer:
-                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {correct_answer}\nthis is answer", buttons=["확인"], is_input_text_box=True)
+                if left_oportunity == 0:
+                    dialog = pkg_park4139.CustomDialog(contents=f"left chance is {left_oportunity} \ntake your next chance.", buttons=["exit"])
+                    dialog.exec_()
+                    break
+                elif user_input == correct_answer:
+                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {correct_answer}\nthis is answer", buttons=["exit"])
                     dialog.exec_()
                     break
                 elif correct_answer < user_input:
-                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {user_input}\ndown!~\nyour left chance is {left_oportunity}", buttons=["확인"], is_input_text_box=True)
+                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {user_input}\nYou need to down!~\nyour left chance is {left_oportunity}", buttons=["submit"], is_input_text_box=True)
                     dialog.exec_()
-                    user_input = dialog.box_for_editing_input_text.text()
-
-                    if user_input == 
-                elif correct_answer < user_input:
-                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {user_input}\ndown!~\nyour left chance is {left_oportunity}", buttons=["확인"], is_input_text_box=True)
+                    user_input = int(dialog.box_for_editing_input_text.text())
+                elif correct_answer > user_input:
+                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {user_input}\nYou need to up!~\nyour left chance is {left_oportunity}", buttons=["submit"], is_input_text_box=True)
                     dialog.exec_()
-                    text_of_clicked_btn = dialog.text_of_clicked_btn
-                    Park4139.debug_as_cli(text_of_clicked_btn)
-                    if text_of_clicked_btn == "확인":
-                        break
-
-
-
-            else:
-                break
+                    user_input = int(dialog.box_for_editing_input_text.text())
+        else:
+            return
 
 
 class MacroWindow(QWidget):
