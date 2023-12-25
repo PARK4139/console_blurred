@@ -300,6 +300,7 @@ class RpaProgramMainWindow(QWidget):
             'KOR TO ENG': 'Ctrl+E',
             'RECORD MACRO': 'Ctrl+M',
             'TEST': 'Ctrl+1',
+            'UP AND DOWN GAME': 'Esc+F1',
 
             #  Alt 단축키 설정(시스템 제어 관련)
             'DOWNLOAD VIDEO FROM WEB1': 'Alt+F1',
@@ -349,6 +350,7 @@ class RpaProgramMainWindow(QWidget):
         self.set_shortcut('DOWNLOAD VIDEO FROM WEB1', self.download_video_from_web1)
         self.set_shortcut('DOWNLOAD VIDEO FROM WEB2', self.download_video_from_web2)
         self.set_shortcut('RECORD MACRO', self.record_macro)
+        self.set_shortcut('UP AND DOWN GAME', self.run_up_and_down_game)
 
         # 약속된 버튼명인 버튼 설정
         self.btn_to_show_weather_from_web = self.get_btn(self.get_btn_name_promised('WEATHER'), self.show_weather_from_web)
@@ -383,6 +385,7 @@ class RpaProgramMainWindow(QWidget):
         self.btn_to_download_video_from_web1 = self.get_btn(self.get_btn_name_promised('DOWNLOAD VIDEO FROM WEB1'), self.download_video_from_web1)
         self.btn_to_download_video_from_web2 = self.get_btn(self.get_btn_name_promised('DOWNLOAD VIDEO FROM WEB2'), self.download_video_from_web2)
         self.btn_to_record_macro = self.get_btn(self.get_btn_name_promised('RECORD MACRO'), self.record_macro)
+        self.btn_to_run_up_and_down_game = self.get_btn(self.get_btn_name_promised('UP AND DOWN GAME'), self.run_up_and_down_game)
 
         # 약속된 단축키명 버튼 설정
         self.btn_to_show_weather_from_web_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('WEATHER'), function=self.show_weather_from_web)
@@ -417,6 +420,7 @@ class RpaProgramMainWindow(QWidget):
         self.btn_to_download_video_from_web1_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('DOWNLOAD VIDEO FROM WEB1'), function=self.download_video_from_web1)
         self.btn_to_download_video_from_web2_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('DOWNLOAD VIDEO FROM WEB2'), function=self.download_video_from_web2)
         self.btn_to_record_macro_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('RECORD MACRO'), function=self.record_macro)
+        self.btn_to_run_up_and_down_game_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('UP AND DOWN GAME'), function=self.run_up_and_down_game)
 
         btns = [
             [self.btn_to_toogle_rpa_window, self.btn_to_toogle_rpa_window_only_shorcut_name],
@@ -438,7 +442,6 @@ class RpaProgramMainWindow(QWidget):
             # [  self.btn_to_hide_windows_of_this_app,      self.btn_to_hide_windows_of_this_app_only_shortcut_name],
             # [  self.btn_to_login,      self.btn_to_login_only_shortcut_name],
             # [  self.btn_to_run_no_paste_memo,      self.btn_to_run_no_paste_memo_only_shortcut_name],
-            # [  self.btn_to_test2,      self.btn_to_test2_only_shortcut_name],
             [self.btn_to_test, self.btn_to_test_only_shortcut_name],
             [self.btn_to_should_i_empty_trash_can, self.btn_to_should_i_empty_trash_can_only_shortcut_name],
             [self.btn_to_should_i_exit_this_program, self.btn_to_should_i_exit_this_program_only_shortcut_name],
@@ -451,6 +454,7 @@ class RpaProgramMainWindow(QWidget):
             [self.btn_to_should_i_find_direction_via_naver_map, self.btn_to_should_i_find_direction_via_naver_map_only_shortcut_name],
             [self.btn_to_should_i_show_animation_information_from_web, self.btn_to_should_i_show_animation_information_from_web_only_shortcut_name],
             [self.btn_to_record_macro, self.btn_to_record_macro_only_shortcut_name],
+            [self.btn_to_run_up_and_down_game, self.btn_to_run_up_and_down_game_only_shortcut_name],
         ]
 
         # GRID SETTING
@@ -2204,7 +2208,7 @@ class RpaProgramMainWindow(QWidget):
                     if int(HH) == 22 and int(mm) == 30:
                         Park4139.speak(f'{int(HH)} 시 {int(mm)}분 루틴을 시작합니다')
                         Park4139.speak('건강을 위해서 지금 씻고 주무실 것을 추천드려요')
-                    if int(HH) == 24 :
+                    if int(HH) == 24:
                         Park4139.speak(f'{int(mm)}시 정각, 루틴을 시작합니다')
                         Park4139.speak_server_hh_mm()
                     if int(mm) % 15 == 0:
@@ -2266,6 +2270,39 @@ class RpaProgramMainWindow(QWidget):
         import win32gui
         active_window = win32gui.GetForegroundWindow()
         win32gui.SetForegroundWindow(active_window)
+
+    def run_up_and_down_game(self):
+        correct_answer: int = random.randint(0, 100)
+        user_input: str
+        left_oportunity: int = 10
+        dialog = pkg_park4139.CustomDialog(contents=f"<up and down game>\nfind correct no.\ntype number between 1 to 100.\n(left chance : {str(left_oportunity)})", buttons=["start"])
+        dialog.exec_()
+        text_of_clicked_btn = dialog.text_of_clicked_btn
+        Park4139.debug_as_cli(text_of_clicked_btn)
+        if text_of_clicked_btn == "start":
+            while left_oportunity >= 0:
+                if user_input == correct_answer:
+                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {correct_answer}\nthis is answer", buttons=["확인"], is_input_text_box=True)
+                    dialog.exec_()
+                    break
+                elif correct_answer < user_input:
+                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {user_input}\ndown!~\nyour left chance is {left_oportunity}", buttons=["확인"], is_input_text_box=True)
+                    dialog.exec_()
+                    user_input = dialog.box_for_editing_input_text.text()
+
+                    if user_input == 
+                elif correct_answer < user_input:
+                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {user_input}\ndown!~\nyour left chance is {left_oportunity}", buttons=["확인"], is_input_text_box=True)
+                    dialog.exec_()
+                    text_of_clicked_btn = dialog.text_of_clicked_btn
+                    Park4139.debug_as_cli(text_of_clicked_btn)
+                    if text_of_clicked_btn == "확인":
+                        break
+
+
+
+            else:
+                break
 
 
 class MacroWindow(QWidget):

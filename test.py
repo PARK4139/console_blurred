@@ -367,6 +367,7 @@ def test():
         # sys.exit(app.exec())
         # __________________________________________________________________________________________________________________________________ TESTED SECTION 2
 
+
         # __________________________________________________________________________________________________________________________________  UP (TESTED SUCCESS)
         # app = QApplication()
         import test_core       # test_core.py 테스트
@@ -522,3 +523,6 @@ if __name__ == '__main__':
         error_str = traceback.format_exc()
         Park4139.debug_as_gui(f"TEST LOOP ERROR CNT REPORT:\nerror_cnt : {error_cnt}\nerror_str : {error_str}")
         # Park4139.pause()
+
+
+

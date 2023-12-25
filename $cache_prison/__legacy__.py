@@ -849,5 +849,16 @@ with keyboard.Listener(
 
 
 # 재귀 한도 설정
-        # import sys
-        # sys.setrecursionlimit(10 ** 5)
+# import sys
+# sys.setrecursionlimit(10 ** 5)
+
+
+# 기능 아이디어
+# get replaced clipboard from / to \
+#     C:/Users/WIN10PROPC3/Desktop/services/archive_py/.git/index.lock
+#     C:\Users\WIN10PROPC3\Desktop\services\archive_py\.git\index.lock
+
+
+# 이걸로 특정 랜덤태스크를 하루에 몇 번까지 제한하도록 관리 > 만들어둔 toml 데이터베이스 활용해서 하면 되겠음.
+# daily_random_tasks = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]
+
