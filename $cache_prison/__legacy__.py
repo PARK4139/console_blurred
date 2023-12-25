@@ -329,11 +329,13 @@ od = OrderedDict((key, val) for key, val in zip(keys, vals))
 print(od)
 
 # :: get 현재 pc에 연결된 드라이브
-connected_drives = win32api.GetLogicalDriveStrings().split('\000')[:-1]
-print(f"현재 pc에 연결된 드라이브 : {connected_drives}")
-
-# :: get 현재 디렉토리 위치
+connected_drives = []
+for drive_letter in string.ascii_uppercase:
+    drive_path = drive_letter + ":\\"
+    if os.path.exists(drive_path):
+        connected_drives.append(drive_path)
 current_directory = os.getcwd()
+print(f"현재 pc에 연결된 드라이브 : {connected_drives}")
 print(f"현재 디렉토리 위치 : {current_directory}")
 
 # :: get 현재 디렉토리 파일의 Modified/Created/Accessed 일자
