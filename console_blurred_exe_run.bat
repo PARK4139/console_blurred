@@ -69,4 +69,4 @@ call "%~dp0.venv\Scripts\activate.bat"
 
 
 :: BUILD FOR CLIENT TEST
-explorer ".\dist\console_blurred\console_blurred.exe"
+explorer ".\console_blurred\console_blurred.exe"

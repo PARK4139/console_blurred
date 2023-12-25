@@ -17,9 +17,7 @@ cls
 :: :minimized
 
 
-:: COMMIT MENT SETTING
-::set commit_ment=%yyyyMMddHHmmss%
-::set commit_ment=Test Push
+:: COMMIT MENT SETTING 
 set commit_ment=REFER TO README.md (commited at %yyyyMMddHHmmss%)
 
 

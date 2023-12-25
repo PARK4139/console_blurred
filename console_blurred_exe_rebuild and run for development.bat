@@ -105,12 +105,17 @@ echo d | xcopy ".\$cache_work_for_music" ".\dist\console_blurred\_internal\$cach
 :: PowerShell -Command "Start-Process cmd -Verb RunAs"    :: 아래 코드는 배치파일용 코드로 바꿔야 함.
 cd "%USERPROFILE%"
 cd ".\Desktop\services\archive_py"
-echo d | xcopy "./build" "%USERPROFILE%\DESKTOP/build" /e /h /k
-echo d | xcopy "./dist" "%USERPROFILE%\DESKTOP/dist" /e /h /k
+:: echo d | xcopy ".\build" "%USERPROFILE%\DESKTOP\build" /e /h /k
+echo d | xcopy ".\dist" "%USERPROFILE%\DESKTOP\dist" /e /h /k
+echo f | xcopy ".\console_blurred_exe_run.bat" "%USERPROFILE%\DESKTOP\dist\console_blurred_exe_run.bat" /e /h /k
+echo f | xcopy ".\console_blurred_exe_kill.bat" "%USERPROFILE%\DESKTOP\dist\console_blurred_exe_kill.bat" /e /h /k
 echo y | rmdir /s ".\build"
 echo y | rmdir /s ".\dist"
 echo y | rmdir /s ".\_internal"
 explorer "%USERPROFILE%\DESKTOP\dist\console_blurred\console_blurred.exe"
+
+cd "%USERPROFILE%\DESKTOP"
+call "run deploy server for local network.bat"
 pause
 :: deactivate.bat
 :: exit
