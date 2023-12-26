@@ -303,6 +303,11 @@ class RpaProgramMainWindow(QWidget):
             'RECORD MACRO': 'Ctrl+M',
             'TEST': 'Ctrl+1',
             'UP AND DOWN GAME': 'F1',
+            "CLASSIFY SPECIAL FILES": "F2",
+            "GATHER EMPTY DIRECTORY": "F3",
+            "GATHER SPECIAL FILES": "F4",
+            "GATHER USELESS FILES": "F5",
+            "MERGE DIRECTORIES": "F6",
 
             #  Alt 단축키 설정(시스템 제어 관련)
             'DOWNLOAD VIDEO FROM WEB1': 'Alt+F1',
@@ -316,7 +321,6 @@ class RpaProgramMainWindow(QWidget):
             'PROJECT DIRECTORY': 'Alt+P',
             'EMPTY RECYCLE BIN': 'Alt+E',
             # 'RUN CMD.EXE AS ADMIN': 'Alt+C',
-            # 'EXCUTE MACRO': 'Alt+M+E',
             'NAVER MAP': 'Alt+N',
             'EXIT': 'Alt+Q',
         }
@@ -352,7 +356,12 @@ class RpaProgramMainWindow(QWidget):
         self.set_shortcut('DOWNLOAD VIDEO FROM WEB1', self.download_video_from_web1)
         self.set_shortcut('DOWNLOAD VIDEO FROM WEB2', self.download_video_from_web2)
         self.set_shortcut('RECORD MACRO', self.record_macro)
-        self.set_shortcut('UP AND DOWN GAME', self.run_up_and_down_game)
+        self.set_shortcut('UP AND DOWN GAME', Park4139.run_up_and_down_game)
+        self.set_shortcut("CLASSIFY SPECIAL FILES", Park4139.should_i_classify_special_files)
+        self.set_shortcut("GATHER EMPTY DIRECTORY", Park4139.should_i_gather_empty_directory)
+        self.set_shortcut("GATHER SPECIAL FILES", Park4139.should_i_gather_special_files)
+        self.set_shortcut("GATHER USELESS FILES", Park4139.should_i_gather_useless_files)
+        self.set_shortcut("MERGE DIRECTORIES", Park4139.should_i_merge_directories)
 
         # 약속된 버튼명인 버튼 설정
         self.btn_to_show_weather_from_web = self.get_btn(self.get_btn_name_promised('WEATHER'), self.show_weather_from_web)
@@ -387,7 +396,12 @@ class RpaProgramMainWindow(QWidget):
         self.btn_to_download_video_from_web1 = self.get_btn(self.get_btn_name_promised('DOWNLOAD VIDEO FROM WEB1'), self.download_video_from_web1)
         self.btn_to_download_video_from_web2 = self.get_btn(self.get_btn_name_promised('DOWNLOAD VIDEO FROM WEB2'), self.download_video_from_web2)
         self.btn_to_record_macro = self.get_btn(self.get_btn_name_promised('RECORD MACRO'), self.record_macro)
-        self.btn_to_run_up_and_down_game = self.get_btn(self.get_btn_name_promised('UP AND DOWN GAME'), self.run_up_and_down_game)
+        self.btn_to_run_up_and_down_game = self.get_btn(self.get_btn_name_promised('UP AND DOWN GAME'), Park4139.run_up_and_down_game)
+        self.btn_to_classify_special_files = self.get_btn(self.get_btn_name_promised("CLASSIFY SPECIAL FILES"), Park4139.should_i_classify_special_files)
+        self.btn_to_gather_empty_directory = self.get_btn(self.get_btn_name_promised("GATHER EMPTY DIRECTORY"), Park4139.should_i_gather_empty_directory)
+        self.btn_to_gather_special_files = self.get_btn(self.get_btn_name_promised("GATHER SPECIAL FILES"), Park4139.should_i_gather_special_files)
+        self.btn_to_gather_useless_files = self.get_btn(self.get_btn_name_promised("GATHER USELESS FILES"), Park4139.should_i_gather_useless_files)
+        self.btn_to_merge_directories = self.get_btn(self.get_btn_name_promised("MERGE DIRECTORIES"), Park4139.should_i_merge_directories)
 
         # 약속된 단축키명 버튼 설정
         self.btn_to_show_weather_from_web_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('WEATHER'), function=self.show_weather_from_web)
@@ -422,7 +436,12 @@ class RpaProgramMainWindow(QWidget):
         self.btn_to_download_video_from_web1_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('DOWNLOAD VIDEO FROM WEB1'), function=self.download_video_from_web1)
         self.btn_to_download_video_from_web2_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('DOWNLOAD VIDEO FROM WEB2'), function=self.download_video_from_web2)
         self.btn_to_record_macro_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('RECORD MACRO'), function=self.record_macro)
-        self.btn_to_run_up_and_down_game_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('UP AND DOWN GAME'), function=self.run_up_and_down_game)
+        self.btn_to_run_up_and_down_game_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised('UP AND DOWN GAME'), function=Park4139.run_up_and_down_game)
+        self.btn_to_classify_special_files_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised("CLASSIFY SPECIAL FILES"), function=Park4139.should_i_classify_special_files)
+        self.btn_to_gather_empty_directory_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised("GATHER EMPTY DIRECTORY"), function=Park4139.should_i_gather_empty_directory)
+        self.btn_to_gather_special_files_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised("GATHER SPECIAL FILES"), function=Park4139.should_i_gather_special_files)
+        self.btn_to_gather_useless_files_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised("GATHER USELESS FILES"), function=Park4139.should_i_gather_useless_files)
+        self.btn_to_merge_directories_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised("MERGE DIRECTORIES"), function=Park4139.should_i_merge_directories)
 
         btns = [
             [self.btn_to_toogle_rpa_window, self.btn_to_toogle_rpa_window_only_shorcut_name],
@@ -457,6 +476,11 @@ class RpaProgramMainWindow(QWidget):
             [self.btn_to_should_i_show_animation_information_from_web, self.btn_to_should_i_show_animation_information_from_web_only_shortcut_name],
             [self.btn_to_record_macro, self.btn_to_record_macro_only_shortcut_name],
             [self.btn_to_run_up_and_down_game, self.btn_to_run_up_and_down_game_only_shortcut_name],
+            [self.btn_to_classify_special_files, self.btn_to_classify_special_files_only_shortcut_name],
+            [self.btn_to_gather_empty_directory, self.btn_to_gather_empty_directory_only_shortcut_name],
+            [self.btn_to_gather_special_files, self.btn_to_gather_special_files_only_shortcut_name],
+            [self.btn_to_gather_useless_files, self.btn_to_gather_useless_files_only_shortcut_name],
+            [self.btn_to_merge_directories, self.btn_to_merge_directories_only_shortcut_name],
         ]
 
         # GRID SETTING
@@ -1918,8 +1942,6 @@ class RpaProgramMainWindow(QWidget):
                 break
 
     @rpa_program_method_decorator
-
-
     @rpa_program_method_decorator
     def test(self):
         while True:
@@ -2276,33 +2298,7 @@ class RpaProgramMainWindow(QWidget):
         active_window = win32gui.GetForegroundWindow()
         win32gui.SetForegroundWindow(active_window)
 
-    def run_up_and_down_game(self):
-        correct_answer: int = random.randint(0, 100)
-        left_oportunity: int = 5
-        dialog = pkg_park4139.CustomDialog(contents=f"<up and down game>\nfind correct no.\ntype number between 1 to 100.\n(left chance : {left_oportunity})", buttons=["start", "exit"], is_input_text_box=True)
-        dialog.exec_()
-        user_input = int(dialog.box_for_editing_input_text.text())
-        text_of_clicked_btn = dialog.text_of_clicked_btn
-        if text_of_clicked_btn == "start":
-            while left_oportunity >= 0:
-                if left_oportunity == 0:
-                    dialog = pkg_park4139.CustomDialog(contents=f"left chance is {left_oportunity} \ntake your next chance.", buttons=["exit"])
-                    dialog.exec_()
-                    break
-                elif user_input == correct_answer:
-                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {correct_answer}\nthis is answer", buttons=["exit"])
-                    dialog.exec_()
-                    break
-                elif correct_answer < user_input:
-                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {user_input}\nYou need to down!~\nyour left chance is {left_oportunity}", buttons=["submit"], is_input_text_box=True)
-                    dialog.exec_()
-                    user_input = int(dialog.box_for_editing_input_text.text())
-                elif correct_answer > user_input:
-                    dialog = pkg_park4139.CustomDialog(contents=f"your number is {user_input}\nYou need to up!~\nyour left chance is {left_oportunity}", buttons=["submit"], is_input_text_box=True)
-                    dialog.exec_()
-                    user_input = int(dialog.box_for_editing_input_text.text())
-        else:
-            return
+
 
 
 class MacroWindow(QWidget):
