@@ -3,16 +3,36 @@ import string
 from datetime import datetime
 from typing import List
 
+from PySide6.QtCore import Signal, QThread
+
 import pkg_park4139
 
-Park4139 = pkg_park4139.Park4139()
 
 
 
-def TEST():
-    pass
 
-TEST()
+import sys
+from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPushButton
+
+class CustomDialogX(QDialog):
+    def __init__(self):
+        super().__init__()
+        layout = QVBoxLayout()
+        label = QLabel("대화 상자")
+        layout.addWidget(label)
+
+        button = QPushButton("닫기")
+        button.clicked.connect(self.hide)
+        layout.addWidget(button)
+
+        self.setLayout(layout)
+        self.setModal(True)  # 모달 대화 상자로 설정
+        # self.setModal(False)  # 모달 대화 상자로 설정
+
+# from test_core import CustomDialogX
+# dialog = CustomDialogX()
+# dialog.exec()
+
 
 # 파일분류 기능
 # 이름에 [subplease] 가 있다면 [subplease] 디렉토리를 만들어 그곳으로 move_without_overwrite
