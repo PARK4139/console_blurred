@@ -94,7 +94,7 @@ def test():
     try:
         app = QApplication()  # set this if necessary in test
         while True:
-            dialog = pkg_park4139.CustomDialog(contents="테스트를 시작할까요?", buttons=["시작하기", "시작하지 않기"])
+            dialog = pkg_park4139.CustomQdialog(context="테스트를 시작할까요?", buttons=["시작하기", "시작하지 않기"])
             dialog.exec_()
             text_of_clicked_btn = dialog.text_of_clicked_btn
             if text_of_clicked_btn == "시작하기":

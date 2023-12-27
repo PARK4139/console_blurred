@@ -136,86 +136,14 @@ Park4139 = pkg_park4139.Park4139()
 # logger.addHandler(hdlr)
 # logger.setLevel(logging.INFO)
 
-#  타입 힌팅 설정
-T = TypeVar('T')
-
-
-#  ///////////////////////////////////////////////  공유 객체 클래스 정의
-
-
-
-class SchedulerAsQthread(QThread):
-    finished = Signal()  # 작업이 완료되었을 때 신호를 보내기 위한 시그널
-
-    def run(self):
-        # QThread 동작 테스트 코드
-        for i in range(10):
-            print(i)
-            self.msleep(100)
-
-        # 여기에 스케쥴러 코어
-        Park4139.run_scheduler_core()
-
-        self.finished.emit()  # 작업이 완료되었음을 신호로 알림 # flutter 상태관리와 비슷
-
-
-
-
-def run_console_blurred():
-    # pyautogui 페일세이프 모드 설정
-    # pyautogui.FAILSAFE = False
-    pyautogui.FAILSAFE = True
-    global app
-    app = QApplication(sys.argv)
-    # global 로 app을 설정 하고 싶진 않았지만 app.primaryScreen() 동작에 필요했다.
-    # app.primaryScreen()의 기능에 대한 대체 방법이 있다면 global app 없애고 싶다, 공유객체로 해소가 될 것 같은데 더 쉬운 방법을 못찾았다
-
-
-    # 프로그램 실행 디렉토리 사용자에게 확인
-    # dialog = CustomDialogReplica(contents=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{Park4139.PROJECT_DIRECTORY}", buttons=["실행", "실행하지 않기"], closing_timer=True)
-    dialog = pkg_park4139.CustomDialog(contents=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{Park4139.PROJECT_DIRECTORY}", buttons=["실행", "실행하지 않기"], starting_timer=True)
-    dialog.exec()
-    text_of_clicked_btn = dialog.text_of_clicked_btn
-    if text_of_clicked_btn == "실행":
-        print(Park4139.PROJECT_DIRECTORY)
-        os.chdir(Park4139.PROJECT_DIRECTORY)
-    if text_of_clicked_btn == "실행하지 않기":
-        sys.exit()
-
-
-    # # 시작스케쥴러 설정 mkr
-    # Park4139.run_scheduler_as_thread() # Qthread 가 아니라 Thread 형태 이면 동작은 하는데 스케쥴러 내에서 pyside6 Qdialog 동작하지 않는다.
-    # run_scheduler_as_Qthread() # 이렇게 함수에 넣으면 Process finished with exit code -1073740791 (0xC0000409) 이 에러와 함께 바로 앱 종료.
-    thread = SchedulerAsQthread() # 이 방법도 결국 되지않앗다 Process finished with exit code -1073741819 (0xC0000005) 이 에러와 함께 바로 앱 종료.
-    thread.finished.connect(lambda: print("작업이 완료되었습니다."))
-    thread.start()
-
-
-    # 창 간 통신 설정 mkr
-    # shared_obj = SharedObject()
-    # rpa_program_main_window = RpaProgramMainWindow(shared_obj=shared_obj)
-    rpa_program_main_window = pkg_park4139.RpaProgramMainWindow()  # 공유객체인 shared_obj 가 사용되는 곳이 없고 불필요할 것으로 판단하여 제거
-    rpa_program_main_window.setMouseTracking(True)  # pyside6 창 밖에서도 마우스 추적 가능 설정 # 마우스 움직임 이벤트 감지 허용 설정
-    rpa_program_main_window.bring_this_window()
-
-
-    sys.exit(app.exec())
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     try:
         while (True):
-            # Park4139.speak(ment="console Blurred 프로그램을 실행합니다")
-            Park4139.speak(ment="콘솔 블러 프로그램을 실행합니다")
-            run_console_blurred()
+            Park4139.speak(ment="console Blurred 프로그램을 실행합니다")
+            # Park4139.speak(ment="콘솔 블러 프로그램을 실행합니다")
+            Park4139.run_console_blurred()
 
             break
     except Exception as e:
         Park4139.trouble_shoot("%%%FOO%%%")
-        # Park4139.pause()
