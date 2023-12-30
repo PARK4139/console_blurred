@@ -96,6 +96,7 @@ echo d | xcopy ".\$cache_mp3" ".\dist\console_blurred\_internal\$cache_mp3" /e /
 echo d | xcopy ".\$cache_png" ".\dist\console_blurred\_internal\$cache_png" /e /h /k
 echo d | xcopy ".\$cache_tools" ".\dist\console_blurred\_internal\$cache_tools" /e /h /k
 echo d | xcopy ".\$cache_txt" ".\dist\console_blurred\_internal\$cache_txt" /e /h /k
+echo d | xcopy ".\pkg_yt_dlp" ".\dist\console_blurred\_internal\pkg_yt_dlp" /e /h /k
 echo d | xcopy ".\pkg_park4139" ".\dist\console_blurred\_internal\pkg_park4139" /e /h /k
 echo d | xcopy ".\$cache_fonts" ".\dist\console_blurred\_internal\$cache_fonts" /e /h /k
 echo d | xcopy ".\$cache_work_for_music" ".\dist\console_blurred\_internal\$cache_work_for_music" /e /h /k

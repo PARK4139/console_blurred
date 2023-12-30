@@ -20,23 +20,6 @@ Park4139 = pkg_park4139.Park4139()
 # logger.setLevel(logging.INFO)
 
 
-@Park4139.measure_seconds_performance
-def generate_mp3_file_for_time_performance():  # time performance : 9028 초 /60 /60  =  2.5 시간
-    """
-    시간에 대한 mp3 파일 작업 최적화 함수
-    """
-    for HH in range(24, 0, -1):
-        for mm in range(0, 60):
-            Park4139.commentize(f'{int(HH)}시')
-            Park4139.commentize(f'{int(mm)}분 입니다')
-
-
-# park4139.commentize() 메소드 테스트 결과, 1개 파일을 만들어 실행하는 데까지 무려 11초 정도로 측정됨, ffmpeg 작업 속도로 문제
-# 의도적으로 mp3 파일을 미리 만들어, ffmpeg 로 두 파일 합성작업 시간을 줄일수 있으므로, 성능 최적화 기대,
-# 따라서, 코드에서 사용되는 모든 텍스트를 추출하여 park4139.commentize 하도록 하여, 최적화시도해보자
-# 번외로 리스트의 파라미터를 몇개까지 가능하지 테스트 해보고 싶긴한데, 망가져도 되는 컴퓨터로 시도해보자
-
-
 def decorate_test_status_printing_code(function):
     def wrapper():
         Park4139.commentize(rf"test status")

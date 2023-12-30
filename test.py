@@ -367,12 +367,12 @@ def test():
         # sys.exit(app.exec())
         # __________________________________________________________________________________________________________________________________ TESTED SECTION 2
 
-
         # __________________________________________________________________________________________________________________________________  UP (TESTED SUCCESS)
         app = QApplication()
         import test_core       # test_core.py 테스트
         app.exec()
         # __________________________________________________________________________________________________________________________________ BELOW (NOT TESTED YET)
+
         # 사용에 유의해야 한다.
         # 값이 공유가 되니 유의해야 한다. 오히려 이점을 활용해서 공유객체를 사용할 수 있지 않을까?
 
@@ -878,6 +878,458 @@ def test():
 
 
 
+        # 매크로 프로그램
+        # F1 녹화시작
+        # F1 녹화종료
+        # F1 재생
+        # F1 에 다시 녹화를 시작할까요?
+        #
+        #
+        #
+        #
+        # 오늘의 파이썬 에러
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # EvtSubscribeActionDeliver
+        # 이건 뭔가. 처음 마주하는 새로운 에러이다
+        # python 콘솔에 줄줄이 인쉐되어 나오는 단어다
+        # 하나씩 트러블 슈팅을 하니 로컬 패키지에서 나는 에러이다
+        # import 만 해도 나는 걸 보니 어디서나는지...
+        # 일단 오늘 작업한 함수들만 주석해보자 못 찻겠다
+        # 일단 로컬백업 수행
+        # 구글링하니 windows 관련 내용 주르륵 나와
+        # 확실히 이 에러가 없던 로컬백업을 열어본다
+        # archive_py - 2023 12 27 23 58 02 - 복사본
+        # 만약 여기서 나오면 프로젝트 문제 아니고 윈도우즈 문제...
+        # 잉? archive_py - 2023 12 27 23 58 02 - 복사본 여기서 안난다.
+        # 내가 프로젝트를 잘못 건드렸다는 것 같은데 어디냐
+        # 뭐지 가상환경이 날아가 벼렸는데? 몇 번 다시봐도 없음.
+        # freeze 시켜둔 가상환경을 설치시도하기 전에 근래 로컬백업 하나만 더보자. 와 이것도 없다.
+        # 윈도우 리부팅 했는데도 나타나는 것이다.
+        # IDE 문제일 수도 있으니 초기화 해보자.
+        # 커밋 주기를 이번엔 길게 했는데 하아..
+        # 의심사항 하나 찾음
+        # # from PySide6.QtCore import Qt, QTimer, QThread, Signal, QObject, QCoreApplication
+        # import 부분 주석처리 실행을 번갈아 몇번하니 사라졌다? 어쨋든 사라졌는데?
+        # 문제가 있을 법한 부분은 같은 패키지가 여러개 import 되어 있던 부분이 있었다.
+        # 이건 overwrite 되는 것처럼 동작하리라 생각하여 문제 없을 것이라 판단하고 귀찮아서 나중에 일괄정리하려고 둔 부분이었는데
+        # import 부분 전체 백업해두고 Jetbrain IDE의 ctrl alt o 를 눌러주었다
+        # 실행한번 눌러보고 오케이 되었어
+        # 프로젝트 로컬백업수행완료
+        # 혹시 이런게 문제가 될 수도 있어 보인다.
+        #
+        #
+        #
+        # 오늘의 파이썬 에러
+        # 'test': opts.should_i_start_test_core,
+        # 이게 뭔줄 아는가? yt_dlp 모듈의 파일 중 하나인데
+        # should_i_start_test_core 라고 내가 리펙토링을 마구하다가 다른 패키지를 건드려
+        # 문제가 된 부분이다. 유의해서 IDE 의 리펙토링을 하자
+        # 이 부분은 다행히 내가 특징적으로 기억을 했기에 망정이지. 몰랐을 거다.
+        #
+        #
+        #
+        # 프로젝트 로컬 백업 버튼 만들기
+        #
+        # mp3 사용일자별로 정리를 해서 한번 지우자
+        #
+        # 다마고치 게임, 바탕화면에서 디지털몬스터 키우는 게임.
+        #
+        # 서른넘어 수학공부
+        #
+        #
+        # 함수목록  최신화일시="2023년 12월 30일 (토) 10:25:44"
+        # def activate_window_by_pid(pid: int):
+        # def aes_decrypt(key, ciphertext):
+        # def aes_encrypt(key, plaintext):
+        # def afterpause(function):
+        # def ask_something_to_ai():
+        # def ask_something_to_ai(self):
+        # def ask_to_bard(question: str):
+        # def ask_to_google(question: str):
+        # def ask_to_web(question):
+        # def ask_to_wrtn(question: str):
+        # def bkup_biggest_targets():
+        # def bkup_by_manual(target_abspath):
+        # def bkup_db_toml():
+        # def bkup_smallest_targets():
+        # def bkup(target_abspath):
+        # def move_this_window_to_front(self):
+        # def move_window_to_front_by_pid(pid):
+        # def bubble_sort_nested_list(nested_list, column_index):
+        # def centerOnScreen(self):
+        # def change_console_color():
+        # def classify_targets_between_smallest_targets_biggest_targets():
+        # def click_center_of_img_recognized_by_mouse_left(img_abspath: str, recognize_loop_limit_cnt=0, is_zoom_toogle_mode=False):
+        # def click_mouse_left_btn(abs_x=None, abs_y=None):
+        # def click_mouse_right_btn(abs_x=None, abs_y=None):
+        # def close(self):
+        # def cls():
+        # def commentize(title):
+        # def compress_string(original_string):
+        # def connect_remote_rdp1():
+        # def connect_to_remote_computer_via_chrome_desktop():
+        # def convent_bytes_to_str(target: bytes):
+        # def convent_str_to_bytes(target: str):
+        # def convert_as_zip_with_timestamp(target_abspath):
+        # def convert_img_to_img_blurred(img_abspath):
+        # def convert_img_to_img_cropped(img_abspath, abs_x: int, abs_y: int, width_px: int, height_px: int):
+        # def convert_img_to_img_flipped_horizontally(img_abspath):
+        # def convert_img_to_img_flipped_vertical(img_abspath):
+        # def convert_img_to_img_grey(img_abspath):
+        # def convert_img_to_img_resized(img_abspath, width_px, height_px):
+        # def convert_img_to_img_rotated(img_abspath, degree: int):
+        # def convert_img_to_img_watermarked(img_abspath):
+        # def convert_mp3_to_flac(target_abspath):
+        # def convert_mp4_to_flac(target_abspath):
+        # def convert_mp4_to_wav(target_abspath):
+        # def convert_mp4_to_webm(target_abspath):
+        # def convert_wav_to_flac(target_abspath):
+        # def copy_and_paste_with_keeping_clipboard_current_contents(contents_new):
+        # def copy_label_text_to_clipboard(self):
+        # def countdown_and_click_negative_btn(self):
+        # def countdown_and_click_positive_btn(self):
+        # def create_db_toml():
+        # def data(self, value):
+        # def data(self):
+        # def debug_as_cli(context: str):
+        # def debug_as_gui(context: str, is_app_instance_mode=False, input_text_default=""):
+        # def decode_as_lzw_algorizm(encrypted_text):
+        # def decompress_string(compressed_string):
+        # def delete_db_toml():
+        # def do_once():
+        # def do_random_schedules():
+        # def download_clip_alt(url: str):
+        # def download_clip(url: str):
+        # def download_from_youtube_to_webm_alt(urls_from_prompt):
+        # def download_from_youtube_to_webm(urls_from_prompt):
+        # def download_video_from_web1():
+        # def download_video_from_web1(self):
+        # def download_video_from_web2(self):
+        # def download_youtube_as_wav(self):
+        # def download_youtube_as_webm_only_sound(self):
+        # def empty_recycle_bin():
+        # def encode_as_lzw_algorizm(plaintext: str):
+        # def enter_power_saving_mode():
+        # def enum_windows_callback(hwnd, _):
+        # def eventFilter(self, obj, event):
+        # def excute_macro(self):
+        # def exit_macro(self):
+        # def explorer(file_abspath: str):
+        # def find_direction_via_naver_map(destination: str):
+        # def gather_storages():
+        # def gen_dictionary_for_monitor_target_edited_and_bkup(directory_abspath):
+        # def get_abs_x_and_y_from_img(img_abspath):
+        # def get_added_files(previous_state, current_state):
+        # def get_all_pid_and_process_name():
+        # def get_btn_name_promised(self, button_name_without_shortcut):
+        # def get_btn_name_with_shortcut_name(self, button_name_without_shortcut):
+        # def get_btn(self, btn_name, function, btn_text_align="left"):
+        # def get_btn(self, btn_name, function):
+        # def get_cmd_output(cmd):
+        # def get_column_of_2_dimension_list(list_2_dimension: [], column_no):  # return 은 list 아니고 ndarray 일 수 있다
+        # def get_common_elements(list1, list2):  # 두 개의 리스트를 비교하여 서로 동일한 요소만 새로운 리스트로 출력 # 중복값 색출
+        # def get_comprehensive_weather_information_from_web():
+        # def get_count_args(func):
+        # def get_current_mouse_abs_info():
+        # def get_current_program_pid():
+        # def get_db_toml_key(target_abspath):
+        # def get_deleted_files(previous_state, current_state):
+        # def get_different_elements(list1, list2):  # 두 개의 리스트를 비교하여 서로 다른 요소만 모아서 리스트로 출력
+        # def get_directory_files_mtime_without_files_excepted(directory_abspath):
+        # def get_display_info():
+        # def get_display_setting():
+        # def get_driver_for_selenium():
+        # def get_elements_that_list1_only_have(list1, list2):  # 두 개의 리스트를 비교하여 특정 하나의 리스트 만 가진 요소만 모아서 리스트로 출력
+        # def get_font_for_pyside6(font_path):
+        # def get_font_name_for_mataplot(font_abspath):
+        # def get_infos_of_img_when_img_recognized_succeed(img_abspath, recognize_loop_limit_cnt=0, is_zoom_toogle_mode=False):
+        # def get_length_of_mp3(target_abspath: str):
+        # def get_line_cnt_of_file(target_abspath: str):
+        # def get_list_added_elements_alternatively(list_for_odd, list_for_even):  # from [1, 2, 3] + [ x, y, z] to [1,x,2,y,3,z]
+        # def get_list_each_two_elements_joined(list: []):  # from ["a", "b", "c", "d"] to ["ab", "cd"]
+        # def get_list_replaced_from_list_that_have_special_characters(target: [str], replacement: str):  # from [str] to [str]
+        # def get_list_seperated_by_each_elements_in_nested_list(nested_list):
+        # def get_modified_files(previous_state, current_state):
+        # def get_name_space():  # name space # namespace # 파이썬 네임스페이스
+        # def get_nested_list_converted_from_ndarray(ndarray: numpy.ndarray):  # ndarray 에서 list 로 변환 # ndarray 에서 list 로 변환 # ndarray to nested []  from [[1 2]] to [[1, 2]] # from [ [str str] [str str] ]  to  [ [str, str], [str, str] ]
+        # def get_nested_list_grouped_by_each_two_elements_in_list(list: []):  # from ["a", "b", "c", "d"] to [["a","b"], ["c","d"]]
+        # def get_nested_list_removed_row_that_have_nth_element_dulplicated_by_column_index_for_ndarray(ndarray: [[]], column_index: int):  # 중복된 행 제거하는게 아니고 행의 2번째 요소가 중복되는 것을 제거
+        # def get_nested_list_removed_row_that_have_nth_element_dulplicated_by_column_index(nested_list: [[]], column_index: int):  # 중복된 행 제거하는게 아니고 행의 2번째 요소가 중복되는 것을 제거
+        # def get_nested_list_sorted_by_column_index(nested_list: [[str]], column_index: int, decending_order=False):  # tree depth(sample[1]) 에 대한 내림차순 정렬 # list 2차원 배열의 특정 열의 내림차순 정렬 # from [[str, str]] to [[str, str]]
+        # def get_os_sys_environment_variable(environment_variable_name: str):
+        # def get_process_name_by_pid(pid):
+        # def get_shortcut_name_promised(self, button_name_without_shortcut):
+        # def get_str_replaced_special_characters(target: str, replacement: str):  # str to str
+        # def get_target_bite(start_path='.'):
+        # def get_target_gigabite(target_path):
+        # def get_target_megabite(target_path):
+        # def get_target_pid_by_process_name_legacy(target_process_name: str):
+        # def get_target_pid_by_process_name(target_process_name: str):
+        # def get_time_as_(pattern: str):
+        # def get_tree_depth_level(file_abspath: str):
+        # def get_validated(target: any):
+        # def get_webdriver_options_customed():
+        # def git_push_by_auto():
+        # def inputbox_changed(self):
+        # def inputbox_edit_finished(self):
+        # def inputbox_return_pressed(self):
+        # def insert_db_toml(key, value):
+        # def insert(self, word):
+        # def is_accesable_local_database():
+        # def is_containing_eng(text):
+        # def is_containing_jpn(text):
+        # def is_containing_kor(text):
+        # def is_containing_number(text):
+        # def is_containing_special_characters(text: str):
+        # def is_directory_changed(directory_abspath):
+        # def is_empty_directory(target_abspath):
+        # def is_eng_or_kor_ja(text: str):
+        # def is_file_changed(file_abspath):
+        # def is_file_edited(target_abspath: str):
+        # def is_only_eng_and_kor_and_no_and_speacial_characters(text):
+        # def is_only_eng_and_no_and_speacial_characters(text):
+        # def is_only_eng_and_no(text):
+        # def is_only_eng_and_speacial_characters(text):
+        # def is_only_eng(text):
+        # def is_only_no(text):
+        # def is_only_speacial_characters(text):
+        # def is_regex_in_contents_with_case_ignored(contents, regex):
+        # def is_regex_in_contents(target, regex):
+        # def is_shortcut_pressed_within_10_secs(key_plus_key: str):
+        # def is_two_lists_equal(list1, list2):
+        # def is_validated(target: any):
+        # def is_void_function(func):
+        # def keyDown(key: str):
+        # def keyPressEvent(self, e):
+        # def keyUp(key: str):
+        # def kill_alsong():
+        # def kill_thread(thread_name):
+        # def log_e(log_title="종료로깅"):
+        # def log_mid(log_title="중간로깅"):
+        # def log_s(log_title="시작로깅"):
+        # def login(self):
+        # def make_leaf_directory(leaf_directory_abspath):
+        # def make_leaf_file(leaf_file_abspath):
+        # def make_matrix_console():
+        # def make_park4139_go_to_sleep():
+        # def make_party_console():
+        # def measure_milliseconds_performance(function):
+        # def measure_seconds_performance(function):
+        # def merge_directories(directoryies: str):
+        # def merge_two_directories_without_overwrite(directory_a, directory_b):
+        # def merge_video_and_sound(file_v_abspath, file_a_abspath):
+        # def monitor_mouse_position_per_second(self):
+        # def monitor_mouse_position(self, x, y):
+        # def monitor_target_edited_and_bkup(target_abspath: str):
+        # def mousePressEvent(self, e):
+        # def move_mouse_rel_x(rel_x: int, rel_y: int):
+        # def move_mouse(abs_x: int, abs_y: int):
+        # def move_target_to_trash_bin(target_abspath):
+        # def move_window_to_center(self):
+        # def move_with_overwrite(src: str, dst: str):
+        # def move_without_overwrite(src, dst):
+        # def on_keboard_press(self, key):
+        # def on_keys_down(self, key):
+        # def on_keys_up(self, key):
+        # def on_mouse_btn_clicked(self, x, y, button, pressed):
+        # def on_mouse_move(self, x, y):  # 아주 빠르게 감지
+        # def on_player_eos():
+        # def on_single_key_pressed(self, key):
+        # def open_mouse_info():
+        # def open_project_directory(self):
+        # def parse_youtube_video_id(url):
+        # def pause():
+        # def press(*presses: str, interval=0.0):
+        # def print_and_open_py_pkg_global_path():
+        # def print_list_each_two_elements(list: []):  # print(rf'list[index] list[index+1] : {list[index]} {list[index+1]}') without out of index
+        # def print_python_process_for_killing_zombie_process():
+        # def print_today_time_info():
+        # def process_thread_loop(ment):
+        # def raise_error(str: str):
+        # def read_db_toml():
+        # def reboot_this_computer():
+        # def recommand_console_color():
+        # def remove_special_characters(text):
+        # def rename_target(current_target_abspath, future_target_abspath):
+        # def replace_with_auto_no_orderless(contents: str, unique_word: str, auto_cnt_starting_no=0):
+        # def replace_with_auto_no(contents: str, unique_word: str, auto_cnt_starting_no=0):
+        # def replace_words_based_on_tri_node(text, dictionary):
+        # def return_korean_week_name():
+        # def rotate_window_size_mode(self):
+        # def rpa_program_method_decorator(function: Callable[[T], None]):
+        # def run_async_event_loop(q_application):
+        # def run_async_event_loop(start_index: int, end_index: int, text: str):
+        # def run_async_loop(q_application):
+        # def run_async_loop1():
+        # def run_async_loop2():
+        # def run_async_loop3():
+        # def run_async_loop4():
+        # def run_cmd_exe_as_admin():
+        # def run_cmd_exe_as_admin(self):
+        # def run_console_blurred_as_gui_as_thread(q_application: QApplication):
+        # def run_console_blurred_as_gui(q_application: QApplication):
+        # def run_console_blurred_as_scheduler_as_thread(q_application: QApplication):
+        # def run_console_blurred_as_scheduler(q_application: QApplication):
+        # def run_console_blurred():
+        # def run_loop_for_speak_as_async(ment):
+        # def run_no_paste_memo(self):
+        # def run_targets_promised():
+        # def run_up_and_down_game():
+        # def run(self):
+        # def sanitized_input(user_input: str):
+        # def save_all_list():
+        # def save_macro_log(self, contents: str):
+        # def search_animation_data_from_web(text_of_clicked_btn):
+        # def search(self, word):
+        # def select_db_toml(key):
+        # def set_shortcut(self, btn_name_promised, function):
+        # def set_shortcut(self, key_plus_key: str, function):
+        # def shoot_custom_screenshot():
+        # def shoot_full_screenshot():
+        # def shoot_img_for_rpa():
+        # def shoot_screenshot_custom(self):
+        # def shoot_screenshot_for_rpa(self):
+        # def shoot_screenshot_full(self):
+        # def should_i_back_up_target():
+        # def should_i_back_up_target(self):
+        # def should_i_check_your_routine_before_coding():
+        # def should_i_classify_special_files():
+        # def should_i_connect_to_rdp1():
+        # def should_i_connect_to_rdp1(self):
+        # def should_i_download_youtube_as_webm_alt():
+        # def should_i_download_youtube_as_webm_alt(self):
+        # def should_i_download_youtube_as_webm():
+        # def should_i_download_youtube_as_webm(self):
+        # def should_i_empty_trash_can():
+        # def should_i_empty_trash_can(self):
+        # def should_i_enter_to_power_saving_mode():
+        # def should_i_enter_to_power_saving_mode(self):
+        # def should_i_exit_this_program():
+        # def should_i_exit_this_program(self):
+        # def should_i_find_direction_via_naver_map():
+        # def should_i_find_direction_via_naver_map(self):
+        # def should_i_gather_empty_directory():
+        # def should_i_gather_special_files():
+        # def should_i_gather_useless_files():
+        # def should_i_merge_directories():
+        # def should_i_reboot_this_computer():
+        # def should_i_reboot_this_computer(self):
+        # def should_i_record_macro():
+        # def should_i_record_macro(self):
+        # def should_i_run_targets_promised():
+        # def should_i_show_animation_information_from_web():
+        # def should_i_show_animation_information_from_web(self):
+        # def should_i_shutdown_this_computer():
+        # def should_i_shutdown_this_computer(self):
+        # def should_i_speak_today_time_info():
+        # def should_i_start_test_core():
+        # def should_i_start_test(self):
+        # def should_i_taskkill_useless_programs():
+        # def should_i_translate_eng_to_kor():
+        # def should_i_translate_eng_to_kor(self):
+        # def should_i_translate_kor_to_eng():
+        # def should_i_translate_kor_to_eng(self):
+        # def show_weather_from_web(self):
+        # def shutdown_this_computer():
+        # def sleep(milliseconds):
+        # def speak_after_x_min(mins: int):
+        # def speak_alt_for_emergency(contents: str):
+        # def speak_server_hh_mm():  # '몇 시야' or usr_input_txt == '몇시야':
+        # def speak_server_ss():
+        # def speak_that_service_is_in_preparing():
+        # def speak_today_time_info():
+        # def speak_without_async(ment):  # 많이 쓸 수록 프로그램이 느려진다
+        # def speak(ment):
+        # def stop_all_sounds():
+        # def taskkill_useless_programs():
+        # def taskkill(program_img_name):
+        # def tmp(string: str):
+        # def tmp2(q_application: QApplication):
+        # def toogle_console_color(color_bg, colors_texts):
+        # def toogle_rpa_window(self):
+        # def translate_eng_to_kor_deprecated(request: str):
+        # def translate_eng_to_kor(question: str):
+        # def translate_kor_to_eng_deprecated(request: str):
+        # def translate_kor_to_eng(question: str):
+        # def trouble_shoot(trouble_id: str):
+        # def update_db_toml(key, value):
+        # def update_global_pkg_park4139():
+        # def update_label(self):
+        # def update_os_sys_environment_variable(environment_variable_name: str, new_path: str):
+        # def update_text_of_clicked_btn_and_close(self, text_of_clicked_button):
+        # def update_text_of_clicked_btn(self, text_of_clicked_button):
+        # def what_does_this_consist_of(text: str):
+        # def write_fast(presses: str):
+        # def write_slow(presses: str):
+        # def xcopy_with_overwrite(target_abspath_from, future_target_abspath):
+        #
+        #
+        #
+        # 진행완료팝업,
+        #     TIMER 기능
+        #     개발배경 : 음악 듣거나, 애니볼때, 말로 하는게 시끄러워서
+        #
+
+
+
+
+
+
+        # 파일 동기화 모듈로 로컬 1차 백업
+
+        # 파일분류 기능
+        # 이름에 [subplease] 가 있다면 [subplease] 디렉토리를 만들어 그곳으로 move_without_overwrite
+
+        # 파일명 대체 기능 (불필요한 접두/어근/접미, 삭제/추가)
+        # 이름에 [subplease] 가 있다면
+        # rename_without_overwrite(이름, 이름.replace([subplease],""))
+        # 필요한 파일명 부여 삭제
+        # rename_target_without_overwiting(current, future)
+        # 이동시키지 말고 그자리에서 rename
+
+        # 2024 PROJECT DATA PRISION
+        # 내가 아는 것은 30초 이내에 찾을 수 있도록 하기 위한 프로젝트
+        # 결국 보고자 하는 것은 디렉토리가 아니라 파일명을 잘 관리해서 인덱싱하면 된다고 생각한다.
+        # 디렉토리명은 파일을 찾기 위한 지표정도이다.
+        # 파일이 어느폴더에 있든 상관없다. 단지 이름명이 류가 되어있어 찾을 때, 정확히 호출만 되면 되는 일이다. 호출명단을 잘 관리를 하면 되는 일이다,
+        # 그렇다면 정리할 필요가 없다, 즉 찾는시간이 적은 시스템이 필요한 것이지 정리하는시간이 필요한 게 아니다
+        # 정리하는시간이 없고 찾는시간이 빠른 시스템 이 나에게 필요한 파일색인시스템.
+        # get filenames
+        # organize
+        # 인덱스를 파일명 유사도분류로
+
+        # (파일명)   #hashtag name #애니 #영화
+        # 파일명 부여 규칙
+        # 접두사는 가장 중요한 직관적인 키워드를 넣는다.
+        # 접미사는 순서에 관계없이 #애니 #영화 이런 걸 붙인다. 이 접미사는 검색 시 중요하므로 잘 보관하고 관리한다.
+        # 파일명으로 가지고 파일을 검색한다.
+
+        # 빈폴더 머지는 확실히 삭제해도 되는 빈폴더를 한 폴더에 두고 빈폴더 삭제 명령어로 처리하자
+
+        # def prisonize_storage():
+
+        # 나중에 TDD 공부를 해볼 것.
+        # 파일 변화 확인 로직 필요.
+        # 파일 읽어와서 전체 자리수가 바뀌면 파일 변화 한 것으로 보면 된다. 완벽하진 않아도 대부분 해소
+        # git으로 관리되는 프로젝트이면 git으로도 확인 가능
+
         pass
 
     except SystemExit:  # sys.exit() 호출을 의도적으로 판단
@@ -896,10 +1348,6 @@ content = r"""
 
 """
 
-# 나중에 TDD 공부를 해볼 것.
-# 파일 변화 확인 로직 필요.
-# 파일 읽어와서 전체 자리수가 바뀌면 파일 변화 한 것으로 보면 된다. 완벽하진 않아도 대부분 해소
-# git으로 관리되는 프로젝트이면 git으로도 확인 가능
 error_cnt = 0
 if __name__ == '__main__':
     try:
