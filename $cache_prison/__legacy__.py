@@ -727,8 +727,8 @@ with open(file_path, 'w') as outfile:
 # print(Park4139.replace_text_B_and_text_C_interchangeably_at_text_A_by_using_(text_a, text_b, text_c, magical_words['and_get_it']))
 
 
-# Park4139.speak("잠시후 RPA를 시작합니다")
-# Park4139.speak("키보드와 마우스에서 손을 때주세요")
+# Park4139Tts.speak("잠시후 RPA를 시작합니다")
+# Park4139Tts.speak("키보드와 마우스에서 손을 때주세요")
 
 info = {
     '모니터_크기': pyautogui.size(),
@@ -803,7 +803,7 @@ with keyboard.Listener(
 
 # 모든 윈도우 창의 제목 출력
 # window_titles = get_window_titles()
-# window_titles = [x for x in window_titles if x.strip()]  # 리스트 요소 "" 제거
+# window_titles = [x for x in window_titles if x.strip()]
 # window_titles = "\n".join(window_titles)  # list to str
 # Park4139.debug_as_gui(f"열린 윈도우 창 제목들\n\n{window_titles}")
 
@@ -858,7 +858,7 @@ with keyboard.Listener(
 # 기능 아이디어
 # get replaced clipboard from / to \
 #     C:/Users/WIN10PROPC3/Desktop/services/archive_py/.git/index.lock
-#     C:\Users\WIN10PROPC3\Desktop\services\archive_py\.git\index.lock
+#     {PROJECT_DIRECTORY}\.git\index.lock
 
 
 # 이걸로 특정 랜덤태스크를 하루에 몇 번까지 제한하도록 관리 > 만들어둔 toml 데이터베이스 활용해서 하면 되겠음.

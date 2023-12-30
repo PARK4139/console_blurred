@@ -24,7 +24,7 @@ Park4139 = pkg_park4139.Park4139()
 # logger.setLevel(logging.INFO)
 
 
-@Park4139.decorate_seconds_performance_measuring_code
+@Park4139.measure_seconds_performance
 def generate_mp3_file_for_time_performance():  # time performance : 9028 초 /60 /60  =  2.5 시간
     """
     시간에 대한 mp3 파일 작업 최적화 함수
@@ -51,7 +51,7 @@ def decorate_for_pause(function):
 
     def wrapper():
         function()
-        Park4139.pause()
+        Park4139Test.pause()
 
     return wrapper
 
@@ -79,7 +79,7 @@ qss = """
 
 # 테스트 루프 카운트 최대치 설정
 test_loop_limit = 3
-@Park4139.decorate_seconds_performance_measuring_code
+@Park4139.measure_seconds_performance
 @decorate_for_pause  # 테스트 루프 마다 정지 설정
 def test():
     try:
@@ -165,7 +165,7 @@ def test():
     except:
         Park4139.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
-        Park4139.pause()
+        Park4139Test.pause()
 
 
 content = r"""
@@ -211,4 +211,4 @@ if __name__ == '__main__':
         error_cnt = error_cnt + 1
         error_str = traceback.format_exc()
         Park4139.debug_as_gui(f"TEST LOOP ERROR CNT REPORT:\nerror_cnt : {error_cnt}\nerror_str : {error_str}")
-        # Park4139.pause()
+        # Park4139Test.pause()

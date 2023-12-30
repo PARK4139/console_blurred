@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'PARK4139 : Jung Hoon Park'
 
-import os.path
 
 # PEP8
 # PEP8 은 파이썬 코드의 작성에 대한 표준권장규칙 정도로 나는 생각한다.
@@ -28,7 +27,6 @@ import os.path
 # - 함수, 메소드명 : def love_you():
 # - import 중 이름충돌 예상 시 as 사용 : 충돌의 소지가 있을 때 as 를 썻다. PEP8을 알고 지킨건 아니고 jetbrain IDE 의 가이드기능을 잘 따르다 보니, 잘 지켜졌다. : import blahblah as blah
 
-
 # 국내주식과 미국주식을 크롤링해서 보고 싶어졌다.
 # 몇 가지 라이브러리가 있음을 확인했고 기획하는 중이다.
 # 데이터수집장소 : 다양한 웹사이트에서 크롤링하여 데이터를 수집하기로 생각하였다, 신뢰도가 높아보이는 데이터를 수집해야 한다
@@ -36,7 +34,6 @@ import os.path
 # 데이터수집방식 : 특정데이터는 네이버에서 직접 크롤링할 것. 웹 크롤링도 약간 늘었고, 데이터를 엑셀의 형태로 핸들링 하기 위해서 pandas 배워야 겠다. 잠깐만 기다려라 배워서 다시 오겠다.
 # import pykrx # 국내증권데이터 공유 라이브러리,               네이버금융사이트(실시간수정되는 주식데이터),               한국증권사이트 의 데이터 기반, 고신뢰성데이터 인 국내주식정보 를 볼 수 있다.  pykrx의 특징은 국내 주식만 수집이 가능한대신 yfinance보다 국내주식 시세가 정확하고 PER, PBR, 배당수익률과 같은 지표는 신뢰성이 떨어진다 - 출처: https://bigdata-doctrine.tistory.com/7 [경제와 데이터:티스토리]
 # import yfinance # 증권데이터 공유 라이브러리,              야후 파이낸스에서 크롤링한 데이터를 제공하는 라이브러리, 미국주식데이터 는 상대적으로 정확 , 국내주식데이터 의 잦은누락,   결론은 다른게 나아보인다.
-import FinanceDataReader as fdr  # 증권데이터 공유 라이브러리,      pip install finance-datareader,   한국 주식 가격, 미국 주식 가격, 지수, 환율, 암호 화폐 가격, 종목 리스트 등을 제공하는 API 패키지입니다,
 
 # 나의 가치는 "있어 보이는 척 말고 해본 것" 에서 온다고 믿는다.
 # 그만큼 해보려면 시간을 쏟아 부어야 한다는 주변의 어느 개발자의 말씀도 있었다
@@ -79,55 +76,10 @@ import FinanceDataReader as fdr  # 증권데이터 공유 라이브러리,      
 # program 간 program 이다. 프로그램들 사이에 위치한 프로그램으로서 통신중계 역할을 주로 한다. api 라 부르는 것은 통신 기능이 들어있기 마련이다
 
 
-import asyncio
-import threading
-import inspect
-import sys
-import threading
-import webbrowser
-from functools import partial
-from typing import Callable, TypeVar
-
-import pynput
-import schedule
-# numpy
-from PIL import Image, ImageFilter  # PIL : Py img lib
-import random
-import time
-import clipboard
-import keyboard
-import pyautogui
-import toml
-import psutil  # 실행중인 프로세스 및 시스템 활용 라이브러리
-import pyglet
-import re
-import shutil
-import subprocess
-import traceback
-import urllib.parse as parser
-from datetime import datetime
-from datetime import timedelta
-import win32api
-from mutagen.mp3 import MP3
-from pytube import Playlist
-# from random import randint, random
-from screeninfo import get_monitors
-from moviepy.editor import *
-from gtts import gTTS  # Google TTS 적용
-# 웹 크롤링용
-import urllib.parse
-from bs4 import BeautifulSoup
-import selenium.webdriver as webdriver
-# GUI 프로그램용
-from PySide6 import QtCore, QtWidgets, QtGui
-from PySide6.QtCore import Qt, QObject, Signal, QPoint, QEvent, QTimer, QEventLoop, Slot, QThread
-from PySide6.QtGui import QScreen, QIcon, QShortcut, QKeySequence, QFont, QCursor, QColor, QFontDatabase
-from PySide6.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushButton, QTextEdit, QVBoxLayout, QLineEdit, QMainWindow, QMessageBox, QDialog, QScrollArea, QSpacerItem, QSizePolicy
-from BlurWindow.blurWindow import GlobalBlur
-
 import pkg_park4139
 
 Park4139 = pkg_park4139.Park4139()
+Park4139Tts = pkg_park4139.Park4139Tts()
 
 #  로깅 설정
 # logger = logging.getLogger('park4139_test_logger')
@@ -140,10 +92,11 @@ Park4139 = pkg_park4139.Park4139()
 if __name__ == '__main__':
     try:
         while (True):
-            Park4139.speak(ment="console Blurred 프로그램을 실행합니다")
-            # Park4139.speak(ment="콘솔 블러 프로그램을 실행합니다")
+            Park4139Tts.speak(ment="console Blurred 프로그램을 실행합니다")
+            # Park4139Tts.speak(ment="콘솔 블러 프로그램을 실행합니다")
             Park4139.run_console_blurred()
 
             break
     except Exception as e:
         Park4139.trouble_shoot("%%%FOO%%%")
+    pass

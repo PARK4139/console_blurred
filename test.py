@@ -32,7 +32,7 @@ Park4139 = pkg_park4139.Park4139()
 # logger.setLevel(logging.INFO)
 
 
-@Park4139.decorate_seconds_performance_measuring_code
+@Park4139.measure_seconds_performance
 def generate_mp3_file_for_time_performance():  # time performance : 9028 초 /60 /60  =  2.5 시간
     """
     시간에 대한 mp3 파일 작업 최적화 함수
@@ -70,7 +70,7 @@ def decorate_for_pause(function):
 
     def wrapper():
         function()
-        Park4139.pause()
+        Park4139Test.pause()
 
     return wrapper
 
@@ -100,7 +100,7 @@ qss = """
 test_loop_limit = 3
 
 
-@Park4139.decorate_seconds_performance_measuring_code
+@Park4139.measure_seconds_performance
 @decorate_for_pause  # 테스트 루프 마다 정지 설정
 def test():
     try:
@@ -404,9 +404,7 @@ def test():
         # find_element(By.CLASS_NAME, "class name")
         # find_element(By.CSS_SELECTOR, "css selector")
 
-        # park4139_archive_log = Park4139.park4139_archive_LOG
-        # key = "park4139_archive_log_line_cnt"
-        # park4139.monitor_target_edited_and_bkup(target_abspath=park4139_archive_log, key=key)
+
 
         # foo = ",".join(key for key in park4139.keyboards).split(",")# DICTIONARY TO STR AS CSV STYLE
         # print(foo)
@@ -469,6 +467,417 @@ def test():
         # pyautogui.moveTo(img_capture)
 
 
+        # 공들여 만든 느린 코드..
+        # [print(sample) for sample in samples]  # 리스트를 한줄코드로 출력
+        # target_replaced = [x for x in target_replaced if not x==None]  # from [None] to []
+        # target_replaced = [x if x is not None else "_" for x in target_replaced]  # from [None] to ["_"]
+        # target_replaced = [x for x in target_replaced if x.strip()]  # from [""] to []
+        target_replaced = [x if x is not None else "" for x in target_replaced]  # from [None] to [""]
+        target_replaced = "".join(target_replaced)  # from ["a", "b", "c"] to "abc"
+        # abspaths을 mtimes 에 맞춰서 내림차순 정렬(파일변경일이 현시점에 가까운 시간인 것부터 처리하기 위함)
+        # abspaths_and_mtimes = _get_processed_abspaths_and_mtimes(abspaths, mtimes)# 쓰레드 5개로 분산처리해도 5분 걸림...
+        # abspaths_and_mtimes = Park4139List.get_list_added_elements_alternatively(abspaths, mtimes)  # from [1, 2, 3] + [ x, y, z] to [1, x, 2, y, 3, z]
+        # abspaths_and_mtimes = Park4139List.get_nested_list_grouped_by_each_two_elements_in_list(abspaths_and_mtimes)  # from ["a", "b", "c", "d"] to [["a","b"], ["c","d"]]
+        # abspaths_and_mtimes = Park4139List.get_nested_list_sorted_by_column_index(nested_list=abspaths_and_mtimes, column_index=1, decending_order=True)
+        # abspaths_and_mtimes = Park4139List.get_list_seperated_by_each_elements_in_nested_list(abspaths_and_mtimes)  # from [["a","b"], ["c","d"]] to ["a", "b", "c", "d"]
+        # abspaths_and_mtimes = Park4139List.get_list_each_two_elements_joined(abspaths_and_mtimes)  # from ["a", "b", "c", "d"] to ["ab", "cd"]
+        # samples = [f"{key}: {value}" for key, value in samples.items()]  # from dict to ["key: value\n"]
+        # samples = get_list_added_elements_alternatively(dirnames, tree_levels)  # from [][] to []
+        # abspaths_and_mtimes = get_list_each_two_elements_joined(abspaths_and_mtimes)  # from ["a", "b", "c", "d"] to ["ab", "cd"]
+        # samples = get_list_grouped_by_each_two_elements_in_list(samples)
+        # samples = get_nested_list_sorted_by_column_index(nested_list=samples, column_index=1, decending_order=True)  # tree depth를 의미하는 column_index=1 에 대한 내림차순 정렬
+        # samples = get_nested_list_removed_row_that_have_nth_element_dulplicated_by_column_index(nested_list=samples, column_index=0)  # from [[]] to [[]] # from [[1 2]] to [[1, 2]] # from [ [str str] [str str] ]  to  [ [str, str], [str, str]]
+        # samples = np.array([dirnames, tree_levels]) # 두 리스트를 ndarry 로 합하기
+        # samples = np.transpose(samples)  # 행과 열을 교체, from ndarry to ndarry
+        # samples = dirnames + tree_levels  # 두 리스트를 [] 로 합하기 # from [][] to []
+        # samples = [dirnames + tree_levels]  # 두 리스트를 [[]] 로 합하기 # from [][] to [[][]]
+        # samples = [[row[i] for row in samples] for i in range(len(samples[0]))] # 행과 열을 교체 # from [[]] to [[]]
+        # samples = get_nested_list_converted_from_ndarray(ndarray = samples)  # from ndarray to [[]]
+        # samples: [str] = sorted(samples, key=lambda sample: sample[1], reverse=True)  # 비중첩 list 의 특정 열의 내림차순 정렬
+        # samples = np.transpose(samples) # 행과 열을 교체 # to ndarry
+        # samples = samples[np.argsort(-samples[:, 0].astype(int))] # 2차원배열 첫 번째 열을 기준으로 내림차순으로 정렬 # to ndarry
+        # samples = list(set(samples))  # list to list 중복제거(orderless way)
+        # tree_levels_and_abspaths_and_mtimes = get_list_added_elements_alternatively(abspaths_and_mtimes, abspaths)  # from [1, 2, 3] + [ x, y, z] to [1,x,2,y,3,z]
+
+        # ndarray 핸들링
+        # tree_levels_and_abspaths_and_mtimes = np.array([tree_levels, abspaths, mtimes])
+        # tree_levels_and_abspaths_and_mtimes = np.transpose(tree_levels_and_abspaths_and_mtimes)
+
+        # 오늘의 에러
+        # 결론 : TypeError: 'int' object is not subscriptable 나타나면, 내가 int 를 슬라이싱하고 있나 확인해보자. int 는 슬라이싱하면 안된다.
+        # TypeError: 'int' object is not subscriptable
+        # 오늘만난 에러는 해당 오류는 정수형 객체가 인덱싱을 지원하지 않기 때문에 발생하는 오류입니다. 이 오류는 보통 정수형 변수를 대신하여 리스트나 튜플과 같은 인덱싱이 가능한 객체를 사용해야 할 때 발생합니다.
+        # 예를 들어, 다음과 같은 상황에서 해당 오류가 발생할 수 있습니다
+        # 문제코드
+        # for index, item in enumerate(samples): # enumerate 로 리스트의 원소를 2개씩 출력
+        #     print(rf'item[index] : {str(item[index])}')
+        #     print(rf'item[index+1] : {str(item[index+1])}')
+
+        # 해설
+        # samples : [int] 였는데
+        # item 은 int 였을 것이며.
+        # int 를 [] 인덱스로 찾으려고 하니 문제가 발생한 것이다.
+
+        # 해결코드 ( 의도된 방향으로 고치면 )
+        # for index, item in enumerate(samples): # enumerate 로 리스트의 원소를 2개씩 출력
+        #     print(rf'samples[index] : {str(samples[index])}')
+        #     print(rf'samples[index+1] : {str(samples[index+1])}')
+
+        # samples = sorted(samples, reverse=True) # 내림차순 정렬
+        # 파이썬 요소가 5만 개의 문자열 리스트를 요소에 대해서 중복제거를 하는 가장 빠른 방법을 알아보고 싶긴한데. 나중에 실험비교 해보자
+
+
+        # 파이썬 문자열 핸들링 성능 향상 아이디어 > 문자열 짧은 문자로 나오게 암호화 시키는 방법 > 문자열을 압축하는 기술 > Lempel-Ziv-Welch (LZW) 알고리즘 > 짧은 문자열로 암호화 시켜준다 > 짧은 문자열 이면 파이선 검색속도가 빨라지지 않을까?
+        # db.toml 에는 특수문자가 들어갈 수 없다. > 특수문자가 있는 문자열을 특수문자가 없는 문자열로 압축 알고리즘 > Huffman 알고리즘 > 원래의 문자열을 알아야 하기 때문에 패스
+        # 압축될 데이터들 특성 분석해서 LZW 압축을 효율적으로 할 수 있는 딕셔너리 적용 > 압축률 증가 > 사용될 57000 개 파일들의 경로명의 특성 분석 > 프로젝트 패키지명을 딕셔너리 첫번째 요소로 사용, \ 로 파일들의 경로 쪼개서 중복이 있는 요소들만 딕셔너리에 추가
+
+        # LZM 용 딕셔너리 제작 함수
+        # 아이디어 1. dirname abspath 의 len 를 tree depth 별로 정렬 > 중복제거 > 딕셔너리 저장 > 문자열 압축률 50프로 이상 가능 할 것으로 생각됨 (딕셔너리는 depression 시 필요하므로 잘 저장해 둬야한다) > 데이터분석해서 하드코딩으로 딕셔너리 작성.
+        # 아이디어 2. 파일명은 문자열 데이터 중복 분석 알고리즘 적용 >
+
+        # 진행상황
+        #     아이디어 1. 의 중복제거 까지 완료
+
+        # samples = [
+        #     r"C:\Users\123\Desktop\services\archive_py\py_pkg_ver_.log",
+        #     r"C:\Users\123\Desktop\services\archive_py\poetry.lock",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt-dlp.sh",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt-dlp.cmd",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\utils\_legacy.py",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\utils\_deprecated.py",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\postprocessor\xattrpp.py",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\postprocessor\sponsorblock.py",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\postprocessor\__pycache__\xattrpp.cpython-311.pyc",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\postprocessor\__pycache__\sponsorblock.cpython-312.pyc",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\postprocessor\__pycache__\sponsorblock.cpython-311.pyc",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\networking\__pycache__\websocket.cpython-311.pyc",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\networking\__pycache__\exceptions.cpython-312.pyc",
+        #     r"C:\Users\123\Desktop\services\archive_py\pkg_yt_dlp\yt_dlp\networking\__pycache__\exceptions.cpython-311.pyc",
+        # ]
+        # samples = samples
+
+        # current_directory_state = [f"{key}" for key, value in current_directory_state.items()]  # from dict to ["key\n"]
+
+        # current_target_files = current_directory_state
+        # current_target_files = current_directory_state[0:]
+        # current_target_files = current_directory_state[0:9999]  # 샘플 10000개 테스트
+        # current_target_files = current_directory_state[0:4999]  # 샘플 5000개 테스트
+        # current_target_files = current_directory_state[0:999]  # 샘플 1000개 테스트
+        # current_target_files = current_directory_state[0:99]  # 샘플 100개 테스트
+        # current_target_files = current_directory_state[0:9]  # 샘플 10개 테스트
+
+        # 세 리스트의 핸들링
+        # abspaths = [sample for sample in current_target_files]  # 파일절대경로 목록
+        # mtimes = [os.path.getmtime(sample) for sample in current_target_files]  # 파일생성일자 목록
+        # 이 경우는 list comprehension을 사용해셔 가독성이 좋았지만. 50000개의 파일을 무려 2번이나 돌아야 하는게 흠이다.
+        # 1번만 돌도록 성능개량, 하으...그래도 3초 넘개 걸림. 공부한 쓰레드 적용해보자!
+
+        # def get_files_cnt_of_directory(directory):
+        #     """
+        #     사용법
+        #     file_count = get_files_cnt_of_directory(directory_abspath)
+        #     """
+        #     # try:
+        #     #     files_count = 0
+        #     #     for _, _, files in os.walk(directory):
+        #     #         files_count += len(files)
+        #     #     return int(files_count)
+        #     # except:
+        #     #     pass
+        #
+        #     # try:
+        #     #     cmd = 'cmd /c dir /s /b /a-d'
+        #     #     result = subprocess.run(cmd, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
+        #     #     file_list = result.stdout.splitlines()
+        #     #     files_count = len(file_list)
+        #     #     return int(files_count)
+        #     # except:
+        #     #     pass
+        #
+        #     try:
+        #         cmd = f'dir /s /a /w "{directory}"'
+        #         lines = Park4139.get_cmd_output(cmd=cmd)
+        #         # print(lines[-3:]) # 리스트 내에서 뒤에서 3개만 출력
+        #         files_count = lines[-3].split("File(s)")[0].strip()
+        #         return int(files_count)
+        #     except:
+        #         pass
+
+        # files_to_exclude = [
+        #     Park4139.DB_TOML,
+        #     Park4139.SUCCESS_LOG,
+        #     Park4139.LOCAL_PKG_CACHE_FILE,
+        # ]
+        # current_target_files = []
+        # for root, dirs, files in os.walk(directory_abspath):
+        #     for file in files:
+        #         file_abspath = os.path.join(root, file)  # 파일 절대 경로
+        #         if file_abspath not in files_to_exclude:
+        #             mtime = os.path.getmtime(file_abspath)  # 파일 생성 일자
+        #             file_abspath = Park4139.get_str_replaced_special_characters(target=file_abspath, replacement="_")  # 파일 경로에서 특수문자 제거처리. toml 에 들어가지 않음.
+        #             current_target_files.append([file_abspath, mtime])
+        # # abspaths = [file_info[0] for file_info in current_target_files]  # file_info_list 이미 생성된 것이기때문에 이 리스트 컴프리헨션 에서는 또 돌지 않는다고 한다.
+        # # mtimes = [file_info[1] for file_info in current_target_files]
+        # current_target_files = Park4139List.get_nested_list_sorted_by_column_index(nested_list=current_target_files, column_index=1, decending_order=True)
+        # current_target_files = Park4139List.get_list_seperated_by_each_elements_in_nested_list(current_target_files)  # from [["a","b"], ["c","d"]] to ["a", "b", "c", "d"]
+        # current_target_files = Park4139List.get_list_each_two_elements_joined(current_target_files)  # from ["a", "b", "c", "d"] to ["ab", "cd"]
+        # abspaths_and_mtimes = "\n".join(abspaths_and_mtimes)  # list to str
+        # current_directory_state = "\n".join([f"{key}: {value}" for key, value in current_directory_state])  # list to str ([tuple] to str) (개행된 str)
+        # current_directory_state = current_directory_state.split("\n")  # str to [str] (개행된 str)
+        # current_directory_state = sorted(current_directory_state.items(), key=lambda item: item[1], reverse=True)  # dict to [tuple] (딕셔너리를 value(mtime)를 기준으로 내림차순으로 정렬), 날짜를 제일 현재와 가까운 날짜를 선택하는 것은 날짜의 숫자가 큰 숫자에 가깝다는 이야기이다. 그러므로  큰 수부터 작은 수의 순서로 가는 내림차순으로 정렬을 해주었다(reverse=True).
+        # current_directory_state = "\n".join(current_directory_state)  # list to str ([str] to str)
+        # current_directory_state = sorted(current_directory_state.items(), key=lambda item: item[0]) # dict to [tuple] (딕셔너리를 key를 기준으로 오름차순으로 정렬)
+        # current_directory_state = sorted(current_directory_state.items(), key=lambda item: item[1]) # dict to [tuple] (딕셔너리를 value를 기준으로 오름차순으로 정렬)
+        # current_directory_state = sorted(current_directory_state, key=lambda item: item[2])  # tuple 2차원 배열의 특정 열의 오름차순 정렬, # 람다의 쉬운 예로 볼 수 있겠다.
+        # current_directory_state = {key: value for key, value in current_directory_state} # list to dict
+        # dict to list (리스트 내의 파일목록의 순서를 파일변경일순으로 변경) ,  람다는 익명함수이며, return 형태도 같이 작성한다,  은 호출은 lambda_function(current_directory_state),  정의는 lambda_function(item), reuturn item[2] 이런 느낌이다
+        # current_directory_state = "\n".join([f"{key}: {value}" for key, value in current_directory_state.items()])  # dict to str (개행을 시킨)
+        # def _get_processed_abspaths_and_mtimes(abspaths:[str], mtimes:[str]):
+        #     # 비동기 처리 설정 ( advanced  )
+        #     import threading
+        #     nature_numbers = [n for n in range(1, 101)]  # from 1 to 100
+        #     work_quantity = len(abspaths)
+        #     n = 15  # thread_cnt # interval_cnt # success
+        #     n = 5  # thread_cnt # interval_cnt # low load test
+        #     d = work_quantity // n  # interval_size
+        #     r = work_quantity % n
+        #     start_1 = 0
+        #     end_1 = d - 1
+        #     starts = [start_1 + (n - 1) * d for n in nature_numbers[:n]]  # 등차수열 공식
+        #     ends = [end_1 + (n - 1) * d for n in nature_numbers[:n]]
+        #     remained_start = ends[-1] + 1
+        #     remained_end = work_quantity
+        #
+        #     print(rf'nature_numbers : {nature_numbers}')  # 원소의 길이의 합이 11넘어가면 1에서 3까지만 표기 ... 의로 표시 그리고 마지막에서 3번째에서 마지막에서 0번째까지 표기 cut_list_proper_for_pretty()
+        #     print(rf'work_quantity : {work_quantity}')
+        #     print(rf'n : {n}')
+        #     print(rf'd : {d}')
+        #     print(rf'r : {r}')
+        #     print(rf'start_1 : {start_1}')
+        #     print(rf'end_1 : {end_1}')
+        #     print(rf'starts : {starts}')
+        #     print(rf'ends : {ends}')
+        #     print(rf'remained_start : {remained_start}')
+        #     print(rf'remained_end : {remained_end}')
+        #
+        #     abspaths_and_mtimes____ = []
+        #
+        #     # 비동기 이벤트 함수 설정 ( advanced  )
+        #     async def is_containing_special_characters(start_index: int, end_index: int):
+        #         abspaths_and_mtimes = Park4139List.get_list_added_elements_alternatively(abspaths[start_index:end_index], mtimes[start_index:end_index])  # from [1, 2, 3] + [ x, y, z] to [1, x, 2, y, 3, z]
+        #         abspaths_and_mtimes_ = Park4139List.get_nested_list_grouped_by_each_two_elements_in_list(abspaths_and_mtimes)  # from ["a", "b", "c", "d"] to [["a","b"], ["c","d"]]
+        #         abspaths_and_mtimes__ = Park4139List.get_nested_list_sorted_by_column_index(nested_list=abspaths_and_mtimes_, column_index=1, decending_order=True)
+        #         abspaths_and_mtimes___ = Park4139List.get_list_seperated_by_each_elements_in_nested_list(abspaths_and_mtimes__)  # from [["a","b"], ["c","d"]] to ["a", "b", "c", "d"]
+        #         abspaths_and_mtimes____[start_index:end_index] = Park4139List.get_list_each_two_elements_joined(abspaths_and_mtimes___)  # from ["a", "b", "c", "d"] to ["ab", "cd"]
+        #
+        #     # 비동기 이벤트 루프 설정
+        #     def run_async_event_loop(start_index: int, end_index: int ):
+        #         loop = asyncio.new_event_loop()
+        #         asyncio.set_event_loop(loop)
+        #         loop.run_until_complete(is_containing_special_characters(start_index, end_index))
+        #
+        #     # 스레드 객체를 저장할 리스트 생성
+        #     threads = []
+        #
+        #     # 주작업 처리용 쓰레드
+        #     for n in range(0, n):
+        #         start_index = starts[n]
+        #         end_index = ends[n]
+        #         thread = threading.Thread(target=run_async_event_loop, args=(start_index, end_index))
+        #         thread.start()
+        #         threads.append(thread)
+        #
+        #     # 남은 작업 처리용 쓰레드
+        #     if remained_end <= work_quantity:
+        #         start_index = remained_start
+        #         end_index = remained_end
+        #         thread = threading.Thread(target=run_async_event_loop, args=(start_index, end_index))
+        #         thread.start()
+        #         threads.append(thread)
+        #     else:
+        #         start_index = remained_start
+        #         end_index = start_index  # end_index 를 start_index 로 하면 될 것 같은데 테스트필요하다.
+        #         thread = threading.Thread(target=run_async_event_loop, args=(start_index, end_index))
+        #         thread.start()
+        #         threads.append(thread)
+        #
+        #     # 모든 스레드의 작업이 종료될 때까지 대기
+        #     for thread in threads:
+        #         thread.join()
+        #
+        #     Park4139Test.pause()
+        #     return abspaths_and_mtimes
+
+        # lzw 알고리즘으로 문자열 압축부터 해야할듯... 10개 샘플 넣었는데 암호문의 길이가 1744자 나왔음....
+
+        # 트라이 구조 유사하게 텍스트 교체 시도
+        # Park4139PerformanceHandler.gen_dictionary_for_monitor_target_edited_and_bkup(directory_abspath= directory_abspath)
+        # Park4139Test.pause()
+
+        # 5만줄을 쓰레드로 나누어 처리, 너무 느리다.
+        # 1개의 큰 메인쓰레드를 여러개의 쓰레드로 나누어 처리한다고 보면된다
+        import threading
+        # 스레드로 처리할 작업량 분배 2개 쓰레드로 쪼갬
+        # (스레드로 처리할 작업량) =  2 * (스레드로 처리할 작업량//2) + (스레드로 처리할 작업량%2)
+        # len(lines) =  threads_cnt * (len(lines)//threads_cnt) + (len(lines)%threads_cnt)
+        # 54234 =  2 * (54234//2) + (54234%2)
+        # d = interval = (len(lines)//threads_cnt)
+        # n = index
+        work_qunatity = len(abspaths_and_mtimes)  # lines
+        # lines = [i for i in range(0, 54233)]
+        n = 10  # thread_cnt # interval_cnt
+        d = work_qunatity // n
+        r = work_qunatity % n
+        # [시작지점_1, 시작지점_2, ...]
+        # [시작지점_n, 시작지점_n]
+        # [시작지점_1 + (n - 1)d, 시작지점_1 + (n - 1)d]
+        # [start_1 + (n - 1)d, start_1 + (n - 1)d]
+        # [start_1 + (1 - 1)d, start_1 + (2 - 1)d]
+        # [0 + (1 - 1)d, 0 + (2 - 1)d]
+        # starts = [a_n for a_n in range(0, n)]
+        # a_n = start_1 + (n - 1) * d
+        # starts = [a_n for n in range(0, n)]
+        nature_numbers = [n for n in range(1, 101)]  # 수학과 프로그래밍을 연결해 사용해보자
+        # start_1 = start_1 + (n - 1) * d
+        # a_2 = start_1 + (n - 1) * d
+        # a_3 = start_1 + (n - 1) * d
+        start_1 = 0  #
+        end_1 = d - 1
+        starts = [start_1 + (n - 1) * d for n in nature_numbers[:n]]  # 등차수열 공식
+        ends = [end_1 + (n - 1) * d for n in nature_numbers[:n]]
+        remained_start = ends[-1] + 1
+        remained_end = work_qunatity
+
+        print(rf'nature_numbers : {nature_numbers}')
+        print(rf'work_qunatity : {work_qunatity}')
+        print(rf'n : {n}')
+        print(rf'd : {d}')
+        print(rf'r : {r}')
+        print(rf'start_1 : {start_1}')
+        print(rf'end_1 : {end_1}')
+        print(rf'starts : {starts}')
+        print(rf'ends : {ends}')
+        print(rf'remained_start : {remained_start}')
+        print(rf'remained_end : {remained_end}')
+
+        # 표수식으로 보는 수학
+        # 수식을 표로보면 이해가 잘간다
+        # 숫자는 수열과 행렬로 보는게 좋다.
+        # 등분 알고리즘 은 작업량이 짝수에서는 딱 떨어지는 방법이다, 홀수에서는 나머지가 발생한다.
+        # 작업량 10 개를 5구간으로 나누면
+        # 10 = 5 * 2         + 0
+        # 10 = 5 * (10 // 5) + (10 % 5)
+        #
+        # 30000 =  5* 6000        + 1
+        # 30000 =  5* (30000//5)  + (30000%5)
+        #
+        # 54234 = 5 * 10846        + 0.8
+        # 54234 = 5 * (54234//5) + (54234%5)
+        #
+        # # 작업량 54234 개를 5구간으로 나누면
+        # 1구간 0   10846 *1 = 10846
+        # 2구간 0   10846 *2 = 21692
+        # 3구간 0   10846 *3 = 32538
+        # 4구간 0   10846 *4 = 43384
+        # 5구간 0   10846 *5 = 54230
+        # 나머지구간         = 54234
+        #
+        # 모든 구간의 인터벌은 10846 이다.
+        # 나머지구간의 인터벌은 4 이다.
+        #
+        # 시작지점 = [1    ]
+        # interval = [10846 10846 10846 10846 10846 10846]
+        # 종료지점 = [10846]
+        #
+        # 시작지점 = [0     ]
+        # interval = [10846 10846 10846 10846 10846 10846]
+        # 종료지점 = [10846-1]
+        #
+        # 시작지점 = [start_1  a_2  a_3 a_4  a_5  ]
+        # interval = [10846 10846 10846 10846 10846 10846]
+        # 종료지점 = [e_1  e_2  e_3 e_4  e_5  ]
+        #
+        # 등차수열의 관계식
+        # start_1 = 0       = start_1 + (n - 1)d = 0   + (1 - 1)10846 = 0
+        # a_2 = start_1 + d = start_1 + (n - 1)d = 0   + (2 - 1)10846 = ?
+        # a_3 = a_2 + d = start_1 + (n - 1)d
+        # a_4 = a_3 + d = start_1 + (n - 1)d
+        # a_n = start_1 + (n - 1)d
+        #
+        # a_n = start_1 + (n - 1)d = ?
+        #
+        # 문제
+        # a_5 = ?
+        # a_5 = start_1 + (n - 1)d = 0 + (5 - 1)10846 = ?
+        # a_54234 = ?
+        # a_54234 = start_1 + (n - 1)d = 0 + (54234 - 1)10846 = ?
+        #
+        # a_5 = ? 가 질문이면 "=" 대신에  "= 공식 =" 으로 대체한다.
+        # a_5 = 공식 = ? 를 두고 풀어본다.
+        # a_54234 = ? 가 질문이면  "=" 대신에  "= 공식 =" 으로 대체한다.
+        # a_54234 = start_1 + (n - 1)d = ?
+        # 일반적인 문제라면 start_1, n, d 에 대해서 주어질 것이다.
+        # 이 3개의 요소중 1개라도 주어지지 않는다면 이 문제는 이 방법으로 풀 수 없다.
+
+        # # 각 스레드의 결과를 저장할 리스트
+        # result_list = [None] * len(abspaths_and_mtimes)
+        #
+        # def process_work_divided(start_index, end_index):
+        #     # 예약된 단어 맵으로 암호화
+        #     for index, abspaths_and_mtime in enumerate(abspaths_and_mtimes[start_index:end_index], start=start_index):
+        #         tmp = Park4139Performance.dictionary_for_monitoring_performance.items()
+        #         for key, value in tmp:
+        #             if key in abspaths_and_mtime:
+        #                 abspaths_and_mtimes[index] = abspaths_and_mtime.replace(key, value)
+        #                 # result_list[index] = abspaths_and_mtime.replace(key, value)
+        #     print(f"쓰레드 {start_index}에서 {end_index}까지 작업 완료")
+        #
+        # threads = []  # 스레드로 처리할 작업 리스트
+        #
+        # # 주작업 처리용 쓰레드
+        # for n in range(0, n):
+        #     start_index = starts[n]
+        #     end_index = ends[n]
+        #     thread = threading.Thread(target=process_work_divided, args=(start_index, end_index))
+        #     thread.start()
+        #     threads.append(thread)
+        #
+        # # 남은 작업 처리용 쓰레드
+        # start_index = remained_start
+        # end_index = remained_end
+        # thread = threading.Thread(target=process_work_divided, args=(start_index, end_index))
+        # thread.start()
+        # threads.append(thread)
+        #
+        # # 모든 스레드의 작업이 종료될 때까지 대기
+        # for thread in threads:
+        #     thread.join()
+
+        # AES 암호화
+        # key: bytes = b'0123456789abcdef'  # AES 키 설정 (16바이트 - 128비트)
+        # plaintext: bytes = abspaths_and_mtimes.encode('utf-8')  # str to bytes  # 문자열을 UTF-8로 인코딩하여 바이트 코드로 변환
+        # ciphertext = Park4139CipherUtil.aes_encrypt(key, plaintext)  # bytes to bytes
+        # print(rf'ciphertext : {ciphertext}')
+        # print(rf'type(ciphertext) : {type(ciphertext)}')
+        # print(rf'len(ciphertext) : {len(ciphertext)}')
+
+        # 복호화
+        # decrypted_text = Park4139CipherUtil.aes_decrypt(key, ciphertext)
+        # print("복호화 결과")
+        # print(rf'decrypted_text.decode() : {decrypted_text.decode()}')
+        # print(rf'type(decrypted_text.decode()) : {type(decrypted_text.decode())}')
+        # print(rf'len(decrypted_text.decode()) : {len(decrypted_text.decode())}')
+
+        # bytecode: bytes = b'\x48\x65\x6c\x6c\x6f'  # 예시로 바이트 코드 생성
+        # string: str = bytecode.decode('utf-8')  # bytes to str
+
+        # current_directory_state = "foo"
+
+        # copy_path = str(input('copy_path: '))  # 복사할 폴더 위치
+        # paste_path = str(input('paste_path: '))  # 저장될 폴더 위치
+
+
+
         pass
 
     except SystemExit:  # sys.exit() 호출을 의도적으로 판단
@@ -476,7 +885,7 @@ def test():
     except:
         Park4139.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
-        Park4139.pause()
+        Park4139Test.pause()
 
 
 content = r"""
@@ -522,7 +931,7 @@ if __name__ == '__main__':
         error_cnt = error_cnt + 1
         error_str = traceback.format_exc()
         Park4139.debug_as_gui(f"TEST LOOP ERROR CNT REPORT:\nerror_cnt : {error_cnt}\nerror_str : {error_str}")
-        # Park4139.pause()
+        # Park4139Test.pause()
 
 
 

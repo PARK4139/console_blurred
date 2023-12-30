@@ -7,31 +7,22 @@ from PySide6.QtCore import Signal, QThread
 
 import pkg_park4139
 
+Park4139 = pkg_park4139.Park4139()
+
+directory_abspath = Park4139.PROJECT_DIRECTORY
 
 
 
 
-import sys
-from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPushButton
+while 1:
+    # Park4139.monitor_target_edited_and_bkup(target_abspath=Park4139.PROJECT_DIRECTORY)
+    Park4139.is_sync_directory_local(target_abspath=Park4139.PROJECT_DIRECTORY)
+    Park4139.sleep(milliseconds=60000)
 
-class CustomDialogX(QDialog):
-    def __init__(self):
-        super().__init__()
-        layout = QVBoxLayout()
-        label = QLabel("대화 상자")
-        layout.addWidget(label)
 
-        button = QPushButton("닫기")
-        button.clicked.connect(self.hide)
-        layout.addWidget(button)
 
-        self.setLayout(layout)
-        self.setModal(True)  # 모달 대화 상자로 설정
-        # self.setModal(False)  # 모달 대화 상자로 설정
 
-# from test_core import CustomDialogX
-# dialog = CustomDialogX()
-# dialog.exec()
+# 파일 동기화 모듈로 로컬 1차 백업
 
 
 # 파일분류 기능
@@ -41,10 +32,10 @@ class CustomDialogX(QDialog):
 # 이름에 [subplease] 가 있다면
 # rename_without_overwrite(이름, 이름.replace([subplease],""))
 # 필요한 파일명 부여 삭제
+# rename_target_without_overwiting(current, future)
 # 이동시키지 말고 그자리에서 rename
 
-# 디렉토리 머지 without_overwrite
-# # rename_target_without_overwiting
+
 
 # 2024 PROJECT DATA PRISION
 # 내가 아는 것은 30초 이내에 찾을 수 있도록 하기 위한 프로젝트
@@ -53,6 +44,10 @@ class CustomDialogX(QDialog):
 # 파일이 어느폴더에 있든 상관없다. 단지 이름명이 류가 되어있어 찾을 때, 정확히 호출만 되면 되는 일이다. 호출명단을 잘 관리를 하면 되는 일이다,
 # 그렇다면 정리할 필요가 없다, 즉 찾는시간이 적은 시스템이 필요한 것이지 정리하는시간이 필요한 게 아니다
 # 정리하는시간이 없고 찾는시간이 빠른 시스템 이 나에게 필요한 파일색인시스템.
+# get filenames
+# organize
+# 인덱스를 파일명 유사도분류로
+
 
 # (파일명)   #hashtag name #애니 #영화
 # 파일명 부여 규칙
@@ -67,5 +62,7 @@ class CustomDialogX(QDialog):
 
 # 빈폴더 머지는 확실히 삭제해도 되는 빈폴더를 한 폴더에 두고 빈폴더 삭제 명령어로 처리하자
 
-
 # def prisonize_storage():
+
+
+

@@ -78,7 +78,7 @@ call ".\.venv\Scripts\activate.bat"
 cd "%USERPROFILE%"
 cd ".\Desktop\services\archive_py"
 @rem echo %cd% | clip.exe
-taskkill /f /im pycharm64.exe
+:: 매우주의하며 수행할 것 taskkill /f /im pycharm64.exe
 call ".\.venv\Scripts\activate.bat"
 :: echo y | del ".\console_blurred.exe"
 echo y | rmdir /s ".\build"
