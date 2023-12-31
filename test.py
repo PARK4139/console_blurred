@@ -1,5 +1,6 @@
 __author__ = 'PARK4139 : Jung Hoon Park'
 
+import inspect
 # -*- coding: utf-8 -*-  # python 3.x 하위버전 호환을 위한코드
 import random
 import sys
@@ -18,12 +19,90 @@ import pkg_park4139
 import clipboard
 import shutil
 from BlurWindow.blurWindow import GlobalBlur, blur
-from pkg_park4139 import Park4139, TestUtil
+from pkg_park4139 import Park4139, TestUtil, TtsUtil
 
 
+class TestUtilReplica:
+    is_first_test_lap = True
+    test_results = []
 
+    @staticmethod
+    # 이해한 게 문제가 있는지 상속에 대한 실험은 꼭 진행해보도록 하자.
+    # 하지만 부모 class 로 만든 인스턴스에 영향이 없도록(값의 공유가 되지 않도록) 사용하는 것이 기본적인 방법으로
+    # 심도있게 예측해야할 상황은 field 가 공유되도록 해야 될때 이다.
+    # 예시로 Account 번호를 DB에 넣는 객체는 singletone으로 유지.
+    # Parent().name    parent.name   Child().name   child.name
+    def pause():
+        Park4139.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        Park4139.print_today_time_info()
+        os.system('pause >nul')
 
+    @staticmethod
+    def measure_seconds_performance(function):
+        """시간성능 측정 데코레이터 코드"""
 
+        # def wrapper(*args, **kwargs):
+        def wrapper(**kwargs):  # **kwargs, keyword argument, dictionary 로 parameter 를 받음. named parameter / positional parameter 를 받을 사용가능?
+            # def wrapper(*args):# *args, arguments, tuple 로 parameter 를 받음.
+            # def wrapper():
+            Park4139.commentize("TEST START")
+            test_cycle_max_limit = 5
+            if TestUtil.is_first_test_lap:
+                ment = rf"총 {test_cycle_max_limit}번의 시간성능측정 테스트를 시도합니다"
+                TestUtil.is_first_test_lap = False
+                TtsUtil.speak_ment(ment=ment, sleep_after_play=1)
+                Park4139.debug_as_cli(ment)
+            seconds_performance_test_results = TestUtil.test_results
+            import time
+            time_s = time.time()
+            # function(*args, **kwargs)
+            function(**kwargs)
+            # function(*args)
+            # function()
+            time_e = time.time()
+            mesured_seconds = time_e - time_s
+            Park4139.commentize(rf"시간성능측정 결과")
+            seconds_performance_test_results.append(f"{round(mesured_seconds, 2)}sec")
+            print(rf'seconds_performance_test_results : {seconds_performance_test_results}')
+            print(rf'type(seconds_performance_test_results) : {type(seconds_performance_test_results)}')
+            print(rf'len(seconds_performance_test_results) : {len(seconds_performance_test_results)}')
+            if len(seconds_performance_test_results) == test_cycle_max_limit:
+                TtsUtil.speak_ment("시간성능측정이 완료 되었습니다", sleep_after_play=0.55)
+                Park4139.commentize("TEST END")
+                TestUtil.pause()
+
+        return wrapper
+
+    @staticmethod
+    def measure_milliseconds_performance(function):
+        """시간성능 측정 코드"""
+
+        def wrapper(*args, **kwargs):
+            # def wrapper(*args):# *args, arguments, tuple 로 parameter 를 받음.
+            # def wrapper():
+            Park4139.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            test_cycle_max_limit = 5
+            milliseconds_performance_test_result = []
+            import time
+            time_s = time.time()
+            # function(*args, **kwargs)
+            function(**kwargs)
+            # function(*args)
+            # function()
+            time_e = time.time()
+            mesured_seconds = time_e - time_s
+            Park4139.commentize(rf"시간성능측정 결과")
+            milliseconds_performance_test_result.append(round(mesured_seconds * 1000, 5))
+            print(rf'milliseconds_performance_test_result : {milliseconds_performance_test_result}')
+            print(rf'type(milliseconds_performance_test_result) : {type(milliseconds_performance_test_result)}')
+            print(rf'len(milliseconds_performance_test_result) : {len(milliseconds_performance_test_result)}')
+            if len(milliseconds_performance_test_result) == test_cycle_max_limit:
+                TtsUtil.speak_ments("시간성능측정이 완료 되었습니다", sleep_after_play=0.65)
+                TestUtil.pause()
+
+        return wrapper
+    
+    
 # LOGGER SET UP
 # logger = logging.getLogger('park4139_test_logger')
 # hdlr = logging.FileHandler('park4139_logger.log')
@@ -460,12 +539,13 @@ def test_sprint_core():
 
 
         # 공들여 만든 느린 코드..
+        sample = []
         # [print(sample) for sample in samples]  # 리스트를 한줄코드로 출력
-        # target_replaced = [x for x in target_replaced if not x==None]  # from [None] to []
-        # target_replaced = [x if x is not None else "_" for x in target_replaced]  # from [None] to ["_"]
-        # target_replaced = [x for x in target_replaced if x.strip()]  # from [""] to []
-        target_replaced = [x if x is not None else "" for x in target_replaced]  # from [None] to [""]
-        target_replaced = "".join(target_replaced)  # from ["a", "b", "c"] to "abc"
+        # sample = [x for x in sample if not x==None]  # from [None] to []
+        # sample = [x if x is not None else "_" for x in sample]  # from [None] to ["_"]
+        # sample = [x for x in sample if x.strip()]  # from [""] to []
+        sample = [x if x is not None else "" for x in sample]  # from [None] to [""]
+        sample = "".join(sample)  # from ["a", "b", "c"] to "abc"
         # abspaths을 mtimes 에 맞춰서 내림차순 정렬(파일변경일이 현시점에 가까운 시간인 것부터 처리하기 위함)
         # abspaths_and_mtimes = _get_processed_abspaths_and_mtimes(abspaths, mtimes)# 쓰레드 5개로 분산처리해도 5분 걸림...
         # abspaths_and_mtimes = Park4139List.get_list_added_elements_alternatively(abspaths, mtimes)  # from [1, 2, 3] + [ x, y, z] to [1, x, 2, y, 3, z]

@@ -727,8 +727,8 @@ with open(file_path, 'w') as outfile:
 # print(Park4139.replace_text_B_and_text_C_interchangeably_at_text_A_by_using_(text_a, text_b, text_c, magical_words['and_get_it']))
 
 
-# Park4139Tts.speak("잠시후 RPA를 시작합니다")
-# Park4139Tts.speak("키보드와 마우스에서 손을 때주세요")
+# TtsUtil.speak("잠시후 RPA를 시작합니다")
+# TtsUtil.speak("키보드와 마우스에서 손을 때주세요")
 
 info = {
     '모니터_크기': pyautogui.size(),
