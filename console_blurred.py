@@ -13,7 +13,7 @@ import pkg_park4139
 if __name__ == '__main__':
     try:
         while (True):
-            pkg_park4139.TtsUtil.speak(ment="console Blurred 프로그램을 실행합니다")
+            pkg_park4139.TtsUtil.speak_ments(ment="console Blurred 프로그램을 실행합니다")
             # Park4139Tts.speak(ment="콘솔 블러 프로그램을 실행합니다")
             pkg_park4139.Park4139.run_console_blurred_as_gui()
             break
