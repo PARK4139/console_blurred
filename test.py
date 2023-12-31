@@ -18,10 +18,10 @@ import pkg_park4139
 import clipboard
 import shutil
 from BlurWindow.blurWindow import GlobalBlur, blur
-import pkg_park4139
-from console_blurred import MacroWindow
+from pkg_park4139 import Park4139, TestUtil
 
-Park4139 = pkg_park4139.Park4139()
+
+
 
 
 # LOGGER SET UP
@@ -32,15 +32,7 @@ Park4139 = pkg_park4139.Park4139()
 # logger.setLevel(logging.INFO)
 
 
-@Park4139.measure_seconds_performance
-def generate_mp3_file_for_time_performance():  # time performance : 9028 초 /60 /60  =  2.5 시간
-    """
-    시간에 대한 mp3 파일 작업 최적화 함수
-    """
-    for HH in range(24, 0, -1):
-        for mm in range(0, 60):
-            Park4139.commentize(f'{int(HH)}시')
-            Park4139.commentize(f'{int(mm)}분 입니다')
+
 
 
 # park4139.commentize() 메소드 테스트 결과, 1개 파일을 만들어 실행하는 데까지 무려 11초 정도로 측정됨, ffmpeg 작업 속도로 문제
@@ -70,7 +62,7 @@ def decorate_for_pause(function):
 
     def wrapper():
         function()
-        Park4139Test.pause()
+        TestUtil.pause()
 
     return wrapper
 
@@ -100,7 +92,7 @@ qss = """
 test_loop_limit = 3
 
 
-@Park4139.measure_seconds_performance
+@TestUtil.measure_seconds_performance
 @decorate_for_pause  # 테스트 루프 마다 정지 설정
 def test_sprint_core():
     try:
@@ -705,14 +697,14 @@ def test_sprint_core():
         #     for thread in threads:
         #         thread.join()
         #
-        #     Park4139Test.pause()
+        #     TestUtil.pause()
         #     return abspaths_and_mtimes
 
         # lzw 알고리즘으로 문자열 압축부터 해야할듯... 10개 샘플 넣었는데 암호문의 길이가 1744자 나왔음....
 
         # 트라이 구조 유사하게 텍스트 교체 시도
         # Park4139PerformanceHandler.gen_dictionary_for_monitor_target_edited_and_bkup(directory_abspath= directory_abspath)
-        # Park4139Test.pause()
+        # TestUtil.pause()
 
         # 5만줄을 쓰레드로 나누어 처리, 너무 느리다.
         # 1개의 큰 메인쓰레드를 여러개의 쓰레드로 나누어 처리한다고 보면된다
@@ -723,7 +715,8 @@ def test_sprint_core():
         # 54234 =  2 * (54234//2) + (54234%2)
         # d = interval = (len(lines)//threads_cnt)
         # n = index
-        work_qunatity = len(abspaths_and_mtimes)  # lines
+        sample = [i for i in range(0, 50000)]
+        work_qunatity = len(sample)  # lines
         # lines = [i for i in range(0, 54233)]
         n = 10  # thread_cnt # interval_cnt
         d = work_qunatity // n
@@ -796,7 +789,7 @@ def test_sprint_core():
         # 시작지점 = [start_1  a_2  a_3 a_4  a_5  ]
         # interval = [10846 10846 10846 10846 10846 10846]
         # 종료지점 = [e_1  e_2  e_3 e_4  e_5  ]
-        #
+
         # 등차수열의 관계식
         # start_1 = 0       = start_1 + (n - 1)d = 0   + (1 - 1)10846 = 0
         # a_2 = start_1 + d = start_1 + (n - 1)d = 0   + (2 - 1)10846 = ?
@@ -1407,7 +1400,7 @@ def test_sprint_core():
     except:
         Park4139.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
-        Park4139Test.pause()
+        TestUtil.pause()
 
 
 content = r"""
@@ -1449,7 +1442,7 @@ if __name__ == '__main__':
         error_cnt = error_cnt + 1
         error_str = traceback.format_exc()
         Park4139.debug_as_gui(f"TEST LOOP ERROR CNT REPORT:\nerror_cnt : {error_cnt}\nerror_str : {error_str}")
-        # Park4139Test.pause()
+        # TestUtil.pause()
 
 
 
