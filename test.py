@@ -133,18 +133,6 @@ def print_with_test_status(status: str):
     print(status)
 
 
-def decorate_for_pause(function):
-    """
-        # ctrl c ctrl c 이렇게 두번 눌르면 소스 수정 후 재시작 됩니다
-        # 안그럼 계속 새롭게 창을 무한정 열게 되어 컴퓨터가 다운될 수 있습니다.
-    """
-
-    def wrapper():
-        function()
-        TestUtil.pause()
-
-    return wrapper
-
 
 qss = """
     # QWidget {
@@ -172,7 +160,7 @@ test_loop_limit = 3
 
 
 @TestUtil.measure_seconds_performance
-@decorate_for_pause  # 테스트 루프 마다 정지 설정
+# @decorate_for_pause  # 테스트 루프 마다 정지 설정
 def test_sprint_core():
     try:
         # cmd = rf'python "{test_target_file}"' # SUCCESS # 가상환경이 아닌 로컬환경에서 실행이 됨.

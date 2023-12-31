@@ -69,8 +69,6 @@ from PySide6.QtWidgets import (
 from pkg_park4139 import Park4139
 
 
-
-
 def on_press(key):
     try:
         print('Alphanumeric key pressed: {0} '.format(key.char))
@@ -448,39 +446,6 @@ webdriver_chrome.quit()
 
 
 
-
-# 네이버 지역 정보 option
-#  '네이버 체감온도 정보'
-url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%EA%B8%B0%EC%98%A8'
-copied_html_selector = '#main_pack > section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div._today > div.temperature_info > dl > dd:nth-child(2)'
-url = unquote(url)  # url decoding
-page = requests.get(url)
-soup = bs(page.text, "html.parser")
-copied_html_selector = '_________'
-elements = soup.select(copied_html_selector)
-AI_print(elements)  # 추출된 elements 출력 시도
-for i in range(0, len(page.text.split('\n'))):
-    if 'hourlyFcastListJson' in page.text.split('\n')[i]:
-        # # hourlyFcastListJson 들어있는 줄들 출력시도 ")
-        str_containing_hourlyFcastListJson = page.text.split('\n')[i].strip()
-        # print(type(str_containing_hourlyFcastListJson))
-        # print(str_containing_hourlyFcastListJson)
-        # json_str ")
-        json_str = str_containing_hourlyFcastListJson.split('=')[-1].split(';')[0].strip()
-        # print(type(json_str))
-        # print(json_str)
-        # print(json.dumps(json_str, indent=4, sort_keys=True))
-        # json_obj ")
-        json_obj = json.loads(json_str)
-        # print(type(json_str))
-        # print(json_obj)
-        # print(json.dumps(json_obj, indent=4, sort_keys=True))
-
-# json_obj[i]['windSpd']][json obj 내부의  ")
-# for i in range(0,len(json_obj)):
-# print(str(i),':', str(json_obj[i]['windSpd']))
-
-
 # json file 에 저장
 file_path = "./json/tmp.json"
 
@@ -652,8 +617,9 @@ with open(file_path, 'w') as outfile:
 # from tkinter import *
 # import ssl
 # context = ssl._create_unverified_context()
-#
-#
+
+
+
 # soup2 = BeautifulSoup(webpage2.read(),"html.parser")
 # for link3 in soup2.find(name="div",attrs={"class":"cont"}):
 #     try:
@@ -747,7 +713,6 @@ print(s)
 target = str(pyautogui.position()).replace("Point(x=", "").replace("y=", "").replace(")", "").replace(" ", "").strip()
 print(target)
 pyperclip.copy(target)
-
 
 
 

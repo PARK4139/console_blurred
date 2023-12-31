@@ -3,13 +3,7 @@
 __author__ = 'PARK4139 : Jung Hoon Park'
 
 
-from  pkg_park4139 import TtsUtil
-
-import pkg_park4139
-
-Park4139 = pkg_park4139.Park4139()
-
-
+from pkg_park4139 import TtsUtil, Park4139
 
 if __name__ == '__main__':
     try:
