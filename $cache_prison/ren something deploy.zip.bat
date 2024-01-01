@@ -1,1 +1,0 @@
-ren "*.zip" "deploy.zip"

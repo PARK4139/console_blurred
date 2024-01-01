@@ -1,1 +1,0 @@
-explorer "https://drive.google.com/drive/my-drive?hl=ko"
