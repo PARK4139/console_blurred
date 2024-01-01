@@ -13,7 +13,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 
 import pkg_park4139
 
-Park4139 = pkg_park4139.Park4139()
+Park4139 = pkg_park4139.StateManagementUtil()
 
 
 # LOGGER SET UP
@@ -148,7 +148,7 @@ def test():
     except SystemExit:  # sys.exit() 호출을 의도적으로 판단
         pass
     except:
-        Park4139.trouble_shoot("%%%FOO%%%")
+        DebuggingUtil.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
         Park4139Test.pause()
 
@@ -169,17 +169,17 @@ error_cnt = 0
 if __name__ == '__main__':
     try:
         test_loop_cnt = 1
-        Park4139.commentize("TRYING TO ENTER TEST LOOP...")
+        DebuggingUtil.commentize("TRYING TO ENTER TEST LOOP...")
         while True:  # test loop
             try:
                 if test_loop_cnt == test_loop_limit + 1:
                     break
-                Park4139.commentize(f" TEST LOOP {test_loop_cnt} STARTED")
+                DebuggingUtil.commentize(f" TEST LOOP {test_loop_cnt} STARTED")
                 test()
-                Park4139.commentize(f" TEST LOOP {test_loop_cnt} ENDED")
+                DebuggingUtil.commentize(f" TEST LOOP {test_loop_cnt} ENDED")
 
             except:
-                Park4139.trouble_shoot(f'%%%FOO%%%')
+                DebuggingUtil.trouble_shoot(f'%%%FOO%%%')
                 continue
             test_loop_cnt = test_loop_cnt + 1
             # Park4139.sleep(milliseconds=1000)# 루프 텀 설정
@@ -191,7 +191,7 @@ if __name__ == '__main__':
         # logger.info(f'logger: dst : {"??????"}')
         # logger.error(msg="에러발생?????")
         # logger.error(f'logger: str(e) : {"????????"}')
-        # park4139.trouble_shoot("%%%FOO%%%")
+        # DebuggingUtil.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
         error_cnt = error_cnt + 1
         error_str = traceback.format_exc()

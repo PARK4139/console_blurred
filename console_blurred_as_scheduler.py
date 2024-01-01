@@ -3,11 +3,11 @@
 __author__ = 'PARK4139 : Jung Hoon Park'
 
 
-from pkg_park4139 import TtsUtil, Park4139
+from pkg_park4139 import TextToSpeechUtil, StateManagementUtil
 
 if __name__ == '__main__':
     try:
-        Park4139.run_console_blurred_as_scheduler()
+        StateManagementUtil.run_console_blurred_as_scheduler()
     except Exception as e:
-        Park4139.trouble_shoot("%%%FOO%%%")
+        DebuggingUtil.trouble_shoot("%%%FOO%%%")
     pass

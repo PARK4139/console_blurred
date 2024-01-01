@@ -66,7 +66,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from pkg_park4139 import Park4139
+from pkg_park4139 import StateManagementUtil
 
 
 def on_press(key):
@@ -83,10 +83,7 @@ def on_release(key):
         return False
 
 
-# 파일 모든 사용권한 얻기 시도
-# os.chmod(target_adspath, 0o777)
-# os.chmod(target_adspath, 777)
-# os.chmod(target_adspath, 777)
+
 
 
 # :: 현재 디렉토리 파일만 사이즈 출력 2
@@ -244,7 +241,7 @@ data = {
     'ID_REQUEST': 1,
     'CUSTOMER_NAME': '_박_정_훈_',
     'MASSAGE_REQUESTED': '주문서변경요청',
-    'DATE_REQUESTED': Park4139.get_time_as_('%Y-%m-%d %H:%M:%S'),
+    'DATE_REQUESTED': StateManagementUtil.get_time_as_('%Y-%m-%d %H:%M:%S'),
     'USE_YN': "Y",
     'MARVEL CHARACTERS': [
         {'MACHANICAL MEMBER1': ['IRONMAN', 'BLACK PANTHER']},
@@ -304,12 +301,12 @@ print("데이터의 흐름 변화 그 안에서 마주하게된 정렬에 대한
 # python 3.6 f-sting
 # python f 문자열 포매팅 #f string formatting
 number = 3
-Park4139.debug_as_cli(f'number = {number}')
+StateManagementUtil.debug_as_cli(f'number = {number}')
 # f - sting alignment
-Park4139.debug_as_cli(f'{"test":_^22}')  # '_______test_______'
-Park4139.debug_as_cli(f'{"test":_<22}')  # 'test______________'
-Park4139.debug_as_cli(f'{"test":_>22}')  # '______________test'
-Park4139.debug_as_cli(f'{{중괄호 사용법}}')  # {중괄호 사용법}
+StateManagementUtil.debug_as_cli(f'{"test":_^22}')  # '_______test_______'
+StateManagementUtil.debug_as_cli(f'{"test":_<22}')  # 'test______________'
+StateManagementUtil.debug_as_cli(f'{"test":_>22}')  # '______________test'
+StateManagementUtil.debug_as_cli(f'{{중괄호 사용법}}')  # {중괄호 사용법}
 
 print("__________________________________________________________ dict sort test")
 # 파이썬 3.6 이후는 자동정렬되어 OrderedDict 사용필요 없음
@@ -345,10 +342,10 @@ for line in lines:
     print("Accessed : " + time.ctime(os.path.getatime(line)))
 
 # :: get 현재 디렉토리 파일의 일자
-Park4139.commentize(" 생성된지 7일 된 모든 확장자 파일 출력")
+DebuggingUtil.commentize(" 생성된지 7일 된 모든 확장자 파일 출력")
 # os.system('forfiles /P os.getcwd() /S /M *.* /D -7 /C "cmd /c @echo @path" ')
 
-Park4139.commentize(" 생성된지 1일 된 zip 확장자의 빽업 파일 삭제")
+DebuggingUtil.commentize(" 생성된지 1일 된 zip 확장자의 빽업 파일 삭제")
 # os.system('forfiles /P os.getcwd() /S /M *.zip /D -1 /C "cmd /c del @file" ')  # 2003 년 이후 설치 된 PC !주의! forfiles의 옵션이 달라서 큰 사이드 이펙트 일으킬 수 있음.
 
 foo = subprocess.check_output('dir /b /s /o /ad', shell=True).decode('utf-8')  # 폴더만 with walking
@@ -394,7 +391,7 @@ for line in lines:
     except Exception as e:
         pass
 
-Park4139.commentize(" 20230414 18:00 이후 생성된 파일 출력")
+DebuggingUtil.commentize(" 20230414 18:00 이후 생성된 파일 출력")
 inputDate = datetime.strptime(str(input('Searching Input Date : ')), '%Y%m%d %H:%M')
 opening_directory = r'D:\test'
 for (path, dir, files) in os.walk(opening_directory):
@@ -403,7 +400,7 @@ for (path, dir, files) in os.walk(opening_directory):
         if inputDate < fileMtime:
             print('경로 : [%s], 파일명 : [%s], 수정일자 : [%s]' % (path, filename, fileMtime))
 
-Park4139.commentize(" 20230414 18:00 이전 생성된 파일 출력")
+DebuggingUtil.commentize(" 20230414 18:00 이전 생성된 파일 출력")
 inputDate = datetime.strptime(str(input('Searching Input Date : ')), '%Y%m%d %H:%M')
 opening_directory = r'D:\test'
 for (path, dir, files) in os.walk(opening_directory):
@@ -413,8 +410,8 @@ for (path, dir, files) in os.walk(opening_directory):
             print(r'경로 : [%s], 파일명 : [%s], 수정일자 : [%s]' % (path, filename, fileMtime))
             print(r'[%s\%s]' % (path, filename))
 
-Park4139.commentize(" 현재시간기준 생성된지 1일 된 zip 확장자 파일만 출력")
-times = Park4139.get_time_as_('%Y-%m-%d %H:%M:%S').split(' ')
+DebuggingUtil.commentize(" 현재시간기준 생성된지 1일 된 zip 확장자 파일만 출력")
+times = StateManagementUtil.get_time_as_('%Y-%m-%d %H:%M:%S').split(' ')
 time_inputed = times[0] + times[1] + str(int(times[2]) - 1) + " " + times[3] + ":" + times[4]
 print(time_inputed)
 time_inputed = '20230414 20:53'
@@ -751,8 +748,8 @@ with keyboard.Listener(
 # pyautogui.dragTo(100, 100, duration=0.25)
 
 
-# Park4139.commentize('응 형은 다했어. 먼저 퇴근해볼께 프로젝트를 종료합니다')
-# Park4139.commentize('RPA를 종료합니다')
+# DebuggingUtil.commentize('응 형은 다했어. 먼저 퇴근해볼께 프로젝트를 종료합니다')
+# DebuggingUtil.commentize('RPA를 종료합니다')
 
 
 # 모든 윈도우 창의 타이틀 가져오기

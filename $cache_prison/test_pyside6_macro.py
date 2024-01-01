@@ -9,7 +9,7 @@ from BlurWindow.blurWindow import blur
 from PySide6.QtCore import Qt, QEvent, QCoreApplication
 from PySide6.QtWidgets import *
 
-from pkg_park4139 import Park4139
+from pkg_park4139 import StateManagementUtil
 from test_pyside6_debugger import debugger
 
 QEvent_Type_identifiers_reference = {
@@ -172,17 +172,17 @@ class Pyside6CoreObjectMacro(QWidget):
         self.setupUI()
 
     def print_info(self):
-        Park4139.commentize(f"display infos")
+        DebuggingUtil.commentize(f"display infos")
         print(self.screen().size().width())
         print(self.screen().size().height())
         print(self.screen().availableSize().width())
         print(self.screen().availableSize().height())
         print(pyautogui.size())
-        Park4139.commentize(f"mouse infos")
+        DebuggingUtil.commentize(f"mouse infos")
         print(pyautogui.position())
-        Park4139.commentize(f"keyboard infos")
+        DebuggingUtil.commentize(f"keyboard infos")
         print(pyautogui.KEYBOARD_KEYS)
-        Park4139.commentize(f"window infos")
+        DebuggingUtil.commentize(f"window infos")
         print(pyautogui.getInfo())
         print(pyautogui.size())
 
@@ -233,7 +233,7 @@ class Pyside6CoreObjectMacro(QWidget):
         self.push_btn6.clicked(QCoreApplication.instance().quit)
 
 
-        Park4139.commentize("_____________________________________ 레이아웃 설정")
+        DebuggingUtil.commentize("_____________________________________ 레이아웃 설정")
         layout_top = QGridLayout()
         layout_top.addWidget(self.push_btn1, 0, 1)
         layout_top.addWidget(self.push_btn2, 1, 1)
@@ -246,7 +246,7 @@ class Pyside6CoreObjectMacro(QWidget):
         print(pyautogui.position())
 
     def changeEvent(self, event):
-        Park4139.commentize(f"{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # changeEvent() 메소드는 개발자가 코드에 직접 호출하지 않아도, 
         # __init__ 처럼 특정 조건에서 호출이 이루어 지는 것 같다.
         # print_event_info_(event, QEvent_Type_identifiers_reference)
@@ -258,7 +258,7 @@ class Pyside6CoreObjectMacro(QWidget):
         elif event.type() == QEvent.ApplicationStateChange:
             debugger.print_event_info_(event, QEvent_Type_identifiers_reference)
         if str(event).strip() == "<PySide6.QtCore.QEvent(QEvent::ActivationChange)>":
-            Park4139.commentize(f"foo")
+            DebuggingUtil.commentize(f"foo")
 
     def on_selection_changed(self):
         print(self.text_entry.textBackgroundColor().name())

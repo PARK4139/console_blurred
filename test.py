@@ -19,7 +19,7 @@ import pkg_park4139
 import clipboard
 import shutil
 from BlurWindow.blurWindow import GlobalBlur, blur
-from pkg_park4139 import Park4139, TestUtil, TtsUtil
+from pkg_park4139 import StateManagementUtil, TestUtil, TextToSpeechUtil
 
 
 class TestUtilReplica:
@@ -33,8 +33,8 @@ class TestUtilReplica:
     # 예시로 Account 번호를 DB에 넣는 객체는 singletone으로 유지.
     # Parent().name    parent.name   Child().name   child.name
     def pause():
-        Park4139.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        Park4139.print_today_time_info()
+        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        StateManagementUtil.print_today_time_info()
         os.system('pause >nul')
 
     @staticmethod
@@ -45,13 +45,13 @@ class TestUtilReplica:
         def wrapper(**kwargs):  # **kwargs, keyword argument, dictionary 로 parameter 를 받음. named parameter / positional parameter 를 받을 사용가능?
             # def wrapper(*args):# *args, arguments, tuple 로 parameter 를 받음.
             # def wrapper():
-            Park4139.commentize("TEST START")
+            DebuggingUtil.commentize("TEST START")
             test_cycle_max_limit = 5
             if TestUtil.is_first_test_lap:
                 ment = rf"총 {test_cycle_max_limit}번의 시간성능측정 테스트를 시도합니다"
                 TestUtil.is_first_test_lap = False
-                TtsUtil.speak_ment(ment=ment, sleep_after_play=1)
-                Park4139.debug_as_cli(ment)
+                TextToSpeechUtil.speak_ment(ment=ment, sleep_after_play=1)
+                StateManagementUtil.debug_as_cli(ment)
             seconds_performance_test_results = TestUtil.test_results
             import time
             time_s = time.time()
@@ -61,14 +61,14 @@ class TestUtilReplica:
             # function()
             time_e = time.time()
             mesured_seconds = time_e - time_s
-            Park4139.commentize(rf"시간성능측정 결과")
+            DebuggingUtil.commentize(rf"시간성능측정 결과")
             seconds_performance_test_results.append(f"{round(mesured_seconds, 2)}sec")
             print(rf'seconds_performance_test_results : {seconds_performance_test_results}')
             print(rf'type(seconds_performance_test_results) : {type(seconds_performance_test_results)}')
             print(rf'len(seconds_performance_test_results) : {len(seconds_performance_test_results)}')
             if len(seconds_performance_test_results) == test_cycle_max_limit:
-                TtsUtil.speak_ment("시간성능측정이 완료 되었습니다", sleep_after_play=0.55)
-                Park4139.commentize("TEST END")
+                TextToSpeechUtil.speak_ment("시간성능측정이 완료 되었습니다", sleep_after_play=0.55)
+                DebuggingUtil.commentize("TEST END")
                 TestUtil.pause()
 
         return wrapper
@@ -80,7 +80,7 @@ class TestUtilReplica:
         def wrapper(*args, **kwargs):
             # def wrapper(*args):# *args, arguments, tuple 로 parameter 를 받음.
             # def wrapper():
-            Park4139.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
             test_cycle_max_limit = 5
             milliseconds_performance_test_result = []
             import time
@@ -91,13 +91,13 @@ class TestUtilReplica:
             # function()
             time_e = time.time()
             mesured_seconds = time_e - time_s
-            Park4139.commentize(rf"시간성능측정 결과")
+            DebuggingUtil.commentize(rf"시간성능측정 결과")
             milliseconds_performance_test_result.append(round(mesured_seconds * 1000, 5))
             print(rf'milliseconds_performance_test_result : {milliseconds_performance_test_result}')
             print(rf'type(milliseconds_performance_test_result) : {type(milliseconds_performance_test_result)}')
             print(rf'len(milliseconds_performance_test_result) : {len(milliseconds_performance_test_result)}')
             if len(milliseconds_performance_test_result) == test_cycle_max_limit:
-                TtsUtil.speak_ments("시간성능측정이 완료 되었습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ments("시간성능측정이 완료 되었습니다", sleep_after_play=0.65)
                 TestUtil.pause()
 
         return wrapper
@@ -114,15 +114,15 @@ class TestUtilReplica:
 
 
 
-# park4139.commentize() 메소드 테스트 결과, 1개 파일을 만들어 실행하는 데까지 무려 11초 정도로 측정됨, ffmpeg 작업 속도로 문제
+# DebuggingUtil.commentize() 메소드 테스트 결과, 1개 파일을 만들어 실행하는 데까지 무려 11초 정도로 측정됨, ffmpeg 작업 속도로 문제
 # 의도적으로 mp3 파일을 미리 만들어, ffmpeg 로 두 파일 합성작업 시간을 줄일수 있으므로, 성능 최적화 기대,
-# 따라서, 코드에서 사용되는 모든 텍스트를 추출하여 park4139.commentize 하도록 하여, 최적화시도해보자
+# 따라서, 코드에서 사용되는 모든 텍스트를 추출하여 DebuggingUtil.commentize 하도록 하여, 최적화시도해보자
 # 번외로 리스트의 파라미터를 몇개까지 가능하지 테스트 해보고 싶긴한데, 망가져도 되는 컴퓨터로 시도해보자
 
 
 def decorate_test_status_printing_code(function):
     def wrapper():
-        Park4139.commentize(rf"test status")
+        DebuggingUtil.commentize(rf"test status")
         function()
 
     return wrapper
@@ -400,7 +400,7 @@ def test_sprint_core():
         # dialog = pkg_park4139.CustomDialog(contents="다운로드하고 싶은 URL을 제출해주세요?", buttons=["제출", "제출하지 않기"], is_input_text_box=True)
         # dialog.show()
         # text_of_clicked_btn = dialog.text_of_clicked_btn
-        # Park4139.commentize("text_of_clicked_btn")
+        # DebuggingUtil.commentize("text_of_clicked_btn")
         # Park4139.debug_as_cli(text_of_clicked_btn)
         # if text_of_clicked_btn == "제출":
         #     Park4139.download_from_youtube_to_webm(dialog.box_for_editing_input_text.text())
@@ -1348,10 +1348,9 @@ def test_sprint_core():
         #     개발배경 : 음악 듣거나, 애니볼때, 말로 하는게 시끄러워서
         #
 
-
-
-
-
+        # 파일변경감지 아이디어
+        # (이것 git으로 할 수 있잖아!)
+        # 감지이벤트를 걸어 파일변경감지 시 비동기 빽업처리... 아 git 설치 안되있으면 안됨.
 
         # 파일 동기화 모듈로 로컬 1차 백업
 
@@ -1370,8 +1369,10 @@ def test_sprint_core():
         # 결국 보고자 하는 것은 디렉토리가 아니라 파일명을 잘 관리해서 인덱싱하면 된다고 생각한다.
         # 디렉토리명은 파일을 찾기 위한 지표정도이다.
         # 파일이 어느폴더에 있든 상관없다. 단지 이름명이 류가 되어있어 찾을 때, 정확히 호출만 되면 되는 일이다. 호출명단을 잘 관리를 하면 되는 일이다,
-        # 그렇다면 정리할 필요가 없다, 즉 찾는시간이 적은 시스템이 필요한 것이지 정리하는시간이 필요한 게 아니다
-        # 정리하는시간이 없고 찾는시간이 빠른 시스템 이 나에게 필요한 파일색인시스템.
+        # 그렇다면 실제파일을 정리할 필요가 없다, 즉 찾는시간이 적은 시스템이 필요한 것이지 정리하는시간이 필요한 게 아니다
+        # 정리하는시간이 없고, 찾는시간이 빠른 시스템 이 나에게 필요한 파일색인시스템.
+        # 떠오른 단점은 파일명이 변경되면 안된다.
+        # 모든 파일명을 가져온다. 모든 파일명은 nick name 으로 최대한 관리한다. nick name 이 없다면 파일명을 표기한다. 파일명에서 어떤 컨텐츠인지 모른다면. 알기위해서 실행하거나 열어볼 수 밖에 없다
         # get filenames
         # organize
         # 인덱스를 파일명 유사도분류로
@@ -1466,7 +1467,7 @@ def test_sprint_core():
     except SystemExit:  # sys.exit() 호출을 의도적으로 판단
         pass
     except:
-        Park4139.trouble_shoot("%%%FOO%%%")
+        DebuggingUtil.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
         TestUtil.pause()
 
@@ -1483,14 +1484,14 @@ error_cnt = 0
 if __name__ == '__main__':
     try:
         test_loop_cnt = 1
-        Park4139.commentize("TRYING TO ENTER TEST LOOP...")
+        DebuggingUtil.commentize("TRYING TO ENTER TEST LOOP...")
         while True:  # test loop
             try:
                 if test_loop_cnt == test_loop_limit + 1:
                     break
-                Park4139.commentize(f" TEST LOOP {test_loop_cnt} STARTED")
+                DebuggingUtil.commentize(f" TEST LOOP {test_loop_cnt} STARTED")
                 test_sprint_core()
-                Park4139.commentize(f" TEST LOOP {test_loop_cnt} ENDED")
+                DebuggingUtil.commentize(f" TEST LOOP {test_loop_cnt} ENDED")
 
             except:
                 print_with_test_status()
@@ -1505,11 +1506,11 @@ if __name__ == '__main__':
         # logger.info(f'logger: dst : {"??????"}')
         # logger.error(msg="에러발생?????")
         # logger.error(f'logger: str(e) : {"????????"}')
-        # park4139.trouble_shoot("%%%FOO%%%")
+        # DebuggingUtil.trouble_shoot("%%%FOO%%%")
         traceback.print_exc(file=sys.stdout)
         error_cnt = error_cnt + 1
         error_str = traceback.format_exc()
-        Park4139.debug_as_gui(f"TEST LOOP ERROR CNT REPORT:\nerror_cnt : {error_cnt}\nerror_str : {error_str}")
+        StateManagementUtil.debug_as_gui(f"TEST LOOP ERROR CNT REPORT:\nerror_cnt : {error_cnt}\nerror_str : {error_str}")
         # TestUtil.pause()
 
 
