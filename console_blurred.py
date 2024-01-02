@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'PARK4139 : Jung Hoon Park'
 
-from pkg_park4139 import TextToSpeechUtil, StateManagementUtil
+from pkg_park4139 import TextToSpeechUtil, StateManagementUtil, DebuggingUtil, BusinessLogicUtil
 
 """
 console_blurred.py 는 build 용 파일
@@ -14,11 +14,11 @@ Build 배치 수행.
 if __name__ == '__main__':
     try:
         while (True):
-            StateManagementUtil.speak_today_time_info()
+            TextToSpeechUtil.speak_today_time_info()
             if TextToSpeechUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment="console Blurred 프로그램을 실행합니다", sleep_after_play=0.95):
             # if TtsUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment="콘솔 블러 프로그램을 실행합니다", sleep_after_play=0.95):
-            #     Park4139.run_console_blurred_as_scheduler()
-                StateManagementUtil.run_console_blurred_as_gui()
+                BusinessLogicUtil.run_console_blurred_as_scheduler()
+                # BusinessLogicUtil.run_console_blurred_as_gui()
             break
     except Exception as e:
         DebuggingUtil.trouble_shoot("%%%FOO%%%")
