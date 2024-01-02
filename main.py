@@ -285,7 +285,7 @@ class DebuggingUtil:
 
 class StateManagementUtil:
     GIT_HUB_ADDRESS = "https://github.com/PARK4139"
-    PROJECT_DIRECTORY = str(Path(__file__).parent.parent.absolute())  # __init__ 해당파일로 되어 있기 때문에. 위치가 복잡하게 되어 버렸다.
+    PROJECT_DIRECTORY = str(Path(__file__).parent.parent.absolute())  # __init__ 해당파일로 되어 있기 때문에. 위치가 복잡하게 되어 버렸다. 이를 __file__ 로 기준을 잡아서 경로를 수정하였다. 빌드를 하면서 알게되었는데 상대경로의 사용은 필연적인데, 상대경로로 경로를 설정할때 기준이 되는 절대경로 하나는 반드시 필요한 것 같다.
     USERPROFILE = os.environ.get('USERPROFILE')
     SERVICE_DIRECTORY = os.path.dirname(PROJECT_DIRECTORY)
     PARK4139_ARCHIVE_TOML = rf'{PROJECT_DIRECTORY}\park4139_archive.toml'
@@ -438,6 +438,7 @@ class DataStructureUtil:
         """
 
         def bubble_sort_nested_list(nested_list, column_index):
+            """버블 소팅 테스트"""
             if type(nested_list[0][column_index]) == float:
                 column_index = int(column_index)
                 n = len(nested_list)
@@ -9327,7 +9328,7 @@ class BusinessLogicUtil:
             return False
 
     @staticmethod
-    def is_two_time_same(time1, time2):
+    def is_two_time_same(time1:datetime, time2:datetime):
         time2.strftime(rf'%Y-%m-%d %H:%M:%S')
         # print(rf'time1 : {time1} , time2 : {time2}')
         if time1 == time2:
