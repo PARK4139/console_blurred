@@ -15,14 +15,6 @@ directory_abspath = StateManagementUtil.PROJECT_DIRECTORY
 
 
 
-
-# [print(sample) for sample in FileSystemUtil.get_target_as_pn(target_abspath=r"C:\Users\WIN10PROPC3\Desktop\services\storage\`\pop_sound.mkv") ]
-FileSystemUtil. convert_mkv_to_wav(file_mkv=r"C:\Users\WIN10PROPC3\Desktop\services\storage\`\pop_sound.mkv")
-TestUtil.pause()
-
-
-
-
-
+FileSystemUtil.move_target_without_overwrite(target_abspath=rf"C:\Users\WIN10PROPC3\Desktop\t\joigjewjgoiwe (2).PNG", dst=rf"D:\$cache_prisonized\$special_files\etwjeiojifweojfo")
 
 
