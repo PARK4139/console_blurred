@@ -993,19 +993,19 @@ class FileSystemUtil:
         line_cnt_measured = BusinessLogicUtil.get_line_cnt_of_file(file_abspath)
         DebuggingUtil.debug_as_cli(f"line_cnt_measured : {line_cnt_measured}")
 
-        # 로직분리 새로운 시도: 기능에 따라 조건문을 여러개 만들어 보았다.
+        # 로직분리 새로운 시도: 기능에 따라 같은 조건문을 여러개 만들어 보았다.
         # commentize() 관련된 로직 분리
-        if BusinessLogicUtil.is_file_edited(file_abspath) is None:
+        if FileSystemUtil.is_file_edited(file_abspath) is None:
             DebuggingUtil.commentize("데이터베이스 타겟에 대한 key가 없어 key를 생성합니다")
-        elif BusinessLogicUtil.is_file_edited(file_abspath):
+        elif FileSystemUtil.is_file_edited(file_abspath):
             TextToSpeechUtil.speak_ments(f'{os.path.basename(file_abspath)} 의 모니터링 중 편집을 감지하였습니다, 타겟빽업을 시도합니다, 타겟에 대한 key를 toml 데이터베이스에 업데이트합니다', sleep_after_play=0.65)
 
         # db crud 관련된 로직 분리
-        if BusinessLogicUtil.is_file_edited(file_abspath):
+        if FileSystemUtil.is_file_edited(file_abspath):
             DbTomlUtil.update_db_toml(key=key, value=BusinessLogicUtil.get_line_cnt_of_file(file_abspath))
-        elif BusinessLogicUtil.is_file_edited(file_abspath) is None:
+        elif FileSystemUtil.is_file_edited(file_abspath) is None:
             DbTomlUtil.insert_db_toml(key=key, value=BusinessLogicUtil.get_line_cnt_of_file(file_abspath))
-        if BusinessLogicUtil.is_file_edited(file_abspath):
+        if FileSystemUtil.is_file_edited(file_abspath):
             return True
 
     @staticmethod
@@ -1542,6 +1542,29 @@ class FileSystemUtil:
         except Exception:
             print(rf"subprocess.CalledProcessError 가 발생하여 재시도를 수행합니다 {inspect.currentframe().f_code.co_name}")
             DebuggingUtil.trouble_shoot('%%%FOO%%%')
+
+    @staticmethod
+    def is_file_edited(target_abspath: str):
+        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        try:
+            key = DbTomlUtil.get_db_toml_key(target_abspath)
+            db = DbTomlUtil.read_db_toml()
+            line_cnt_measured = BusinessLogicUtil.get_line_cnt_of_file(target_abspath)
+            if line_cnt_measured != db[key]:
+                DebuggingUtil.commentize("파일편집 감지되었습니다")
+            else:
+                DebuggingUtil.commentize("파일편집 감지되지 않았습니다")
+                pass
+            if line_cnt_measured != db[key]:
+                return True
+            else:
+                return False
+        except KeyError:
+            DbTomlUtil.insert_db_toml(key=DbTomlUtil.get_db_toml_key(target_abspath), value=BusinessLogicUtil.get_line_cnt_of_file(target_abspath))
+            DebuggingUtil.commentize("파일편집 확인 중 key 에러가 발생하였습니다")
+        except Exception:  # except Exception:으로 작성하면 KeyError 를 뺀 나머지 에러처리 설정 , except: 를 작성하면 모든 에러처리 설정
+            DebuggingUtil.commentize("데이터베이스 확인 중 예상되지 않은 에러가 감지되었습니다")
+            DebuggingUtil.trouble_shoot("202312030000b")
 
 
 class FontsUtil:
@@ -5105,7 +5128,7 @@ class DbTomlUtil:
     def read_db_toml():
         try:
             DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-            print("DB 의 모든 자료를 가져왔습니다")
+            # print("DB 의 모든 자료를 가져왔습니다")
             return toml.load(StateManagementUtil.DB_TOML)
         except:
             DebuggingUtil.trouble_shoot("%%%FOO%%%")
@@ -7131,28 +7154,7 @@ class BusinessLogicUtil:
         DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
         raise shutil.Error(str)
 
-    @staticmethod
-    def is_file_edited(target_abspath: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        try:
-            key = DbTomlUtil.get_db_toml_key(target_abspath)
-            db = DbTomlUtil.read_db_toml()
-            line_cnt_measured = BusinessLogicUtil.get_line_cnt_of_file(target_abspath)
-            if line_cnt_measured != db[key]:
-                DebuggingUtil.commentize("파일편집 감지되었습니다")
-            else:
-                DebuggingUtil.commentize("파일편집 감지되지 않았습니다")
-                pass
-            if line_cnt_measured != db[key]:
-                return True
-            else:
-                return False
-        except KeyError:
-            DbTomlUtil.insert_db_toml(key=DbTomlUtil.get_db_toml_key(target_abspath), value=BusinessLogicUtil.get_line_cnt_of_file(target_abspath))
-            DebuggingUtil.commentize("파일편집 확인 중 key 에러가 발생하였습니다")
-        except Exception:  # except Exception:으로 작성하면 KeyError 를 뺀 나머지 에러처리 설정 , except: 를 작성하면 모든 에러처리 설정
-            DebuggingUtil.commentize("데이터베이스 확인 중 예상되지 않은 에러가 감지되었습니다")
-            DebuggingUtil.trouble_shoot("202312030000b")
+    
 
     @staticmethod
     def git_push_by_auto():
