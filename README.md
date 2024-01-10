@@ -2,7 +2,16 @@
 #[WORK ASSISTANCE PROGARM]()
 #[SHORTCUTS]() #[BLURRED DESIGN]() #[BASED PYTHON]()
 #[AUTOMATED WORK]()
+
+
+
+
   
+#
+
+
+
+
 
 ### PREVIEW
 <!-- [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys) -->
@@ -123,7 +132,7 @@
 - 2023 12 30 22:42:49 MODIFIED TTS FUNCTION AS ASYNCHRONOUS 
 - 2023 12 30 22:42:49 MODIFIED FILE/DIRECTORY BACK UP SCHEDULE
 - 2024 01 02 02:30:43 ADDED 
-
+- 2024 01 10 23:49:09 MODIFIED TIMMING SOME FUNCTIONS
 
 
 

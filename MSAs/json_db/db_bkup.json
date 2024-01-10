@@ -1,0 +1,66 @@
+{
+  "boards": [
+    {
+      "id": 1,
+      "title": "1",
+      "contents": "1"
+    }
+  ],
+  "nav-items": [
+    {
+      "id": "0",
+      "title": "홈",
+      "href": "/home"
+    },
+    {
+      "id": "1",
+      "title": "파이썬이라는 공구상자",
+      "href": "/understanding-toolbox"
+    },
+    {
+      "id": "2",
+      "title": "파이썬으로 실험실 만들어보기",
+      "href": "/do-labo"
+    },
+    {
+      "id": "3",
+      "title": "파이썬으로 친구랑 대화하기",
+      "href": "/chatting"
+    },
+    {
+      "id": "4",
+      "title": "파이썬으로 몰컴하기",
+      "href": "/playing-game"
+    },
+    {
+      "id": "5",
+      "title": "파이썬으로 게임만들기",
+      "href": "/making-game"
+    },
+    {
+      "id": "6",
+      "title": "파이썬으로 수학문제풀기",
+      "href": "/solving-math"
+    },
+    {
+      "id": "7",
+      "title": "질문 게시판",
+      "href": "/create"
+    },
+    {
+      "id": "8",
+      "title": "read",
+      "href": "/read"
+    },
+    {
+      "id": "9",
+      "title": "write",
+      "href": "/write"
+    },
+    {
+      "id": "10",
+      "title": "edit",
+      "href": "/edit"
+    }
+  ]
+}
