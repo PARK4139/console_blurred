@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-  # python 3.x 하위버전 호환을 위한코드
 __author__ = 'PARK4139 : Jung Hoon Park'
+
 import asyncio
 import copy
 import inspect
@@ -36,79 +37,6 @@ import toml
 import win32gui
 import win32process
 # ! import 에 주석은 import 백업임 지우지말자. 오름차순 정리를 하자. 백업했으면 ctrl alt o를 누르자
-# from dirsync import sync
-# from BlurWindow.blurWindow import GlobalBlur
-# from bs4 import BeautifulSoup
-# from bs4 import BeautifulSoup, ResultSet
-# from datetime import datetime, timedelta
-# from Demos.EvtSubscribe_push import c
-# from functools import partial
-# from googletrans import Translator
-# from gtts import gTTS  # Google TTS
-# from gtts import gTTS  # Google TTS 적용
-# from moviepy.editor import *
-# from mutagen.mp3 import MP3
-# from pathlib import Path
-# from PIL import Image, ImageFilter  # PIL : Py img lib
-# from PySide6 import QtCore, QtWidgets
-# from PySide6 import QtCore, QtWidgets, QtGui
-# from PySide6.QtCore import QEvent
-# from PySide6.QtCore import Qt, QObject, Signal, QPoint, QEvent, QTimer, QEventLoop, Slot, QThread
-# from PySide6.QtCore import Qt, QTimer, QThread, Signal, QObject, QCoreApplication
-# from PySide6.QtGui import QCursor
-# from PySide6.QtGui import QScreen, QIcon, QShortcut, QKeySequence, QFont, QCursor, QColor, QFontDatabase
-# from PySide6.QtGui import QScreen, QIcon, QShortcut, QKeySequence, QFontDatabase, QFont, QGuiApplication
-# from PySide6.QtWidgets import QApplication, QGridLayout, QPushButton, QVBoxLayout, QLineEdit, QDialog, QScrollArea, QWidget, QMainWindow, QLabel
-# from PySide6.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushButton, QTextEdit, QVBoxLayout, QLineEdit, QMainWindow, QMessageBox, QDialog, QScrollArea, QSpacerItem, QSizePolicy
-# from PySide6.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushButton, QVBoxLayout, QLineEdit, QDialog, QScrollArea
-# from pytube import Playlist
-# from random import randint, random
-# from screeninfo import get_monitors
-# from selenium.webdriver.common.by import By
-# from typing import Callable
-# from typing import Callable, TypeVar
-# from typing import TypeVar
-# import asyncio
-# import BlurWindow.blurWindow
-# import clipboard
-# import copy
-# import FinanceDataReader as fdr  # 증권데이터 공유 라이브러리,      pip install finance-datareader,   한국 주식 가격, 미국 주식 가격, 지수, 환율, 암호 화폐 가격, 종목 리스트 등을 제공하는 API 패키지입니다,
-# import googletrans
-# import inspect
-# import keyboard
-# import mutagen
-# import numpy
-# import numpy as np
-# import os
-# import os.path
-# import plotly # 대표적인 인터랙티브 시각화 도구
-# import plotly.express as px
-# import psutil
-# import psutil  # 실행중인 프로세스 및 시스템 활용 라이브러리
-# import pyautogui
-# import pyglet
-# import pykrx # 국내증권데이터 공유 라이브러리,               네이버금융사이트(실시간수정되는 주식데이터),               한국증권사이트 의 데이터 기반, 고신뢰성데이터 인 국내주식정보 를 볼 수 있다.  pykrx의 특징은 국내 주식만 수집이 가능한대신 yfinance보다 국내주식 시세가 정확하고 PER, PBR, 배당수익률과 같은 지표는 신뢰성이 떨어진다 - 출처: https://bigdata-doctrine.tistory.com/7 [경제와 데이터:티스토리]
-# import pynput
-# import random
-# import re
-# import schedule
-# import selenium.webdriver as webdriver
-# import shutil
-# import string
-# import subprocess
-# import sys
-# import threading
-# import time
-# import toml
-# import traceback
-# import urllib.parse
-# import urllib.parse as parser
-# import webbrowser
-# import win32api
-# import win32con
-# import win32gui
-# import win32process
-# import yfinance # 증권데이터 공유 라이브러리,              야후 파이낸스에서 크롤링한 데이터를 제공하는 라이브러리, 미국주식데이터 는 상대적으로 정확 , 국내주식데이터 의 잦은누락,   결론은 다른게 나아보인다.
 from BlurWindow.blurWindow import GlobalBlur
 from PIL import Image, ImageFilter  # PIL : Py img lib
 from PySide6 import QtCore, QtWidgets
@@ -1392,19 +1320,19 @@ class FileSystemUtil:
         #                             output=True)
         #         # 데이터 읽기
         #         data = wav.readframes(1024)
-        # 
+        #
         #         # 재생
         #         while data:
         #             stream.write(data)
         #             data = wav.readframes(1024)
-        # 
+        #
         #         # 스트림 닫기
         #         stream.stop_stream()
         #         stream.close()
-        # 
+        #
         #         # PyAudio 객체 종료
         #         audio.terminate()
-        # 
+        #
         #     # WAV 파일 닫기
         #     # wav.close()
         # except:
@@ -3513,10 +3441,10 @@ class UiUtil:
         # def inputbox_changed(self):
         #     DebuggingUtil.commentize("inputbox 텍스트 change event 감지 되었습니다")
         #     print(self.inputbox.ment())
-        # 
+        #
         # def inputbox_edit_finished(self):
         #     DebuggingUtil.commentize("inputbox edit finish event 감지 되었습니다")
-        # 
+        #
         # def inputbox_return_pressed(self):
         #     DebuggingUtil.commentize("inputbox return pressed event 감지 되었습니다")
 
@@ -4332,7 +4260,7 @@ class UiUtil:
         DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
         FileSystemUtil.play_wav_file(file_abspath=StateManagementUtil.POP_SOUND_WAV)
 
-        app_foo= None
+        app_foo = None
 
         # QApplication 인스턴스 확인
         app = QApplication.instance()
@@ -6182,7 +6110,7 @@ class BusinessLogicUtil:
 
             ment = "프로젝트 백업을 하고 최대절전모드로 전환해 드릴까요?"
             TextToSpeechUtil.speak_ments(ment=ment, sleep_after_play=0.95, thread_join_mode=True)
-            BusinessLogicUtil.should_i_do(ment=ment, function=   BusinessLogicUtil.back_up_project_and_change_to_power_saving_mode(), auto_click_negative_btn_after_seconds=20)
+            BusinessLogicUtil.should_i_do(ment=ment, function=BusinessLogicUtil.back_up_project_and_change_to_power_saving_mode(), auto_click_negative_btn_after_seconds=20)
 
     @staticmethod
     def sleep(milliseconds):
@@ -8593,8 +8521,6 @@ class BusinessLogicUtil:
         font_name = mataplotlig_fontmanager.FontProperties(fname=future_abspath).get_name()
         return font_name
 
-
-
     @staticmethod
     def return_korean_week_name():
         weekday: str
@@ -9029,7 +8955,7 @@ class BusinessLogicUtil:
                 elif is_game_strated == False or user_input is None:
                     ment = f"TYPE NUMBER BETWEEN 1 TO 100"
                     if user_input is None:
-                        ment = ment +", AGAIN"
+                        ment = ment + ", AGAIN"
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
                     dialog = UiUtil.CustomQdialog(ment=ment, buttons=["SUBMIT"], is_input_box=True)
                     dialog.exec()
@@ -9215,7 +9141,7 @@ class BusinessLogicUtil:
                     # TextToSpeechUtil.speak_ments(f'1시간 간격 루틴을 시작합니다', sleep_after_play=0.65, thread_join_mode=True)
                     BusinessLogicUtil.should_i_do(ment="쓰레기통을 비울까요?", function=BusinessLogicUtil.empty_recycle_bin, auto_click_negative_btn_after_seconds=10)
                     BusinessLogicUtil.should_i_do(ment="오늘 시간정보를 말씀드릴까요?", function=TextToSpeechUtil.speak_today_time_info, auto_click_negative_btn_after_seconds=10)
-                    BusinessLogicUtil.monitor_target_edited_and_sync(target_abspath=StateManagementUtil.SERVICE_DIRECTORY) # seconds_performance_test_results : ['28.46sec', '27.53sec', '2.85sec', '2.9sec', '2.91sec']
+                    BusinessLogicUtil.monitor_target_edited_and_sync(target_abspath=StateManagementUtil.SERVICE_DIRECTORY)  # seconds_performance_test_results : ['28.46sec', '27.53sec', '2.85sec', '2.9sec', '2.91sec']
 
             # 0시에서 4시 사이, 30초 마다
             if 0 <= int(HH) <= 4 and int(ss) % 30 == 0:
@@ -9394,11 +9320,10 @@ class BusinessLogicUtil:
         else:
             return False
 
-    @staticmethod    
+    @staticmethod
     def back_up_project_and_change_to_power_saving_mode():
         BusinessLogicUtil.back_up_target(target_abspath=StateManagementUtil.PROJECT_DIRECTORY)
         FileSystemUtil.enter_power_saving_mode()
-        
 
 
 class INPUT(Enum):
