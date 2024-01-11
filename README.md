@@ -83,7 +83,7 @@
 - ffmpeg
 - pot player
 
-### PERSONAL DEVELOPMENT RULE 
+### DEVELOPMENT RULE 
 - consider target(file/directory) path as much as possible ✔️
 - Deploy A Package File As Exe File (Using pyinstaller)
 - File Auto Back Up(Following Schedule)

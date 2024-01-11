@@ -1,0 +1,41 @@
+cd project_root
+npm install vercel
+
+vercel --version
+run cmd.exe as admin
+setx path "%PATH%;C:\projects\services\archive_py\MSAs\json_db\node_modules\.bin\;"
+exit
+IDE restart
+vercel --version
+
+
+
+
+requirements.txt 작성
+pip list | findstr fastapi
+
+
+
+vercel login
+
+vercel .
+y
+everyone
+n
+json-server # 소문자랑 하이픈으로만 작성해야한다.
+./
+
+
+
+
+
+json-server --version
+run cmd.exe as admin
+setx path "%PATH%;C:\Users\WIN10PROPC3\AppData\Roaming\npm\;"
+exit
+IDE restart
+json-server --version
+json-server --watch db.json --port 3001
+
+
+

@@ -39,7 +39,7 @@ console_blurred_exe_run.bat
 console_blurred.spec
 index.bat
 index.spec
-jq-win64.exe
+pkg_jq/jq-win64.exe
 park4139_archive.toml
 park4193_logger.log
 parks2park_archive.log

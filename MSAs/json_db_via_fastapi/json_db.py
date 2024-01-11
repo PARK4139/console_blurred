@@ -58,23 +58,20 @@ def convert_file_from_cp_949_to_utf_8(file_abspath):
     #         new_file.write(contents)
     pass
 
-
-# :: app SETTING
+# :: SERVER SETTING
 app = FastAPI()
 app.encoding = 'utf-8'
 os.system("chcp 65001")
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-# :: SERVER SETTING
 web_server_config = {
     # :: PRODUCTION MODE SETTING
-    # 'port': 8080,
-    # 'host': "0.0.0.0",
+    'port': 8080,
+    'host': "0.0.0.0",
 
     # :: DEVELOPMENT MODE SETTING
-    # 'port': 9001,
-    'port': 9002,
+    # 'port': 9002,
     # 'host': "127.0.0.1",
-    'host': "localhost",
+    # 'host': "localhost",
 }
 PROJECT_DIRECTORY = str(Path(__file__).parent.parent.absolute())
 DB_JSON = rf"{PROJECT_DIRECTORY}\json_db\db.json"
@@ -86,12 +83,15 @@ DB_JSON = rf"{PROJECT_DIRECTORY}\json_db\db.json"
 
 # CORS 설정 via add_middleware(), origins
 origins = [
+    # DEV
     # "*",
     #     "http://localhost.tiangolo.com",
     #     "https://localhost.tiangolo.com",
     #     "http://localhost",
     #     "http://localhost:8080",
     "http://localhost:3000",  # client 의 설정     "127.0.0.1:11430" next.js 이렇게 실행되는데?
+    #
+    # OP
     #
 ]
 app.add_middleware(
@@ -106,17 +106,15 @@ app.add_middleware(
 # 미들웨어를 통한 로깅
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
-    # 요청 정보 로깅
     logging.debug(f"요청: {request.method} {request.url}")
     response = await call_next(request)
-    # 응답 정보 로깅
     logging.debug(f"응답: {response.status_code}")
     return response
 
 
-# @app.get("/")
-# async def return_success():
-#     return { "success":"json-db 가 정상 동작 중 입니다"}
+@app.get("/")
+async def return_success():
+    return { "success":"json-db 가 정상 동작 중 입니다"}
 
 
 @app.get("/{specific_object_name}")
@@ -190,7 +188,6 @@ async def create_file(file: UploadFile):
 async def create_board(board: Board):
     # logging.debug("1")
     # logging.debug(board)
-    a = 3
     # board = JSONResponse(board)
 
     # 유효성 검사
@@ -252,3 +249,4 @@ if __name__ == "__main__":
         reload=True,
         log_level="debug",
     )
+
