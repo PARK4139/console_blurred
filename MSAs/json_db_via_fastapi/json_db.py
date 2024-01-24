@@ -65,16 +65,17 @@ os.system("chcp 65001")
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 web_server_config = {
     # :: PRODUCTION MODE SETTING
-    'port': 8080,
-    'host': "0.0.0.0",
+    # 'port': 8080,
+    # 'port': 80,
+    # 'host': "0.0.0.0",
 
     # :: DEVELOPMENT MODE SETTING
-    # 'port': 9002,
-    # 'host': "127.0.0.1",
+    'port': 9002,
+    'host': "127.0.0.1",
     # 'host': "localhost",
 }
-PROJECT_DIRECTORY = str(Path(__file__).parent.parent.absolute())
-DB_JSON = rf"{PROJECT_DIRECTORY}\json_db\db.json"
+DB_JSON = rf"{str(Path(__file__).parent.absolute())}\db.json"
+print(DB_JSON)
 # logger = logging.getLogger(__name__)
 # logger.setLevel(logging.DEBUG)
 # console_handler = logging.StreamHandler()

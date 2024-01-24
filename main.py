@@ -44,14 +44,16 @@ from PySide6.QtCore import QEvent
 from PySide6.QtCore import Qt, QTimer, QThread, Signal, QObject, QCoreApplication
 from PySide6.QtGui import QCursor
 from PySide6.QtGui import QScreen, QIcon, QShortcut, QKeySequence, QFontDatabase, QFont, QGuiApplication
-from PySide6.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushButton, QVBoxLayout, QLineEdit, QDialog, QScrollArea
+from PySide6.QtWidgets import QWidget, QApplication, QGridLayout, QLabel, QPushButton, QVBoxLayout, QLineEdit, QDialog, QScrollArea, QTextBrowser
 from bs4 import BeautifulSoup, ResultSet
+from colorama import init, Fore
 from googletrans import Translator
 from gtts import gTTS  # Google TTS 적용
 from moviepy.editor import *
 from mutagen.mp3 import MP3
 from pytube import Playlist
 from screeninfo import get_monitors
+from tqdm import tqdm
 
 # logger = logging.getLogger('park4139_test_logger')
 # hdlr = logging.FileHandler('park4139_logger.log')
@@ -61,6 +63,26 @@ from screeninfo import get_monitors
 
 
 T = TypeVar('T')  # 타입 힌팅 설정
+
+
+class ColoramaColorUtil(Enum):
+    RED = "RED"
+    GREEN = "GREEN"
+    BLACK = "BLACK"
+    YELLOW = "YELLOW"
+    BLUE = "BLUE"
+    MAGENTA = "MAGENTA"
+    CYAN = "CYAN"
+    WHITE = "WHITE"
+    RESET = "RESET"
+    LIGHTBLACK_EX = "LIGHTBLACK_EX"
+    LIGHTRED_EX = "LIGHTRED_EX"
+    LIGHTGREEN_EX = "LIGHTGREEN_EX"
+    LIGHTYELLOW_EX = "LIGHTYELLOW_EX"
+    LIGHTBLUE_EX = "LIGHTBLUE_EX"
+    LIGHTMAGENTA_EX = "LIGHTMAGENTA_EX"
+    LIGHTCYAN_EX = "LIGHTCYAN_EX"
+    LIGHTWHITE_EX = "LIGHTWHITE_EX"
 
 
 class TestUtil:
@@ -74,25 +96,25 @@ class TestUtil:
     # 예시로 Account 번호를 DB에 넣는 객체는 singletone으로 유지.
     # Parent().name    parent.name   Child().name   child.name
     def pause():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         BusinessLogicUtil.print_today_time_info()
         os.system('pause >nul')
 
     @staticmethod
-    def measure_seconds_performance(function):
+    def measure_seconds_performance_nth(function):
         """시간성능 측정 데코레이터 코드"""
 
         # def wrapper(*args, **kwargs):
         def wrapper(**kwargs):  # **kwargs, keyword argument, dictionary 로 parameter 를 받음. named parameter / positional parameter 를 받을 사용가능?
             # def wrapper(*args):# *args, arguments, tuple 로 parameter 를 받음.
             # def wrapper():
-            DebuggingUtil.commentize("TEST START")
-            test_loop_cnt = 5  # 테스트 루프 반복 횟수 설정
+            DebuggingUtil.print_via_colorama("___________________________________________________________ TEST START", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+            n = 5  # 테스트 루프 반복 횟수 설정
             if TestUtil.is_first_test_lap:
-                ment = rf"총 {test_loop_cnt}번의 시간성능측정 테스트를 시도합니다"
+                ment = rf"총 {n}번의 시간성능측정 테스트를 시도합니다"
                 TestUtil.is_first_test_lap = False
+                DebuggingUtil.print_via_colorama(ment, colorama_color=ColoramaColorUtil.BLUE)
                 TextToSpeechUtil.speak_ment(ment=ment, sleep_after_play=1)
-                DebuggingUtil.debug_as_cli(ment)
             seconds_performance_test_results = TestUtil.test_results
             import time
             time_s = time.time()
@@ -103,27 +125,29 @@ class TestUtil:
             time_e = time.time()
             mesured_seconds = time_e - time_s
             seconds_performance_test_results.append(f"{round(mesured_seconds, 2)}sec")
-            if len(seconds_performance_test_results) == test_loop_cnt:
-                ment = rf"총 {test_loop_cnt}번의 시간성능측정 테스트가 완료 되었습니다"
+            if len(seconds_performance_test_results) == n:
+                ment = rf"총 {n}번의 시간성능측정 테스트가 성공 되었습니다"
                 TextToSpeechUtil.speak_ment(ment=ment, sleep_after_play=0.55)
-                print(rf'seconds_performance_test_results = {seconds_performance_test_results}')
-                print(rf'type(seconds_performance_test_results) : {type(seconds_performance_test_results)}')
-                print(rf'len(seconds_performance_test_results) : {len(seconds_performance_test_results)}')
-                DebuggingUtil.commentize("TEST END")
+                DebuggingUtil.print_via_colorama(rf'seconds_performance_test_results = {seconds_performance_test_results}', colorama_color=ColoramaColorUtil.BLUE)
+                DebuggingUtil.print_via_colorama(rf'type(seconds_performance_test_results) : {type(seconds_performance_test_results)}', colorama_color=ColoramaColorUtil.BLUE)
+                DebuggingUtil.print_via_colorama(rf'len(seconds_performance_test_results) : {len(seconds_performance_test_results)}', colorama_color=ColoramaColorUtil.BLUE)
+                DebuggingUtil.print_via_colorama("___________________________________________________________ TEST END", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
                 TestUtil.pause()
 
         return wrapper
 
     @staticmethod
-    def measure_milliseconds_performance(function):
-        """시간성능 측정 코드"""
+    def measure_seconds_performance_once(function):
+        """시간성능 측정 데코레이터 코드"""
 
-        def wrapper(*args, **kwargs):
+        # def wrapper(*args, **kwargs):
+        def wrapper(**kwargs):  # **kwargs, keyword argument, dictionary 로 parameter 를 받음. named parameter / positional parameter 를 받을 사용가능?
             # def wrapper(*args):# *args, arguments, tuple 로 parameter 를 받음.
             # def wrapper():
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-            test_cycle_max_limit = 5
-            milliseconds_performance_test_result = []
+            DebuggingUtil.print_via_colorama("___________________________________________________________ TEST START", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+            if TestUtil.is_first_test_lap:
+                TestUtil.is_first_test_lap = False
+            seconds_performance_test_results = TestUtil.test_results
             import time
             time_s = time.time()
             # function(*args, **kwargs)
@@ -132,13 +156,36 @@ class TestUtil:
             # function()
             time_e = time.time()
             mesured_seconds = time_e - time_s
+            DebuggingUtil.print_via_colorama(rf'mesured_seconds = {round(mesured_seconds, 2)}', colorama_color=ColoramaColorUtil.BLUE)
+            DebuggingUtil.print_via_colorama("___________________________________________________________ TEST END", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+
+        return wrapper
+
+    @staticmethod
+    def measure_milliseconds_performance(function):
+        """시간성능 측정 코드"""
+
+        def wrapper():
+            # def wrapper(*args):# *args, arguments, tuple 로 parameter 를 받음.
+            # def wrapper(*args, **kwargs):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+            test_cycle_max_limit = 5
+            milliseconds_performance_test_result = []
+            import time
+            time_s = time.time()
+            function()
+            # function(*args)
+            # function(**kwargs)
+            # function(*args, **kwargs)
+            time_e = time.time()
+            mesured_seconds = time_e - time_s
             DebuggingUtil.commentize(rf"시간성능측정 결과")
             milliseconds_performance_test_result.append(round(mesured_seconds * 1000, 5))
             print(rf'milliseconds_performance_test_result : {milliseconds_performance_test_result}')
             print(rf'type(milliseconds_performance_test_result) : {type(milliseconds_performance_test_result)}')
             print(rf'len(milliseconds_performance_test_result) : {len(milliseconds_performance_test_result)}')
             if len(milliseconds_performance_test_result) == test_cycle_max_limit:
-                TextToSpeechUtil.speak_ments("시간성능측정이 완료 되었습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ments("시간성능측정이 성공 되었습니다", sleep_after_play=0.65)
                 TestUtil.pause()
 
         return wrapper
@@ -148,18 +195,17 @@ class DebuggingUtil:
     # @afterpause # gui 가 뜨면 pause() 수행되는 것과 동일한 효과가 나타난다.
     @staticmethod
     def trouble_shoot(trouble_id: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        ment = f"TROUBLE SHOOT REPORT:\n\n{traceback.format_exc()}\n\ntrouble_id : {trouble_id}"
-        DebuggingUtil.debug_as_cli(ment)
-        BusinessLogicUtil.debug_as_gui(ment, input_text_default=trouble_id)
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        # if e != None:
-        #     Park4139.debug_as_cli(str(e))
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        ment = f"TROUBLE SHOOT REPORT:\n{traceback.format_exc()}\ntrouble_id : {trouble_id}"
+        print(ment)
+        BusinessLogicUtil.debug(ment, input_text_default=trouble_id, auto_click_positive_btn_after_seconds=600)
         return trouble_id
 
     @staticmethod
     def commentize(ment):
-        print(f'{StateManagementUtil.line_length_promised} {ment.replace("__", "")}')
+        # print(f'{StateManagementUtil.LINE_LENGTH_PROMISED} {ment}')
+        # DebuggingUtil.print_via_colorama(f'{StateManagementUtil.LINE_LENGTH_PROMISED} {ment}', colorama_color=ColoramaColorUtil.LIGHTGREEN_EX)
+        DebuggingUtil.print_via_colorama(f'{StateManagementUtil.LINE_LENGTH_PROMISED} {ment}', colorama_color=ColoramaColorUtil.LIGHTBLACK_EX)
 
         # 아래 코드를 주석 해제하면 귀찮을 정도로 너무 말이 많을 수 있습니다.
         # self.speak(title)
@@ -167,7 +213,7 @@ class DebuggingUtil:
     @staticmethod
     def debug_as_cli(context: str):
         # CODE FOR DEVELOPMENT
-        # DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        # DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # Park4139.debug_as_cli(inspect.currentframe().f_code)
         # Park4139.debug_as_cli(f'{repr(context)} : {context}') # 이거 의도한 대로 안됨...
 
@@ -177,42 +223,107 @@ class DebuggingUtil:
         # CODE FOR PRODUCTION
         pass
 
-    @staticmethod
+    # @staticmethod
     # 시작로깅(json 형태로 넣을 수 있도록 코드 업데이트 할것)
-    def log_s(log_title="시작로깅"):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        starting_directory = os.getcwd()
-        FileSystemUtil.get_cmd_output('chcp 65001 >nul')  # 한글 엔코딩 설정
-        BusinessLogicUtil.time_s = time.time()  # 서버라이프사이클 계산용 변수 설정
-        server_time = BusinessLogicUtil.get_time_as_(f'%Y-%m-%d %H:%M:%S')
-        cmd = rf'echo "server_time  : {server_time} ,  starting_directory  : {starting_directory},  __file__  : {__file__},  log_title : {log_title} " >> "{BusinessLogicUtil.LOG_DIRECTORY}\success.log"'
-        FileSystemUtil.get_cmd_output(cmd)
+    # def log_s(log_title="시작로깅"):
+    #     DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+    #     starting_directory = os.getcwd()
+    #     FileSystemUtil.get_cmd_output('chcp 65001 >nul')  # 한글 엔코딩 설정
+    #     BusinessLogicUtil.time_s = time.time()  # 서버라이프사이클 계산용 변수 설정
+    #     server_time = BusinessLogicUtil.get_time_as_(f'%Y-%m-%d %H:%M:%S')
+    #     cmd = rf'echo "server_time  : {server_time} ,  starting_directory  : {starting_directory},  __file__  : {__file__},  log_title : {log_title} " >> "{BusinessLogicUtil.LOG_DIRECTORY}\success.log"'
+    #     FileSystemUtil.get_cmd_output(cmd)
 
     @staticmethod
     def log_mid(log_title="중간로깅"):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         starting_directory = os.getcwd()
         server_time = BusinessLogicUtil.get_time_as_(f'%Y-%m-%d %H:%M:%S')
         cmd = rf'echo "server_time  : {server_time} ,  starting_directory  : {starting_directory},  __file__  : {__file__},  log_title : {log_title} " >> "{BusinessLogicUtil.LOG_DIRECTORY}\success.log"'
         FileSystemUtil.get_cmd_output(cmd)
 
+    # @staticmethod
+    # def log_e(log_title="종료로깅"):
+    #     DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+    #     starting_directory = os.getcwd()
+    #     BusinessLogicUtil.time_e = time.time()  # 서버라이프사이클 계산용 변수 설정
+    #     server_time = BusinessLogicUtil.get_time_as_(f'%Y-%m-%d %H:%M:%S')
+    #     server_life_cycle = BusinessLogicUtil.time_e - BusinessLogicUtil.time_s
+    #     lines = subprocess.check_output(
+    #         rf'echo "server_time  : {server_time} ,  starting_directory  : {starting_directory},  __file__  : {__file__},  log_title : {log_title},  server_life_cycle : {server_life_cycle}  " >> "{BusinessLogicUtil.LOG_DIRECTORY}\success.log"',
+    #         shell=True).decode('utf-8').split('\n')
+    # os.system('cls')
     @staticmethod
-    def log_e(log_title="종료로깅"):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        starting_directory = os.getcwd()
-        BusinessLogicUtil.time_e = time.time()  # 서버라이프사이클 계산용 변수 설정
-        server_time = BusinessLogicUtil.get_time_as_(f'%Y-%m-%d %H:%M:%S')
-        server_life_cycle = BusinessLogicUtil.time_e - BusinessLogicUtil.time_s
-        lines = subprocess.check_output(
-            rf'echo "server_time  : {server_time} ,  starting_directory  : {starting_directory},  __file__  : {__file__},  log_title : {log_title},  server_life_cycle : {server_life_cycle}  " >> "{BusinessLogicUtil.LOG_DIRECTORY}\success.log"',
-            shell=True).decode('utf-8').split(
-            '\n')
-        # os.system('cls')
+    # def print_via_colorama(ment, color:Union[ColoramaColorUtil.GREEN, ColoramaColorUtil.RED]):
+    def print_via_colorama(ment, colorama_color: Enum):
+        # colorama_color 값에 해당하는 Fore 값으로 매핑, 리펙토링 전
+        # if colorama_color == ColoramaColorUtil.RED:
+        #     colorama_color = Fore.RED
+        # elif colorama_color == ColoramaColorUtil.BLACK:
+        #     colorama_color = Fore.BLACK
+        # elif colorama_color == ColoramaColorUtil.GREEN:
+        #     colorama_color = Fore.GREEN
+        # elif colorama_color == ColoramaColorUtil.YELLOW:
+        #     colorama_color = Fore.YELLOW
+        # elif colorama_color == ColoramaColorUtil.BLUE:
+        #     colorama_color = Fore.BLUE
+        # elif colorama_color == ColoramaColorUtil.MAGENTA:
+        #     colorama_color = Fore.MAGENTA
+        # elif colorama_color == ColoramaColorUtil.CYAN:
+        #     colorama_color = Fore.CYAN
+        # elif colorama_color == ColoramaColorUtil.WHITE:
+        #     colorama_color = Fore.WHITE
+        # elif colorama_color == ColoramaColorUtil.RESET:
+        #     colorama_color = Fore.RESET
+        # elif colorama_color == ColoramaColorUtil.LIGHTBLACK_EX:
+        #     colorama_color = Fore.LIGHTBLACK_EX
+        # elif colorama_color == ColoramaColorUtil.LIGHTRED_EX:
+        #     colorama_color = Fore.LIGHTRED_EX
+        # elif colorama_color == ColoramaColorUtil.LIGHTGREEN_EX:
+        #     colorama_color = Fore.LIGHTGREEN_EX
+        # elif colorama_color == ColoramaColorUtil.LIGHTYELLOW_EX:
+        #     colorama_color = Fore.LIGHTYELLOW_EX
+        # elif colorama_color == ColoramaColorUtil.LIGHTBLUE_EX:
+        #     colorama_color = Fore.LIGHTBLUE_EX
+        # elif colorama_color == ColoramaColorUtil.LIGHTMAGENTA_EX:
+        #     colorama_color = Fore.LIGHTMAGENTA_EX
+        # elif colorama_color == ColoramaColorUtil.LIGHTCYAN_EX:
+        #     colorama_color = Fore.LIGHTCYAN_EX
+        # elif colorama_color == ColoramaColorUtil.LIGHTWHITE_EX:
+        #     colorama_color = Fore.LIGHTWHITE_EX
+
+        # colorama_color 값에 해당하는 Fore 값으로 매핑, 리펙토리 후
+        colorama_to_fore = {
+            ColoramaColorUtil.BLACK: Fore.BLACK,
+            ColoramaColorUtil.RED: Fore.RED,
+            ColoramaColorUtil.GREEN: Fore.GREEN,
+            ColoramaColorUtil.YELLOW: Fore.YELLOW,
+            ColoramaColorUtil.BLUE: Fore.BLUE,
+            ColoramaColorUtil.MAGENTA: Fore.MAGENTA,
+            ColoramaColorUtil.CYAN: Fore.CYAN,
+            ColoramaColorUtil.WHITE: Fore.WHITE,
+            ColoramaColorUtil.RESET: Fore.RESET,
+            ColoramaColorUtil.LIGHTBLACK_EX: Fore.LIGHTBLACK_EX,
+            ColoramaColorUtil.LIGHTRED_EX: Fore.LIGHTRED_EX,
+            ColoramaColorUtil.LIGHTGREEN_EX: Fore.LIGHTGREEN_EX,
+            ColoramaColorUtil.LIGHTYELLOW_EX: Fore.LIGHTYELLOW_EX,
+            ColoramaColorUtil.LIGHTBLUE_EX: Fore.LIGHTBLUE_EX,
+            ColoramaColorUtil.LIGHTMAGENTA_EX: Fore.LIGHTMAGENTA_EX,
+            ColoramaColorUtil.LIGHTCYAN_EX: Fore.LIGHTCYAN_EX,
+            ColoramaColorUtil.LIGHTWHITE_EX: Fore.LIGHTWHITE_EX
+        }
+        colorama_color = colorama_to_fore.get(colorama_color, Fore.RESET)
+
+        print(f"{colorama_color}{ment}")
+        # init(autoreset=False)
 
 
 class StateManagementUtil:
-    GIT_HUB_ADDRESS = "https://github.com/PARK4139"
     PROJECT_DIRECTORY = str(Path(__file__).parent.parent.absolute())  # __init__ 해당파일로 되어 있기 때문에. 위치가 복잡하게 되어 버렸다. 이를 __file__ 로 기준을 잡아서 경로를 수정하였다. 빌드를 하면서 알게되었는데 상대경로의 사용은 필연적인데, 상대경로로 경로를 설정할때 기준이 되는 절대경로 하나는 반드시 필요한 것 같다.
+    GIT_HUB_ADDRESS = "https://github.com/PARK4139"
+    EMPTY_DIRECTORYIES = rf"E:\[noe] [8TB] [local]\`\$empty_directories"
+    # SPECIAL_DIRECTORY = rf"E:\[noe] [8TB] [local]"
+    USELESS_DIRECTORIES = rf"E:\[noe] [8TB] [local]\`\$useless_directories"
     USERPROFILE = os.environ.get('USERPROFILE')
     SERVICE_DIRECTORY = os.path.dirname(PROJECT_DIRECTORY)
     PARK4139_ARCHIVE_TOML = rf'{PROJECT_DIRECTORY}\park4139_archive.toml'
@@ -234,7 +345,7 @@ class StateManagementUtil:
     # db_template = {
     # 'park4139_archive_log_line_cnt': 0,
     # }
-    line_length_promised = '-' * 59  # 제목작성 시 앞부분에 적용되는 기준인데 pep8 최대권장길이(79)를 기준으로 20 자 내외로 제목작성을 작성
+    LINE_LENGTH_PROMISED = '_' * 59  # 제목작성 시 앞부분에 적용되는 기준인데 pep8 최대권장길이(79)를 기준으로 20 자 내외로 제목작성을 작성
     time_s = 0.0
     time_e = 0.0
     biggest_targets = []  # 300 MB 이상 빽업대상
@@ -439,7 +550,7 @@ class DataStructureUtil:
 
     @staticmethod
     def is_two_lists_equal(list1, list2):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # 두 리스트의 요소들이 동일한지만 확인 # 하나라도 발견되면 탐색 중지 # 두 리스트의 동일 인덱스에서 진행하다 달라도 다른거다
         if len(list1) != len(list2):
             print(f"두 리스트의 줄 수가 다릅니다 {len(list1)}, {len(list2)}")
@@ -492,9 +603,23 @@ class DataStructureUtil:
                 common_elements.append(element)
         return common_elements
 
+    @staticmethod
+    def add_suffix_to_string_list(string_list, suffix):
+        result = []
+        for string in string_list:
+            result.append(string + suffix)
+        return result
+
+    @staticmethod
+    def add_prefix_to_string_list(string_list, prefix):
+        result = []
+        for string in string_list:
+            result.append(prefix + string)
+        return result
+
 
 class PerformanceOptimizingUtil:
-    @TestUtil.measure_seconds_performance
+    @TestUtil.measure_seconds_performance_nth
     @staticmethod
     def generate_mp3_file_for_time_performance():  # time performance : 9028 초 /60 /60  =  2.5 시간
         """
@@ -629,27 +754,27 @@ class FileSystemUtil:
 
     @staticmethod
     def get_target_as_pnx(target_abspath):
-        """디렉토리/파일 대상 테스트 완료"""
+        """디렉토리/파일 대상 테스트 성공"""
         return target_abspath
 
     @staticmethod
     def get_target_as_pn(target_abspath):
-        """디렉토리/파일 대상 테스트 완료"""
+        """디렉토리/파일 대상 테스트 성공"""
         return rf"{os.path.dirname(target_abspath)}\{os.path.splitext(os.path.basename(target_abspath))[0]}"
 
     @staticmethod
     def get_target_as_nx(target_abspath):
-        """디렉토리/파일 대상 테스트 완료"""
+        """디렉토리/파일 대상 테스트 성공"""
         return rf"{os.path.splitext(os.path.basename(target_abspath))[0]}{os.path.splitext(os.path.basename(target_abspath))[1]}"
 
     @staticmethod
     def get_target_as_x(target_abspath):
-        """디렉토리/파일 대상 테스트 완료"""
+        """디렉토리/파일 대상 테스트 성공"""
         return rf"{os.path.splitext(os.path.basename(target_abspath))[1]}"
 
     @staticmethod
     def get_target_as_n(target_abspath):
-        """디렉토리/파일 대상 테스트 완료"""
+        """디렉토리/파일 대상 테스트 성공"""
         return rf"{os.path.splitext(os.path.basename(target_abspath))[0]}"
 
     @staticmethod
@@ -658,7 +783,7 @@ class FileSystemUtil:
 
     @staticmethod
     def convert_mp4_to_webm(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         '''테스트 필요'''
         DebuggingUtil.debug_as_cli(f'from : {target_abspath}')
         file_edited = f'{os.path.splitext(os.path.basename(target_abspath))[0]}.webm'
@@ -673,7 +798,7 @@ class FileSystemUtil:
 
     @staticmethod
     def convert_wav_to_flac(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         '''테스트 필요'''
 
         # :: 한글 인코딩 setting
@@ -696,7 +821,7 @@ class FileSystemUtil:
 
     @staticmethod
     def convert_mp4_to_wav(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         '''테스트 필요'''
         DebuggingUtil.debug_as_cli(f'from : {target_abspath}')
         file_edited = f'{os.path.splitext(os.path.basename(target_abspath))[0]}.wav'
@@ -719,7 +844,7 @@ class FileSystemUtil:
 
     @staticmethod
     def convert_mp4_to_flac(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         '''테스트 필요'''
         # :: 한글 인코딩 setting
         os.system("chcp 65001 >nul")
@@ -744,7 +869,7 @@ class FileSystemUtil:
 
     @staticmethod
     def convert_mp3_to_flac(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         '''테스트 필요'''
         os.system("chcp 65001 >nul")
 
@@ -769,7 +894,7 @@ class FileSystemUtil:
 
     @staticmethod
     def convert_as_zip_with_timestamp(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             starting_directory = os.getcwd()
 
@@ -804,52 +929,52 @@ class FileSystemUtil:
 
     @staticmethod
     def convert_img_to_img_blurred(img_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         img_converted = Image.open(img_abspath).filter(ImageFilter.GaussianBlur(10))  # 가우시안 블러 적용 # 숫자크면 많이흐려짐
         img_converted.show()
 
     @staticmethod
     def convert_img_to_img_grey(img_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         img_converted = Image.open(img_abspath).convert("L")
         img_converted.show()
 
     @staticmethod
     def convert_img_to_img_resized(img_abspath, width_px, height_px):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         img_converted = Image.open(img_abspath).resize((width_px, height_px))
         img_converted.show()
 
     @staticmethod
     def convert_img_to_img_cropped(img_abspath, abs_x: int, abs_y: int, width_px: int, height_px: int):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         img_converted = Image.open(img_abspath).crop((abs_x, abs_y, width_px, height_px))
         img_converted.show()
 
     @staticmethod
     def convert_img_to_img_rotated(img_abspath, degree: int):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         img_converted = Image.open(img_abspath).rotate(degree)
         img_converted.show()
         img_converted.save(f"{os.path.dirname(img_abspath)}   {os.path.splitext(img_abspath)[0]}_$flipped_h{os.path.splitext(img_abspath)[1]}")
 
     @staticmethod
     def convert_img_to_img_flipped_horizontally(img_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         img_converted = Image.open(img_abspath).transpose(Image.FLIP_LEFT_RIGHT)
         img_converted.show()
         img_converted.save(f"{os.path.dirname(img_abspath)}   {os.path.splitext(img_abspath)[0]}_$flipped_h{os.path.splitext(img_abspath)[1]}")
 
     @staticmethod
     def convert_img_to_img_flipped_vertical(img_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         img_converted = Image.open(img_abspath).transpose(Image.FLIP_TOP_BOTTOM)
         img_converted.show()
         img_converted.save(f"{os.path.dirname(img_abspath)}   {os.path.splitext(img_abspath)[0]}_$flipped_v{os.path.splitext(img_abspath)[1]}")
 
     @staticmethod
     def convert_img_to_img_watermarked(img_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         from PIL import Image, ImageDraw, ImageFont
 
         # step2.워터마크 삽입할 이미지 불러오기
@@ -939,12 +1064,12 @@ class FileSystemUtil:
     @staticmethod
     def sync_directory_remote(target_abspath):
         """ windows + wsl + rsync """
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pass
 
     @staticmethod
     def sync_directory_local(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             import os
             import shutil
@@ -980,9 +1105,9 @@ class FileSystemUtil:
                             print(sample)
                         print(rf'len(lines) : {len(lines)}')
                         FileSystemUtil.remove_target_parmanently(StateManagementUtil.DIRSYNC_LOG)
-                        lines = [x for x in lines if x.strip("\n")]  # 리스트 요소 "" 제거,  ["", A] ->  [A]       [""] to []
-                        # TextToSpeechUtil.speak_ments(f"타겟의 동기화가 완료 되었습니다", sleep_after_play=0.65, thread_join_mode=True)
-                        UiUtil.pop_up_as_complete(title="작업완료보고", ment=f"타겟의 동기화가 완료 되었습니다\n{future_abspath}", auto_click_positive_btn_after_seconds=5)
+                        lines = [x for x in lines if x.strip("\n")]  # 리스트 요소 "" 제거,  from ["", A] to [A]       [""] to []
+                        # TextToSpeechUtil.speak_ments(f"타겟의 동기화가 성공 되었습니다", sleep_after_play=0.65, thread_join_mode=True)
+                        UiUtil.pop_up_as_complete(title="작업성공보고", ment=f"타겟의 동기화가 성공 되었습니다\n{future_abspath}", auto_click_positive_btn_after_seconds=60)
         except:
             DebuggingUtil.trouble_shoot("%%%FOO%%%")
         # from dirsync import sync
@@ -1011,7 +1136,7 @@ class FileSystemUtil:
 
     @staticmethod
     def get_lines_of_file(file_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             if os.path.exists(file_abspath):
                 # with open(file_abspath, 'r', encoding="utf-8") as f:
@@ -1030,7 +1155,7 @@ class FileSystemUtil:
         쓰레기통으로 target을 옮기는 move_to_trash_bin_target() 함수를 만들어 두었으니 최대한 활용하자.
         유사 기능으로는 shutil.rmtree(path) 가 있다. rmdir /s 명령어랑 같은 것 결과가 기대된다.
         """
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             if BusinessLogicUtil.validate_and_return(value=target_abspath) is not False:
                 if os.path.isdir(target_abspath):
@@ -1168,15 +1293,21 @@ class FileSystemUtil:
 
     @staticmethod
     def make_leaf_directory(leaf_directory_abspath):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.print_via_colorama(ment=rf"leaf_directory_abspath : {leaf_directory_abspath}", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
         if not os.path.exists(leaf_directory_abspath):
             os.makedirs(leaf_directory_abspath)
 
     @staticmethod
-    def is_empty_directory(target_abspath):
-        if len(os.listdir(target_abspath)) == 0:
-            return True
-        else:
-            return False
+    def is_empty_directory(directory_abspath):
+        try:
+            if len(os.listdir(directory_abspath)) == 0:
+                return True
+            else:
+                return False
+        except FileNotFoundError:
+            DebuggingUtil.print_via_colorama(ment="FileNotFoundError", colorama_color=ColoramaColorUtil.RED)
+            pass
 
     @staticmethod
     def rename_target(current_target_abspath, future_target_abspath):
@@ -1185,44 +1316,56 @@ class FileSystemUtil:
         # os.rename 사용 중에 old_path 가 directory  인 경우는 재귀적으로 변경이 안된다고 wrtn 은 말해주었다.
         os.renames(current_target_abspath, future_target_abspath)
 
-    @staticmethod
-    def merge_two_directories_without_overwrite(directory_a, directory_b):
-        """디렉토리 머지용 기능"""
-        # 빈디렉토리 머지 용도로도 많이 쓸것 같다
-        while True:
-            if directory_a == directory_b:
-                TextToSpeechUtil.speak_ments("동일한 디렉토리는 머지하실 수 없습니다", sleep_after_play=0.65)
-                break
-            dst = rf"{os.path.dirname(directory_a)}\{os.path.basename(directory_a)}_$merged_{BusinessLogicUtil.get_time_as_('%Y_%m_%d_%H_%M_%S')}"
-            FileSystemUtil.make_leaf_directory(dst)
-            print(rf'directory_a : {directory_a}')
-            print(rf'directory_b : {directory_b}')
-            if os.path.isdir(directory_b):
-                for target in os.listdir(directory_a):  # os.listdir 은 without walking 으로 동작한다
-                    print(rf'target : {directory_a}\{target}')
-                    FileSystemUtil.move_target_without_overwrite(target_abspath=rf'{directory_a}\{target}', dst=dst)
-                    # Park4139.move_target_to_trash_bin(directory_a)
-                for target in os.listdir(directory_b):  # os.listdir 은 without walking 으로 동작한다
-                    print(rf'target : {directory_b}\{target}')
-                    FileSystemUtil.move_target_without_overwrite(target_abspath=rf'{directory_b}\{target}', dst=dst)
-            else:
-                TextToSpeechUtil.speak_ments("디렉토리만 머지하실 수 있습니다", sleep_after_play=0.65)
-                break
-            break
+    # @staticmethod
+    # def merge_two_directories_without_overwrite(directory_a, directory_b):
+    #     """디렉토리 머지용 기능"""
+    #     # 빈디렉토리 머지 용도로도 많이 쓸것 같다
+    #     while True:
+    #         if directory_a == directory_b:
+    #             TextToSpeechUtil.speak_ments("동일한 디렉토리는 머지하실 수 없습니다", sleep_after_play=0.65)
+    #             break
+    #         dst_p = rf"{os.path.dirname(directory_a)}"
+    #         dst_n = rf"[{os.path.basename(directory_a)}] [{os.path.basename(directory_b)}]"
+    #         dst_n = dst_n.replace("[[", "[")
+    #         dst_n = dst_n.replace("]]", "]")
+    #         # dst_n = dst_n.split("] [")
+    #         # dst_n = re.sub(pattern=r'\$\d{19}', repl='', string=dst_n, count=1) # count 파라미터를 count=1 로 설정하여, 패턴이 여러번 나타나도 첫번째 카운트만 제거
+    #         dst_n = re.sub(pattern=r'\$\d{20}', repl='', string=dst_n)
+    #         dst_n = rf"{dst_n} ${BusinessLogicUtil.get_time_as_('%Y%m%d%H%M%S%f')}"
+    #         dst = rf"{dst_p}\{dst_n}"
+    #         FileSystemUtil.make_leaf_directory(dst)
+    #         print(rf'dst : {dst}')
+    #         if os.path.isdir(directory_b):
+    #             for target in os.listdir(directory_a):  # os.listdir 은 without walking 으로 동작한다
+    #                 print(rf'target : {directory_a}\{target}')
+    #                 FileSystemUtil.move_target_without_overwrite(target_abspath=rf'{directory_a}\{target}', dst=dst)
+    #                 # Park4139.move_target_to_trash_bin(directory_a)
+    #             for target in os.listdir(directory_b):  # os.listdir 은 without walking 으로 동작한다
+    #                 print(rf'target : {directory_b}\{target}')
+    #                 FileSystemUtil.move_target_without_overwrite(target_abspath=rf'{directory_b}\{target}', dst=dst)
+    #         else:
+    #             TextToSpeechUtil.speak_ments("디렉토리만 머지하실 수 있습니다", sleep_after_play=0.65)
+    #             break
+    #         break
+    # nagasarete airantou
 
     @staticmethod
     def merge_directories(directoryies: str):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+
+
         is_breaking = False
         # cmd /c dir /b /s /a:d | clip
         directoryies = directoryies.strip()
         directoryies = directoryies.strip("\t")
         directoryies_: [str] = directoryies.split("\n")
-        directoryies_ = [x for x in directoryies_ if x.strip()]  # 리스트 요소 "" 제거,  ["", A] ->  [A]    from [""] to []
+        directoryies_ = [x for x in directoryies_ if x.strip()]  # 리스트 요소 "" 제거,  from ["", A] to [A]    from [""] to []
         directoryies_ = [x.strip() for x in directoryies_]  # 리스트 각 요소 strip(),  ["   A", "B   "] from ["A", "B"]
         directoryies_ = [x.strip("\"") for x in directoryies_]  # 리스트 각 요소 strip("\""),  [""A""] from ["A"]
         directoryies_ = [x.strip("\'") for x in directoryies_]  # 리스트 각 요소 strip("\'),  ["'A'""] from ["A"]
-        print(directoryies_)
-        print(len(directoryies_))
+        print(rf'directoryies_ : {directoryies_}')
+        print(rf'type(directoryies_) : {type(directoryies_)}')
+        print(rf'len(directoryies_) : {len(directoryies_)}')
         if 0 == len(directoryies_):
             TextToSpeechUtil.speak_ments("타겟경로가 아무것도 입력되지 않았습니다", sleep_after_play=0.65)
             return
@@ -1239,32 +1382,96 @@ class FileSystemUtil:
                         if directory == drive_path:
                             TextToSpeechUtil.speak_ments("입력된 타겟경로는 너무 광범위하여, 진행할 수 없도록 설정되어 있습니다", sleep_after_play=0.65)
                             break
-            for index, directory in enumerate(directoryies_):
-                if directory == "":
-                    TextToSpeechUtil.speak_ments("하나 이상의 타겟경로가 공백으로 입력되었습니다", sleep_after_play=0.65)
-                    return
-                if not os.path.exists(directory):
-                    TextToSpeechUtil.speak_ments("하나 이상의 타겟경로가 존재하지 않습니다", sleep_after_play=0.65)
-                    return
 
-            dst = rf"D:\$cache_prisonized\$empty_directories"
+            # FileSystemUtil.make_leaf_directory(StateManagementUtil.EMPTY_DIRECTORYIES)
+
+            # indices_to_remove = []  # 제거할 인덱스를 기록할 리스트
+            # for index, directory in enumerate(directoryies_):
+            #     if os.path.isdir(directory):
+            #         if FileSystemUtil.is_empty_directory(directory):
+            #             FileSystemUtil.move_target_without_overwrite(target_abspath=directory, dst=StateManagementUtil.EMPTY_DIRECTORYIES)
+            #             indices_to_remove.append(index)
+            # for index in indices_to_remove:
+            #     directoryies_.pop(index)
+
+            # for index, directory in enumerate(directoryies_):
+            #     if directory == "":
+            #         TextToSpeechUtil.speak_ments("하나 이상의 타겟경로가 공백으로 입력되었습니다", sleep_after_play=0.65)
+            #         return
+            #     if not os.path.exists(directory):
+            #         TextToSpeechUtil.speak_ments("하나 이상의 타겟경로가 존재하지 않습니다", sleep_after_play=0.65)
+            #         return
+
+            DebuggingUtil.commentize("빈 트리 리프디렉토리별로 해체한 뒤 제거")
+            for index, directory in enumerate(directoryies_):
+                if FileSystemUtil.is_empty_tree(directory):
+                    for root, directories, files in os.walk(directory, topdown=True):
+                        for directory in directories:
+                            directory = os.path.abspath(os.path.join(root, directory))
+                            if FileSystemUtil.is_leaf_directory(directory):
+                                FileSystemUtil.move_target_without_overwrite(target_abspath=directory, dst=StateManagementUtil.EMPTY_DIRECTORYIES)
+                                DebuggingUtil.print_via_colorama(rf'directory : {directory}', colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+                                if directory in directoryies_:
+                                    directoryies_.remove(directory)
+
+            DebuggingUtil.commentize("빈 트리 제거된 directoryies_")
+            DebuggingUtil.print_via_colorama(rf'directoryies_      : {directoryies_}', colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+            DebuggingUtil.print_via_colorama(rf'len(directoryies_) : {len(directoryies_)}', colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+
+            dst = rf"{os.path.dirname(directoryies_[0])}\{os.path.basename(directoryies_[0]).replace("_$merged", "")}_$merged"
             FileSystemUtil.make_leaf_directory(dst)
+
+            if len(directoryies_) == len(list(set(directoryies_))):
+                for index, directory in enumerate(directoryies_):
+                    # for target in os.listdir(directoryies_[index]):  # os.listdir 은 without walking 으로 동작한다
+                    #     DebuggingUtil.print_via_colorama(rf'{directoryies_[index]}\{target}', colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+                    #     FileSystemUtil.move_target_without_overwrite(target_abspath=rf'{directoryies_[index]}\{target}', dst=dst)
+
+                    for root, directories, files in os.walk(directoryies_[index], topdown=True):
+                        for target in files:
+                            FileSystemUtil.move_target_without_overwrite(target_abspath=os.path.join(root, target), dst=dst)
+
+                    # if os.path.isdir(directory):
+                    #     while True:
+                    #         try:
+                    #             if directoryies_[index+1]:
+                    #                 pass
+                    #         except:
+                    #             DebuggingUtil.print_via_colorama(rf"머지시도 중 인덱스가 넘어간것 같습니다. 이를 예외처리하고 넘어갑니다", colorama_color=ColoramaColorUtil.RED)
+                    #             break
+                    #
+                    #
+                    #         else:
+                    #             TextToSpeechUtil.speak_ments("디렉토리만 머지하실 수 있습니다", sleep_after_play=0.65)
+                    #             break
+                    #         break
+            else:
+                TextToSpeechUtil.speak_ments("동일한 디렉토리는 머지하실 수 없습니다", sleep_after_play=0.65)
+                return
+
+            # 빈 디렉토리 트리 리프디렉토리별로 해체한 뒤 제거
             for index, directory in enumerate(directoryies_):
-                if os.path.isdir(directory):
-                    if index + 1 < len(directoryies_):
-                        FileSystemUtil.merge_two_directories_without_overwrite(directoryies_[0], directoryies_[index + 1])
+                if FileSystemUtil.is_empty_tree(directory):
+                    for root, directories, files in os.walk(directory, topdown=True):
+                        for directory in directories:
+                            directory = os.path.abspath(os.path.join(root, directory))
+                            if FileSystemUtil.is_leaf_directory(directory):
+                                FileSystemUtil.move_target_without_overwrite(target_abspath=directory, dst=StateManagementUtil.EMPTY_DIRECTORYIES)
+                                DebuggingUtil.print_via_colorama(rf'directory : {directory}', colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+                                if directory in directoryies_:
+                                    directoryies_.remove(directory)
+
+            # 빈 디렉토리 제거
             for index, directory in enumerate(directoryies_):
-                if os.path.isdir(directory):
-                    if FileSystemUtil.is_empty_directory(directory):
-                        print(f"empty directory : {directory}")
-                        # if not "_$빈폴더" in directory:
-                        # Park4139.rename_target(directory, rf"{directory}_$빈폴더")
-                        FileSystemUtil.move_target_without_overwrite(target_abspath=directory, dst=dst)
+                if FileSystemUtil.is_empty_directory(directory):
+                    FileSystemUtil.move_target_without_overwrite(target_abspath=directory, dst=StateManagementUtil.EMPTY_DIRECTORYIES)
+                    DebuggingUtil.print_via_colorama(rf'directory : {directory}', colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+                    directoryies_.remove(directory)
 
     @staticmethod
     # THIS IS BAD FUNCTION... I SHOULD CHECK TYPE, WHEN I MADE THIS
     def get_display_info():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # :: 디스플레이 정보 가져오기  # pyautogui.size?() 로 대체할것.
         global height, width
         from screeninfo import get_monitors
@@ -1282,18 +1489,18 @@ class FileSystemUtil:
 
     @staticmethod
     def reboot_this_computer():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         FileSystemUtil.get_cmd_output(rf'shutdown -r ')
 
     @staticmethod
     def shutdown_this_computer():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         FileSystemUtil.get_cmd_output(rf'%windir%\System32\Shutdown.exe -s ')
         # Park4139.get_cmd_output('Shutdown.exe -s ')
 
     @staticmethod
     def enter_power_saving_mode():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         cmd = rf'%windir%\System32\rundll32.exe powrprof.dll SetSuspendState'
         FileSystemUtil.get_cmd_output(cmd)
 
@@ -1320,31 +1527,33 @@ class FileSystemUtil:
         #                             output=True)
         #         # 데이터 읽기
         #         data = wav.readframes(1024)
-        #
+        # 
         #         # 재생
         #         while data:
         #             stream.write(data)
         #             data = wav.readframes(1024)
-        #
+        # 
         #         # 스트림 닫기
         #         stream.stop_stream()
         #         stream.close()
-        #
+        # 
         #         # PyAudio 객체 종료
         #         audio.terminate()
-        #
+        # 
         #     # WAV 파일 닫기
         #     # wav.close()
         # except:
         #     pass
 
-        source = pyglet.media.load(file_abspath)
-        source.play()
+        # 소리 시끄러워서 주석처리, 소리 필요 시 주석해제
+        # source = pyglet.media.load(file_abspath)
+        # source.play()
+        pass
 
     @staticmethod
     def get_cmd_output(cmd):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        DebuggingUtil.debug_as_cli(rf'{cmd}')
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        print(rf'{cmd}')
 
         # os.Popen 으로 print 가능하도록 할 수 있다는 것 같았는데 다른 방식으로 일단 되니까. 안되면 시도.
 
@@ -1370,8 +1579,9 @@ class FileSystemUtil:
             [print(sample) for sample in lines]
             print(rf'type(lines) : {type(lines)}')
             print(rf'len(lines) : {len(lines)}')
-            # print("subprocess.CalledProcessError 가 발생했습니다. os.system(cmd)로 재시도 합니다")
             print("subprocess.CalledProcessError 가 발생했습니다")
+            dialog = UiUtil.CustomQdialog(ment=f"에러코드[E%%%FOO%%%]\n\nsubprocess.CalledProcessError 가 발생했습니다", btns=["확인"], is_input_box=True)
+            dialog.exec()
             # os.system(cmd)
             return lines
         except Exception:
@@ -1381,7 +1591,7 @@ class FileSystemUtil:
 
     @staticmethod
     def explorer(target_abspath: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         target_abspath = str(target_abspath)
         target_abspath = target_abspath.replace('\"', '')
         target_abspath = rf'explorer "{target_abspath}"'
@@ -1398,7 +1608,7 @@ class FileSystemUtil:
     @staticmethod
     # 프로그램 PID 출력
     def get_current_program_pid():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pro = subprocess.check_output(
             rf'powershell (Get-WmiObject Win32_Process -Filter ProcessId=$PID).ParentProcessId', shell=True).decode(
             'utf-8')  # 실험해보니 subprocess.check_output(cmd,shell=True).decode('utf-8') 코드는 프로세스가 알아서 죽는 것 같다. 모르겠는데 " " 가 있어야 동작함
@@ -1413,7 +1623,7 @@ class FileSystemUtil:
 
     @staticmethod
     def get_target_bite(start_path='.'):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(start_path):
             for f in filenames:
@@ -1425,17 +1635,17 @@ class FileSystemUtil:
 
     @staticmethod
     def get_target_megabite(target_path):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         return FileSystemUtil.get_target_bite(target_path.strip()) / 1024 ** 2
 
     @staticmethod
     def get_target_gigabite(target_path):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         return FileSystemUtil.get_target_bite(target_path.strip()) / 1024 ** 3
 
     @staticmethod
     def move_target_to_trash_bin(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         import send2trash  # pip install send2trash
         # 타겟 휴지통으로 이동
         send2trash.send2trash(target_abspath)
@@ -1445,7 +1655,7 @@ class FileSystemUtil:
 
     @staticmethod
     def xcopy_with_overwrite(target_abspath, future_target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             result = FileSystemUtil.get_cmd_output(rf'echo a | xcopy "{target_abspath}" "{future_target_abspath}" /e /h /k /y')
             if result == subprocess.CalledProcessError:
@@ -1458,7 +1668,7 @@ class FileSystemUtil:
 
     @staticmethod
     def xcopy_without_overwrite(target_abspath, future_target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             if os.path.exists(future_target_abspath):
                 future_target_abspath = rf"{os.path.dirname(future_target_abspath)}\{os.path.basename(target_abspath)[0]}_{BusinessLogicUtil.get_time_as_('%Y_%m_%d_%H_%M_%S_%f')}{os.path.basename(target_abspath)[1]}"
@@ -1473,7 +1683,7 @@ class FileSystemUtil:
 
     @staticmethod
     def is_file_edited(target_abspath: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             key = DbTomlUtil.get_db_toml_key(target_abspath)
             db = DbTomlUtil.read_db_toml()
@@ -1496,81 +1706,46 @@ class FileSystemUtil:
 
     @staticmethod
     def move_target_without_overwrite(target_abspath, dst):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             # 시간 포멧팅 ms 까지 설정
             # get_time_as_() 로 %f 를 pettern 인자에 str 으로서 덧붙여 전달하면, 에러가 났는데
             # time 모듈이 %f 를 지원하지 않아서 나던 것.
             # %f를 지원하는 datetime 으로 교체했다
             target_dirname = os.path.dirname(target_abspath)
-            target_nx = FileSystemUtil.get_target_as_nx(target_abspath)
+            spaceless_time_pattern = rf"{BusinessLogicUtil.get_time_as_('%Y%m%d%H%M%S%f')}"
             target_n = FileSystemUtil.get_target_as_n(target_abspath)
             target_x = FileSystemUtil.get_target_as_x(target_abspath)
-            spaceless_time_pattern = rf"{BusinessLogicUtil.get_time_as_('%Y_%m_%d_%H_%M_%S_%f')}"
-            file_abspath_with_timestamp = None
-            future_abspath = rf"{dst}\{target_nx}"
-            current_abspath = target_abspath
-            # print(rf'current_abspath : {current_abspath}')
-            # print(rf'future_abspath : {future_abspath}')
-            if os.path.isfile(target_abspath):
-                if os.path.exists(future_abspath):
-                    file_abspath_with_timestamp = rf'{target_dirname}\{target_n}{spaceless_time_pattern}{target_x}'
-                    UiUtil.pop_up_as_complete(title="파일중복보고", ment=f"이동하려는 파일이 미래경로에 동일한 이름으로 존재합니다. 타임스탬프를 넣어 타겟이동을 시도 합니다\ncurrent_abspath : {current_abspath}\nfuture_abspath : {future_abspath}\nfile_abspath_with_timestamp : {file_abspath_with_timestamp}", auto_click_positive_btn_after_seconds=3)
-                    os.rename(target_abspath, file_abspath_with_timestamp)
-                else:
-                    file_abspath_with_timestamp = target_abspath
-                try:
-                    DebuggingUtil.commentize('타겟 이동 시도')
-                    print(rf'new_named : {file_abspath_with_timestamp}')
-                    print(rf'dst : {dst}')
-                    shutil.move(src=file_abspath_with_timestamp, dst=dst)
-                except:
+            # future_abspath = rf"{dst}\{target_n}{target_x}"
+            # future_abspath = copy.deepcopy(future_abspath)
+
+            target_n = re.sub(pattern=r'\$\d{22}', repl='', string=target_n)
+            target_abspath_with_timestamp = rf'{target_dirname}\{target_n}${spaceless_time_pattern}{random.randint(10, 99)}{target_x}'  # 시각적으로 _ 가 늘어나니까 좋을 수 도 있음.
+            if dst != os.path.dirname(target_abspath_with_timestamp):
+                DebuggingUtil.print_via_colorama(ment=rf"target_abspath_with_timestamp : {target_abspath_with_timestamp}", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+                DebuggingUtil.print_via_colorama(ment=rf"dst                           : {dst}", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+                if os.path.isfile(target_abspath):
                     try:
-                        DebuggingUtil.commentize('타겟 이동 실패, xcopy 로 이동 재시도 시작')
-                        if os.path.exists(future_abspath):
-                            file_abspath_with_timestamp = rf'{target_dirname}\{target_n}_{spaceless_time_pattern}{target_x}'
-                            dialog = UiUtil.CustomQdialog(ment=f"이미 중복된 파일명이 미래경로에 있습니다. 타임스탬프를 넣어 타겟이동을 시도 합니다\ntarget_abspath : {target_abspath}\nfile_abspath_with_timestamp : {file_abspath_with_timestamp} ", buttons=["확인"], auto_click_positive_btn_after_seconds=2)
-                            dialog.exec()
-                        try:
-                            # FileSystemUtil.xcopy_without_overwrite(target_abspath=target_abspath, future_target_abspath=file_abspath_with_timestamp)
-                            if os.path.exists(future_abspath):
-                                # # 파일 생성 시간과 현재 시간의 차이 계산 (단위: 초)
-                                # file_creation_time = os.path.getctime(future_target_abspath)
-                                # current_time = time.time()
-                                # time_difference = current_time - file_creation_time
-                                # # 차이가 15초 이내인지 확인
-                                # if time_difference <= 15:
-                                #     print("파일이 15초 이내에 생성 되었습니다")
-                                #     Park4139.move_target_to_trash_bin(target_abspath)
-                                # else:
-                                #     print("파일이 15초 이내에 생성된 것이 아닙니다")
-                                BusinessLogicUtil.should_i_do(ment=rf"이 파일들을 쓰레기통으로 이동할까요?{target_abspath}", function=partial(FileSystemUtil.move_target_to_trash_bin, target_abspath), auto_click_negative_btn_after_seconds=30)
-                        except:
-                            DebuggingUtil.commentize('파일 이동 실패,  xcopy 로도 이동 실패')
-                    except:
-                        DebuggingUtil.commentize('파일 이동 실패')
-            elif os.path.isdir(target_abspath):
-                if os.path.exists(future_abspath):
-                    file_abspath_with_timestamp = rf'{target_dirname}\{target_n}{spaceless_time_pattern}{target_x}'
-                    dialog = UiUtil.CustomQdialog(ment=f"이미 중복된 디렉토리 명이 미래경로에 있습니다. 타임스탬프를 넣어 타겟이동을 시도 합니다\ntarget_abspath : {target_abspath}\nfile_abspath_with_timestamp : {file_abspath_with_timestamp}", buttons=["확인"], auto_click_positive_btn_after_seconds=1)
-                    dialog.exec()
-                    DebuggingUtil.commentize('디렉토리 이름 변경 시도')
-                    print(rf'target_abspath : {target_abspath}')
-                    print(rf'new_named : {file_abspath_with_timestamp}')
-                    os.rename(target_abspath, file_abspath_with_timestamp)
-                else:
-                    file_abspath_with_timestamp = dst
-                DebuggingUtil.commentize('디렉토리 이동 시도')
-                try:
-                    shutil.move(target_abspath, file_abspath_with_timestamp)
-                except:
-                    DebuggingUtil.commentize('디렉토리 이동 실패2')
+                        os.rename(target_abspath, target_abspath_with_timestamp)
+                        shutil.move(src=target_abspath_with_timestamp, dst=dst)
+                        DebuggingUtil.print_via_colorama(ment=rf"파일이동성공", colorama_color=ColoramaColorUtil.LIGHTCYAN_EX)
+                    except Exception:
+                        # traceback.print_exc()
+                        DebuggingUtil.print_via_colorama(ment=rf"파일이동실패", colorama_color=ColoramaColorUtil.RED)
+                elif os.path.isdir(target_abspath):
+                    try:
+                        os.rename(target_abspath, target_abspath_with_timestamp)
+                        shutil.move(src=target_abspath_with_timestamp, dst=dst)
+                        DebuggingUtil.print_via_colorama(ment=rf"디렉토리이동성공", colorama_color=ColoramaColorUtil.LIGHTCYAN_EX)
+                    except Exception:
+                        # traceback.print_exc()
+                        DebuggingUtil.print_via_colorama(ment=rf"디렉토리이동실패", colorama_color=ColoramaColorUtil.RED)
         except:
             DebuggingUtil.trouble_shoot("202312030021")
 
     @staticmethod
     def move_without_overwrite_via_robocopy(target_abspath, dst):  # 명령어 자체가 안되는데 /mir 은 되는데 /move 안된다
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             DebuggingUtil.commentize('타겟이동 시도')
             # Park4139.get_cmd_output(rf'robocopy "{target_abspath}" "{dst}" /MOVE')
@@ -1579,6 +1754,54 @@ class FileSystemUtil:
 
         except Exception:
             DebuggingUtil.trouble_shoot("202312030021")
+
+    @staticmethod
+    def is_empty_tree(directory_path):
+        # 디렉토리의 내부를 돌면서 전부 파일이 하나도 없는지 확인하는 함수
+        # 디렉토리의 내부를 확인하여 모든 파일이 하나도 없는지를 판단합니다
+
+        # 디렉토리 내부의 파일과 하위 디렉토리 목록을 가져옵니다.
+        try:
+            contents = os.listdir(directory_path)
+        except OSError:
+            DebuggingUtil.print_via_colorama('OSError', colorama_color=ColoramaColorUtil.RED)
+        except FileNotFoundError:
+            DebuggingUtil.print_via_colorama('FileNotFoundError', colorama_color=ColoramaColorUtil.RED)
+
+        # 파일이 존재하는 경우, 디렉토리가 비어있지 않습니다.
+        try:
+            for content in contents:
+                content_path = os.path.join(directory_path, content)
+                if os.path.isfile(content_path):
+                    return False
+        except UnboundLocalError:
+            DebuggingUtil.print_via_colorama('UnboundLocalError', colorama_color=ColoramaColorUtil.RED)
+
+        # 디렉토리가 비어있습니다.
+        return True
+
+    @staticmethod
+    def is_leaf_directory(directory_path):
+        # leaf 디렉토리란, 하위 디렉토리를 가지지 않는 가장 마지막 단계의 디렉토리를 말합니다
+
+        # 디렉토리 내부의 파일과 하위 디렉토리 목록을 가져옵니다.
+        try:
+            contents = os.listdir(directory_path)
+        except FileNotFoundError:
+            DebuggingUtil.print_via_colorama('FileNotFoundError', colorama_color=ColoramaColorUtil.RED)
+
+        # 디렉토리 내에 파일이 존재하면 leaf 디렉토리가 아닙니다.
+        if len(contents) > 0:
+            return False
+
+        # 디렉토리 내에 하위 디렉토리가 존재하는지 확인합니다.
+        for content in contents:
+            content_path = os.path.join(directory_path, content)
+            if os.path.isdir(content_path):
+                return False
+
+        # 디렉토리가 leaf 디렉토리입니다.
+        return True
 
 
 class FontsUtil:
@@ -1641,17 +1864,17 @@ class UiUtil:
         """순환참조 를 회피하기 위해서 객체를 복제했다."""
 
         def update_btn_text_clicked(self, text_of_clicked_button):
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             self.btn_text_clicked = text_of_clicked_button
 
         def update_btn_text_clicked_and_close(self, text_of_clicked_button):
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             FileSystemUtil.play_wav_file(file_abspath=StateManagementUtil.POP_SOUND_WAV)
             self.btn_text_clicked = text_of_clicked_button
             self.close()
 
         def set_shortcut(self, key_plus_key: str, function):
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             self.shortcut = QShortcut(QKeySequence(key_plus_key), self)
             self.shortcut.activated.connect(function)
 
@@ -1668,7 +1891,8 @@ class UiUtil:
         #
         #     return super().eventFilter(obj, event)
 
-        def __init__(self, ment: str, buttons=None, parent=None, is_input_box=False, input_box_text_default="", title="", auto_click_negative_btn_after_seconds: int = None, auto_click_positive_btn_after_seconds: int = None):
+        def __init__(self, ment: str, btns=None, parent=None, is_input_box=False, input_box_text_default="", title="", auto_click_negative_btn_after_seconds: int = None, auto_click_positive_btn_after_seconds: int = None):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             super().__init__(parent)
             FileSystemUtil.play_wav_file(file_abspath=StateManagementUtil.POP_SOUND_WAV)
             self.input_text_default = input_box_text_default
@@ -1692,19 +1916,23 @@ class UiUtil:
 
             self.display_width = FileSystemUtil.get_display_info()['width'],
             self.display_height = FileSystemUtil.get_display_info()['height'],
-            self.pop_up_window_width_default = int(int(self.display_width[0]) * 0.4)
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-            self.pop_up_window_height_default = int(int(self.display_height[0]) * 0.4)
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            # self.pop_up_window_width_default = int(int(self.display_width[0]) * 0.4)
+            # self.pop_up_window_height_default = int(int(self.display_height[0]) * 0.4)
             # self.resize(self.pop_up_window_width_default, self.pop_up_window_height_default)
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
             if len(ment.split("\n")) < 20:
-                self.resize(500, 250)
+                # self.resize(500, 250)
+                self.resize(int(self.display_width[0] * 0.3), int(self.display_height[0] * 0.2))
             else:
-                self.resize(int(500 * 2.5), 250 * 2)
+                # self.resize(int(500 * 2.5), 250 * 2)
+                # self.resize(int(self.display_width[0] * 0.8), int(self.display_height[0] * 0.6))
+                self.resize(int(self.display_width[0] * 0.4), int(self.display_height[0] * 0.6))
+                # self.resize(int(self.display_width[0] * 0.9), int(self.display_height[0] * 0.6))
 
-            # self.setGeometry(0, 0, self.pop_up_window_width_default, self.pop_up_window_height_default)
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            # 창을 화면의 상단가운데로 이동
+            screen = QGuiApplication.primaryScreen()
+            screen_geometry = screen.availableGeometry()
+            center_point = screen_geometry.center()
+            self.move(center_point.x() - self.width() / 2, screen_geometry.top() + (center_point.y() * 0.1))
 
             # pyside6 표준버튼 설정
             # self.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
@@ -1715,26 +1943,22 @@ class UiUtil:
             self.layout_horizontal = None
             self.btn_positive = None
             self.btn_negative = None
-            self.btn_etc = None
+            self.btn_third = None
 
             # 스크롤지역 설정
             self.scroll_area = None
 
-            # # 레이블로 설정
-            # self.label = QLabel(contents)
-            # if len(contents.split("\n")) < 3:
-            #     self.label.setAlignment(Qt.AlignCenter)
-
-            # 버튼으로 설정
+            # 버튼 설정
             btn_to_copy = QPushButton(ment)
             btn_to_copy.setStyleSheet("background-color: rgba(0, 0, 0, 0);  color: white;")
             btn_to_copy.setFocusPolicy(Qt.NoFocus)
             btn_to_copy.clicked.connect(self.copy_label_text_to_clipboard)
             # Park4139.debug_as_cli(context=len(contents.strip()))
             if 30 < len(ment.strip()):
-                btn_to_copy.setStyleSheet("text-align: left; font-size: 8px")
+                # btn_to_copy.setStyleSheet("text-align: left; font-size: 8px")
+                btn_to_copy.setStyleSheet("text-align: left; font-size: 16px")
             else:
-                btn_to_copy.setStyleSheet("text-align: center; font-size: 12px")
+                btn_to_copy.setStyleSheet("text-align: center; font-size: 20px")
             btn_to_copy.setFont(Pyside6Util.get_font_for_pyside6(font_path=FontsUtil.GMARKETSANSTTFLIGHT_TTF))
             self.set_shortcut(function=self.copy_label_text_to_clipboard, key_plus_key="alt+C")  # 단축키 설정
 
@@ -1759,36 +1983,46 @@ class UiUtil:
                 self.input_box.setFocusPolicy(Qt.StrongFocus)
                 self.input_box.setFocus()  # 창이 나타났을 때 focus 가 다른데 말고 입력 텍스트 박스에 있도록
 
-            self.buttons = buttons
+            if btns != None:
+                self.btns = btns
+            else:
+                self.btns = [""]
+            self.btns_etc: [QPushButton] = [None] * (len(self.btns) - 3)
             try:
                 # 버튼 설정 / 단축키 설정
-                if self.buttons[0]:
-                    self.btn_positive = QPushButton(f'{self.buttons[0]} (Alt + Y)')
+                if self.btns[0]:
+                    self.btn_positive = QPushButton(f'{self.btns[0]} (F1)')
                     self.btn_positive.setStyleSheet("background-color: rgba(0, 0, 0, 0);  color: white;")
-                    self.btn_positive.clicked.connect(partial(self.update_btn_text_clicked_and_close, self.buttons[0]))
+                    self.btn_positive.clicked.connect(partial(self.update_btn_text_clicked_and_close, self.btns[0]))
                     font_path = FontsUtil.GMARKETSANSTTFLIGHT_TTF
                     # font_path = FONTS.RUBIKDOODLESHADOW_REGULAR_TTF
                     self.btn_positive.setFont(Pyside6Util.get_font_for_pyside6(font_path=font_path))
-
-                    self.set_shortcut(function=partial(self.update_btn_text_clicked_and_close, self.buttons[0]), key_plus_key="alt+y")  # 단축키 설정
-                if self.buttons[1]:
-                    self.btn_negative = QPushButton(f'{self.buttons[1]} (Alt + N)')
+                    # self.set_shortcut(function=partial(self.update_btn_text_clicked_and_close, self.btns[0]), key_plus_key="alt+y")  # 단축키 설정
+                    self.set_shortcut(function=partial(self.update_btn_text_clicked_and_close, self.btns[0]), key_plus_key="F1")  # 단축키 설정
+                if self.btns[1]:
+                    self.btn_negative = QPushButton(f'{self.btns[1]} (F2)')
                     self.btn_negative.setStyleSheet("background-color: rgba(0, 0, 0, 0);  color: white;")
-                    self.btn_negative.clicked.connect(partial(self.update_btn_text_clicked_and_close, self.buttons[1]))
+                    self.btn_negative.clicked.connect(partial(self.update_btn_text_clicked_and_close, self.btns[1]))
                     font_path = FontsUtil.GMARKETSANSTTFLIGHT_TTF
-                    # font_path = FONTS.RUBIKDOODLESHADOW_REGULAR_TTF
                     self.btn_negative.setFont(Pyside6Util.get_font_for_pyside6(font_path=font_path))
-
-                    self.set_shortcut(function=partial(self.update_btn_text_clicked_and_close, self.buttons[1]), key_plus_key="alt+n")  # 단축키 설정
-                if self.buttons[2]:
-                    self.btn_etc = QPushButton(f'{self.buttons[2]} (Alt + R)')
-                    self.btn_etc.setStyleSheet("background-color: rgba(0, 0, 0, 0);  color: white;")
-                    self.btn_etc.clicked.connect(partial(self.update_btn_text_clicked_and_close, self.buttons[2]))
+                    self.set_shortcut(function=partial(self.update_btn_text_clicked_and_close, self.btns[1]), key_plus_key="F2")  # 단축키 설정
+                if self.btns[2]:
+                    self.btn_third = QPushButton(f'{self.btns[2]} (F3)')
+                    self.btn_third.setStyleSheet("background-color: rgba(0, 0, 0, 0);  color: white;")
+                    self.btn_third.clicked.connect(partial(self.update_btn_text_clicked_and_close, self.btns[2]))
                     font_path = FontsUtil.GMARKETSANSTTFLIGHT_TTF
-                    # font_path = FONTS.RUBIKDOODLESHADOW_REGULAR_TTF
-                    self.btn_etc.setFont(Pyside6Util.get_font_for_pyside6(font_path=font_path))
+                    self.btn_third.setFont(Pyside6Util.get_font_for_pyside6(font_path=font_path))
+                    self.set_shortcut(function=partial(self.update_btn_text_clicked_and_close, self.btns[2]), key_plus_key="F3")  # 단축키 설정
+                try:
+                    for n, item in enumerate(iterable=self.btns[3:]):
+                        self.btns_etc[n] = QPushButton(f'{self.btns[3:][n]}')
+                        self.btns_etc[n].setStyleSheet("background-color: rgba(0, 0, 0, 0);  color: white;")
+                        self.btns_etc[n].clicked.connect(partial(self.update_btn_text_clicked_and_close, self.btns[3:][n]))
+                        self.btns_etc[n].setFont(Pyside6Util.get_font_for_pyside6(font_path=FontsUtil.GMARKETSANSTTFLIGHT_TTF))
 
-                    self.set_shortcut(function=partial(self.update_btn_text_clicked_and_close, self.buttons[2]), key_plus_key="alt+r")  # 단축키 설정
+                except:
+                    DebuggingUtil.trouble_shoot("%%%FOO%%%")
+                print(rf'self.btns_etc : {self.btns_etc}')
             except IndexError:
                 # btns=[]의 index 를 초과하거나 부족한 경우
                 pass
@@ -1812,7 +2046,7 @@ class UiUtil:
             # print(rf'self.is_starting_timer : {self.is_starting_timer}')
             # print(rf'auto_starting_seconds : {auto_click_positive_btn_after_seconds}')
             if self.is_closing_timer == True and self.is_starting_timer == True:
-                BusinessLogicUtil.debug_as_gui("closing_timer 와 starting_timer 는 동시에 설정 할 수 없습니다")
+                BusinessLogicUtil.debug("closing_timer 와 starting_timer 는 동시에 설정 할 수 없습니다")
                 sys.exit()
 
             if self.is_closing_timer == True or self.is_starting_timer == True:
@@ -1825,13 +2059,23 @@ class UiUtil:
 
             # 레이아웃 설정
             self.layout_horizontal = QGridLayout()
+
             try:
-                if self.buttons[0]:
+                if self.btns[0]:
                     self.layout_horizontal.addWidget(self.btn_positive, 0, 0)
-                if self.buttons[1]:
+                if self.btns[1]:
                     self.layout_horizontal.addWidget(self.btn_negative, 0, 1)
-                if self.buttons[2]:
-                    self.layout_horizontal.addWidget(self.btn_etc, 0, 2)
+                if self.btns[2]:
+                    self.layout_horizontal.addWidget(self.btn_third, 0, 2)
+                try:
+                    for n, item in enumerate(iterable=self.btns_etc):
+                        self.layout_horizontal.addWidget(self.btns_etc[n], 0, n + 3)
+                except IndexError:
+                    pass
+                except:
+                    DebuggingUtil.trouble_shoot("%%%FOO%%%")
+
+
             except IndexError:
                 # btns=[]의 index 를 초과하거나 부족한 경우
                 pass
@@ -1850,12 +2094,13 @@ class UiUtil:
 
             self.bring_this_window()
 
-        def centerOnScreen(self):
-            # 현재 화면의 가운데 좌표를 계산
-            screen_geometry = QScreen().geometry()
-            x = (screen_geometry.width() - self.width()) // 2
-            y = (screen_geometry.height() - self.height()) // 2
-            self.move(x, y)
+        # deprecating test
+        # def centerOnScreen(self):
+        #     # 현재 화면의 가운데 좌표를 계산
+        #     screen_geometry = QScreen().geometry()
+        #     x = (screen_geometry.width() - self.width()) // 2
+        #     y = (screen_geometry.height() - self.height()) // 2
+        #     self.move(x, y)
 
         def copy_label_text_to_clipboard(self):
             clipboard.copy(self.context)
@@ -1871,11 +2116,11 @@ class UiUtil:
                 mins_with_unit = f"{mins}분"
             else:
                 mins_with_unit = ""
-            self.btn_positive.setText(f"{self.buttons[0]} ({mins_with_unit} {secs_remaining_with_unit} 뒤 자동클릭)")
+            self.btn_positive.setText(f"{self.btns[0]} ({mins_with_unit} {secs_remaining_with_unit} 뒤 자동클릭)")
 
             if self.seconds_remaining_until_auto_click == 0:
-                if self.buttons[0]:
-                    self.update_btn_text_clicked_and_close(self.buttons[0])
+                if self.btns[0]:
+                    self.update_btn_text_clicked_and_close(self.btns[0])
             self.seconds_remaining_until_auto_click = self.seconds_remaining_until_auto_click - 1
 
         def countdown_and_click_negative_btn(self):
@@ -1888,11 +2133,11 @@ class UiUtil:
                 mins_with_unit = f"{mins}분"
             else:
                 mins_with_unit = ""
-            self.btn_negative.setText(f"{self.buttons[1]} ({mins_with_unit} {secs_remaining_with_unit} 뒤 자동클릭)")
+            self.btn_negative.setText(f"{self.btns[1]} ({mins_with_unit} {secs_remaining_with_unit} 뒤 자동클릭)")
 
             if self.seconds_remaining_until_auto_click == 0:
-                if self.buttons[1]:
-                    self.update_btn_text_clicked_and_close(self.buttons[1])
+                if self.btns[1]:
+                    self.update_btn_text_clicked_and_close(self.btns[1])
             self.seconds_remaining_until_auto_click = self.seconds_remaining_until_auto_click - 1
 
         def bring_this_window(self):
@@ -1905,7 +2150,7 @@ class UiUtil:
 
     class CustomDialog():
         def __init__(self, q_application: QApplication, q_wiget: QWidget, is_app_instance_mode=False, is_exec_mode=True):
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             """
             이 함수는 특별한 사용요구사항이 있습니다
             pyside6 앱 내에서 해당 함수를 호출할때는 is_app_instance_mode 를 파라미터에 넣지 않고 쓰는 것을 default 로 디자인했습니다.
@@ -1951,7 +2196,7 @@ class UiUtil:
         # class RpaProgramMainWindow(QMainWindow):
         # def __init__(self, shared_obj): # shared_obj 는 창간 통신용 공유객체 이다. pyside6 app 의 상태관리
         def __init__(self, q_application):
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             FileSystemUtil.play_wav_file(file_abspath=StateManagementUtil.POP_SOUND_WAV)
             super().__init__()
             self.app = q_application
@@ -1985,7 +2230,7 @@ class UiUtil:
             # self.setWindowFlags(Qt.WindowType.FramelessWindowHint) # 메인창 최상단 프레임레스 설정
             GlobalBlur(self.winId(), hexColor=False, Acrylic=False, Dark=True, QWidget=self)
             self.setWindowFlags(Qt.WindowTitleHint | Qt.WindowCloseButtonHint)  # 최대화 최소화 버튼 숨기기
-            # self.setWindowFlags(Qt.WindowStaysOnTopHint)  # 모든 창 앞에 위치하도록 설정
+            self.setWindowFlags(Qt.WindowStaysOnTopHint)  # 모든 창 앞에 위치하도록 설정
             self.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
             # self.setStyleSheet(pyqt6css.qss)
             # self.setAttribute(Qt.WA_TranslucentBackground)
@@ -2000,7 +2245,7 @@ class UiUtil:
             # self.resize(self.display_width_default, self.display_height_default)
 
             # self.setGeometry(0, 0, int(self.display_width_default * self.scale), int(self.display_height[0]))
-            self.windows_size_mode = 0  # 창크기 모드 설정  #0 ~ 3
+            self.windows_size_mode = 1  # 창크기 모드 설정  #0 ~ 3
             QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)  # 고해상도 스케일링을 활성화합니다.
             self.screens = QGuiApplication.screens()  # 사용 가능한 모든 화면을 가져옵니다.
 
@@ -2030,26 +2275,23 @@ class UiUtil:
 
             # 프로그램 내 단축키 설정 mkr
             self.available_shortcut_list = {
-                #  Ctrl 단축키 설정(서비스 제어 관련)
                 # 'Ctrl+F4' 는 설정하지 마는 것이 좋겠다.
-                'ASK AI QUESTION': 'Ctrl+A',
-                'BACK UP TARGET': 'Ctrl+S',
-                'SHOOT SCREENSHOT FULL': 'Ctrl+F',
-                'SHOOT SCREENSHOT CUSTOM': 'Ctrl+C',
-                'SHOOT SCREENSHOT FOR RPA': 'Ctrl+4',
-                'ANI': 'Ctrl+5',
-                'rdp-82106': 'Ctrl+R',
-                'DOWNLOAD YOUTUBE(webm)': 'Ctrl+Y',
-                'DOWNLOAD YOUTUBE(webm)_': 'Ctrl+Alt+Y',
+                'ASK AI QUESTION': 'A',
+                'BACK UP TARGET': 'S',
+                'SHOOT SCREENSHOT FULL': 'F',
+                'SHOOT SCREENSHOT CUSTOM': 'C',
+                'SHOOT SCREENSHOT FOR RPA': '4',
+                'ANI': '5',
+                'rdp-82106': 'R',
                 'HIDE': 'Esc',  # GHOST MODE?
-                # 'DOWNLOAD YOUTUBE(wav)': 'Ctrl+S',
-                # 'DOWNLOAD YOUTUBE(webm) ONLY SOUND': 'Ctrl+Alt+S',
-                'WEATHER': 'Ctrl+W',
-                # 'NO PASTE MEMO': 'Ctrl+M',
-                'ENG TO KOR': 'Ctrl+K',
-                'KOR TO ENG': 'Ctrl+E',
-                'RECORD MACRO': 'Ctrl+M',
-                'TEST': 'Ctrl+1',
+                # 'DOWNLOAD YOUTUBE(wav)': 'S',
+                # 'DOWNLOAD YOUTUBE(webm) ONLY SOUND': 'Alt+S',
+                'WEATHER': 'W',
+                # 'NO PASTE MEMO': 'M',
+                'ENG TO KOR': 'K',
+                'KOR TO ENG': 'E',
+                'RECORD MACRO': 'M',
+                'TEST': '1',
                 'UP AND DOWN GAME': 'F1',
                 "CLASSIFY SPECIAL FILES": "F2",
                 "GATHER EMPTY DIRECTORY": "F3",
@@ -2057,6 +2299,8 @@ class UiUtil:
                 "GATHER USELESS FILES": "F5",
                 "MERGE DIRECTORIES": "F6",
                 "CONVERT MKV TO WAV": "F7",
+                'DOWNLOAD YOUTUBE(webm)': 'F8',
+                'DOWNLOAD YOUTUBE(webm)_': 'F9',
 
                 #  Alt 단축키 설정(시스템 제어 관련)
                 'DOWNLOAD VIDEO FROM WEB1': 'Alt+F1',
@@ -2072,6 +2316,12 @@ class UiUtil:
                 # 'RUN CMD.EXE AS ADMIN': 'Alt+C',
                 'NAVER MAP': 'Alt+N',
                 'EXIT': 'Alt+Q',
+
+                # 버튼없는 SHORCUT
+                # 'WEB CRAWL HREF': "`+F1", # fail
+                'WEB CRAWL HREF': "Ctrl+F1",
+                'WEB CRAWL YOUTUBE VIDEO TITLE AND URL': "Ctrl+F2",
+                'WEB CRAWL YOUTUBE VIDEO PLAYLIST': "Ctrl+F3",
             }
             # self.set_shortcut('RUN CMD.EXE AS ADMIN', self.run_cmd_exe)
             # self.set_shortcut('DOWNLOAD YOUTUBE(wav)', self.download_youtube_as_wav)
@@ -2112,6 +2362,11 @@ class UiUtil:
             self.set_shortcut("GATHER USELESS FILES", BusinessLogicUtil.should_i_gather_useless_files)
             self.set_shortcut("MERGE DIRECTORIES", BusinessLogicUtil.should_i_merge_directories)
             self.set_shortcut("CONVERT MKV TO WAV", BusinessLogicUtil.should_i_convert_mkv_to_wav)
+
+            # 버튼없는 SHORCUT
+            self.set_shortcut("WEB CRAWL HREF", BusinessLogicUtil.should_i_crawl_a_tag_href)
+            self.set_shortcut("WEB CRAWL YOUTUBE VIDEO TITLE AND URL", BusinessLogicUtil.should_i_crawl_youtube_video_title_and_url)
+            self.set_shortcut("WEB CRAWL YOUTUBE VIDEO PLAYLIST", BusinessLogicUtil.should_i_crawl_youtube_playlist)
 
             # 약속된 버튼명인 버튼 설정
             self.btn_to_show_weather_from_web = self.get_btn(self.get_btn_name_promised('WEATHER'), self.show_weather_from_web)
@@ -2195,7 +2450,41 @@ class UiUtil:
             self.btn_to_merge_directories_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised("MERGE DIRECTORIES"), function=BusinessLogicUtil.should_i_merge_directories)
             self.btn_to_convert_mkv_to_wav_only_shortcut_name = self.get_btn(btn_text_align="right", btn_name=self.get_shortcut_name_promised("CONVERT MKV TO WAV"), function=BusinessLogicUtil.should_i_convert_mkv_to_wav)
 
+            # view = QWebEngineView()
+            # view.load(QUrl("https://qt-project.org/"))
+            # view.resize(1024, 750)
+            # view.show()
+
+            # pyside6 에서는 제거되었다고 함...
+            # url = "https://google.com"
+            # browser = QWebEngineView()
+            # browser.load(QUrl(url))
+
+            # 레이블로 설정 mkmkmkmk
+            html = "<html><body><h1 style='color: white;'>Hello, World!</h1></body></html>"
+            text_browser = QTextBrowser()
+            text_browser.setHtml(html)
+            text_browser.resize(800, 600)
+
+            html = "<html><body><h1 style='color: white;'>Hello, World!</h1></body></html>"
+            text_browser2 = QTextBrowser()
+            text_browser2.setHtml(html)
+            text_browser2.resize(800, 600)
+
+            html = "<html><body><h1 style='color: white;'>Hello, World!</h1></body></html>"
+            text_browser3 = QTextBrowser()
+            text_browser3.setHtml(html)
+            text_browser3.resize(800, 600)
+
+            html = "<html><body><h1 style='color: white;'>Hello, World!</h1></body></html>"
+            text_browser4 = QTextBrowser()
+            text_browser4.setHtml(html)
+            # text_browser4.setStyleSheet("background-color: rgba(0, 0, 0, 0); color: white;")  # 메시지박스창 스타일시트 적용 설정
+            text_browser4.resize(800, 600)
+
             btns = [
+                [text_browser, text_browser2],
+                [text_browser3, text_browser4],
                 [self.btn_to_toogle_rpa_window, self.btn_to_toogle_rpa_window_only_shorcut_name],
                 [self.btn_to_show_weather_from_web, self.btn_to_show_weather_from_web_only_shortcut_name],
                 [self.btn_to_should_i_download_youtube_as_webm_alt, self.btn_to_should_i_download_youtube_as_webm_alt_only_shortcut_name],
@@ -2217,7 +2506,7 @@ class UiUtil:
                 # [  self.btn_to_run_no_paste_memo,      self.btn_to_run_no_paste_memo_only_shortcut_name],
                 [self.btn_to_test, self.btn_to_test_only_shortcut_name],
                 [self.btn_to_should_i_empty_trash_can, self.btn_to_should_i_empty_trash_can_only_shortcut_name],
-                [self.btn_to_should_i_exit_this_program, self.btn_to_should_i_exit_this_program_only_shortcut_name],
+
                 [self.btn_to_should_i_enter_to_power_saving_mode, self.btn_to_should_i_enter_to_power_saving_mode_only_shortcut_name],
                 [self.btn_to_should_i_reboot_this_computer, self.btn_to_should_i_reboot_this_computer_only_shortcut_name],
                 [self.btn_to_should_i_shutdown_this_computer, self.btn_to_should_i_shutdown_this_computer_only_shortcut_name],
@@ -2234,6 +2523,7 @@ class UiUtil:
                 [self.btn_to_gather_useless_files, self.btn_to_gather_useless_files_only_shortcut_name],
                 [self.btn_to_merge_directories, self.btn_to_merge_directories_only_shortcut_name],
                 [self.btn_to_convert_mkv_to_wav, self.btn_to_convert_mkv_to_wav_only_shortcut_name],
+                [self.btn_to_should_i_exit_this_program, self.btn_to_should_i_exit_this_program_only_shortcut_name],
             ]
 
             # GRID SETTING
@@ -2321,6 +2611,7 @@ class UiUtil:
             self.setMouseTracking(True)  # pyside6 창 밖에서도 마우스 추적 가능 설정 # 마우스 움직임 이벤트 감지 허용 설정
             # self.toogle_rpa_window()
             # Park4139.press("alt", "w")
+
             self.move_this_window_to_front()
 
             self.btn_text_clicked = "foo"
@@ -2500,951 +2791,14 @@ class UiUtil:
         #         self.showMaximized()
         #     elif e.key() == Qt.Key_0:
         #         self.label11.setText(f"keyboard event monitor:\nKey_0 : Key_0 ")
-        #     elif e.key() == Qt.Key_1:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_1 : Key_1 ")
-        #     elif e.key() == Qt.Key_2:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_2 : Key_2 ")
-        #     elif e.key() == Qt.Key_3:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_3 : Key_3 ")
-        #     elif e.key() == Qt.Key_4:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_4 : Key_4 ")
-        #     elif e.key() == Qt.Key_5:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_5 : Key_5 ")
-        #     elif e.key() == Qt.Key_6:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_6 : Key_6 ")
-        #     elif e.key() == Qt.Key_7:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_7 : Key_7 ")
-        #     elif e.key() == Qt.Key_8:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_8 : Key_8 ")
-        #     elif e.key() == Qt.Key_9:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_9 : Key_9 ")
-        #     elif e.key() == Qt.Key_A:
-        #         self.label11.setText(f"keyboard event monitor:\nKey_A : Key_A ")
-        #         # elif e.key() == Qt.Key_Aacute:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Aacute : Key_Aacute ")
-        #         # elif e.key() == Qt.Key_Acircumflex:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Acircumflex : Key_Acircumflex ")
-        #         # elif e.key() == Qt.Key_acute:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_acute : Key_acute ")
-        #         # elif e.key() == Qt.Key_AddFavorite:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AddFavorite : Key_AddFavorite ")
-        #         # elif e.key() == Qt.Key_Adiaeresis:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Adiaeresis : Key_Adiaeresis ")
-        #         # elif e.key() == Qt.Key_AE:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AE : Key_AE ")
-        #         # elif e.key() == Qt.Key_Agrave:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Agrave : Key_Agrave ")
-        #         # elif e.key() == Qt.Key_Alt:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Alt : Key_Alt ")
-        #         # elif e.key() == Qt.Key_AltGr:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AltGr : Key_AltGr ")
-        #         # elif e.key() == Qt.Key_Ampersand:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Ampersand : Key_Ampersand ")
-        #         # elif e.key() == Qt.Key_Any:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Any : Key_Any ")
-        #         # elif e.key() == Qt.Key_Apostrophe:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Apostrophe : Key_Apostrophe ")
-        #         # elif e.key() == Qt.Key_ApplicationLeft:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_ApplicationLeft : Key_ApplicationLeft ")
-        #         # elif e.key() == Qt.Key_ApplicationRight:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_ApplicationRight : Key_ApplicationRight ")
-        #         # elif e.key() == Qt.Key_Aring:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Aring : Key_Aring ")
-        #         # elif e.key() == Qt.Key_AsciiCircum:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AsciiCircum : Key_AsciiCircum ")
-        #         # elif e.key() == Qt.Key_AsciiTilde:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AsciiTilde : Key_AsciiTilde ")
-        #         # elif e.key() == Qt.Key_Asterisk:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Asterisk : Key_Asterisk ")
-        #         # elif e.key() == Qt.Key_At:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_At : Key_At ")
-        #         # elif e.key() == Qt.Key_Atilde:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Atilde : Key_Atilde ")
-        #         # elif e.key() == Qt.Key_AudioCycleTrack:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AudioCycleTrack : Key_AudioCycleTrack ")
-        #         # elif e.key() == Qt.Key_AudioForward:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AudioForward : Key_AudioForward ")
-        #         # elif e.key() == Qt.Key_AudioRandomPlay:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AudioRandomPlay : Key_AudioRandomPlay ")
-        #         # elif e.key() == Qt.Key_AudioRepeat:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AudioRepeat : Key_AudioRepeat ")
-        #         # elif e.key() == Qt.Key_AudioRewind:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_AudioRewind : Key_AudioRewind ")
-        #         # elif e.key() == Qt.Key_Away:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Away : Key_Away ")
-        #         # elif e.key() == Qt.Key_B:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_B : Key_B ")
-        #         # elif e.key() == Qt.Key_Back:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Back : Key_Back ")
-        #         # elif e.key() == Qt.Key_BackForward:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BackForward : Key_BackForward ")
-        #         # elif e.key() == Qt.Key_Backslash:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Backslash : Key_Backslash ")
-        #         # elif e.key() == Qt.Key_Backspace:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Backspace : Key_Backspace ")
-        #         # elif e.key() == Qt.Key_Backtab:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Backtab : Key_Backtab ")
-        #         # elif e.key() == Qt.Key_Bar:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Bar : Key_Bar ")
-        #         # elif e.key() == Qt.Key_BassBoost:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BassBoost : Key_BassBoost ")
-        #         # elif e.key() == Qt.Key_BassDown:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BassDown : Key_BassDown ")
-        #         # elif e.key() == Qt.Key_BassUp:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BassUp : Key_BassUp ")
-        #         # elif e.key() == Qt.Key_Battery:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Battery : Key_Battery ")
-        #         # elif e.key() == Qt.Key_Blue:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Blue : Key_Blue ")
-        #         # elif e.key() == Qt.Key_Bluetooth:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Bluetooth : Key_Bluetooth ")
-        #         # elif e.key() == Qt.Key_Book:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Book : Key_Book ")
-        #         # elif e.key() == Qt.Key_BraceLeft:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BraceLeft : Key_BraceLeft ")
-        #         # elif e.key() == Qt.Key_BraceRight:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BraceRight : Key_BraceRight ")
-        #         # elif e.key() == Qt.Key_BracketLeft:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BracketLeft : Key_BracketLeft ")
-        #         # elif e.key() == Qt.Key_BracketRight:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BracketRight : Key_BracketRight ")
-        #         # elif e.key() == Qt.Key_BrightnessAdjust:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_BrightnessAdjust : Key_BrightnessAdjust ")
-        #         # elif e.key() == Qt.Key_brokenbar:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_brokenbar : Key_brokenbar ")
-        #         # elif e.key() == Qt.Key_C:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_C : Key_C ")
-        #         # elif e.key() == Qt.Key_Calculator:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Calculator : Key_Calculator ")
-        #         # elif e.key() == Qt.Key_Calendar:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Calendar : Key_Calendar ")
-        #         # elif e.key() == Qt.Key_Call:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Call : Key_Call ")
-        #         # elif e.key() == Qt.Key_Camera:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Camera : Key_Camera ")
-        #         # elif e.key() == Qt.Key_CameraFocus:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_CameraFocus : Key_CameraFocus ")
-        #         # elif e.key() == Qt.Key_Cancel:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Cancel : Key_Cancel ")
-        #         # elif e.key() == Qt.Key_CapsLock:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_CapsLock : Key_CapsLock ")
-        #         # elif e.key() == Qt.Key_Ccedilla:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Ccedilla : Key_Ccedilla ")
-        #         # elif e.key() == Qt.Key_CD:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_CD : Key_CD ")
-        #         # elif e.key() == Qt.Key_cedilla:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_cedilla : Key_cedilla ")
-        #         # elif e.key() == Qt.Key_cent:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_cent : Key_cent ")
-        #         # elif e.key() == Qt.Key_ChannelDown:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_ChannelDown : Key_ChannelDown ")
-        #         # elif e.key() == Qt.Key_ChannelUp:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_ChannelUp : Key_ChannelUp ")
-        #         # elif e.key() == Qt.Key_Clear:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Clear : Key_Clear ")
-        #         # elif e.key() == Qt.Key_ClearGrab:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_ClearGrab : Key_ClearGrab ")
-        #         # elif e.key() == Qt.Key_Close:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Close : Key_Close ")
-        #         # elif e.key() == Qt.Key_Codeinput:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Codeinput : Key_Codeinput ")
-        #         # elif e.key() == Qt.Key_Colon:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Colon : Key_Colon ")
-        #         # elif e.key() == Qt.Key_Comma:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Comma : Key_Comma ")
-        #         # elif e.key() == Qt.Key_Community:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Community : Key_Community ")
-        #         # elif e.key() == Qt.Key_Context1:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Context1 : Key_Context1 ")
-        #         # elif e.key() == Qt.Key_Context2:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Context2 : Key_Context2 ")
-        #         # elif e.key() == Qt.Key_Context3:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Context3 : Key_Context3 ")
-        #         # elif e.key() == Qt.Key_Context4:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Context4 : Key_Context4 ")
-        #         # elif e.key() == Qt.Key_ContrastAdjust:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_ContrastAdjust : Key_ContrastAdjust ")
-        #         # elif e.key() == Qt.Key_Control:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Control : Key_Control ")
-        #         # elif e.key() == Qt.Key_Copy:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Copy : Key_Copy ")
-        #         # elif e.key() == Qt.Key_copyright:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_copyright : Key_copyright ")
-        #         # elif e.key() == Qt.Key_currency:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_currency : Key_currency ")
-        #         # elif e.key() == Qt.Key_Cut:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Cut : Key_Cut ")
-        #         # elif e.key() == Qt.Key_D:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_D : Key_D ")
-        #         # elif e.key() == Qt.Key_Dead_a:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_a : Key_Dead_a ")
-        #         # elif e.key() == Qt.Key_Dead_A:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_A : Key_Dead_A ")
-        #         # elif e.key() == Qt.Key_Dead_Abovecomma:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Abovecomma : Key_Dead_Abovecomma ")
-        #         # elif e.key() == Qt.Key_Dead_Abovedot:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Abovedot : Key_Dead_Abovedot ")
-        #         # elif e.key() == Qt.Key_Dead_Abovereversedcomma:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Abovereversedcomma : Key_Dead_Abovereversedcomma ")
-        #         # elif e.key() == Qt.Key_Dead_Abovering:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Abovering : Key_Dead_Abovering ")
-        #         # elif e.key() == Qt.Key_Dead_Aboveverticalline:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Aboveverticalline : Key_Dead_Aboveverticalline ")
-        #         # elif e.key() == Qt.Key_Dead_Acute:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Acute : Key_Dead_Acute ")
-        #         # elif e.key() == Qt.Key_Dead_Belowbreve:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowbreve : Key_Dead_Belowbreve ")
-        #         # elif e.key() == Qt.Key_Dead_Belowcircumflex:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowcircumflex : Key_Dead_Belowcircumflex ")
-        #         # elif e.key() == Qt.Key_Dead_Belowcomma:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowcomma : Key_Dead_Belowcomma ")
-        #         # elif e.key() == Qt.Key_Dead_Belowdiaeresis:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowdiaeresis : Key_Dead_Belowdiaeresis ")
-        #         # elif e.key() == Qt.Key_Dead_Belowdot:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowdot : Key_Dead_Belowdot ")
-        #         # elif e.key() == Qt.Key_Dead_Belowmacron:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowmacron : Key_Dead_Belowmacron ")
-        #         # elif e.key() == Qt.Key_Dead_Belowring:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowring : Key_Dead_Belowring ")
-        #         # elif e.key() == Qt.Key_Dead_Belowtilde:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowtilde : Key_Dead_Belowtilde ")
-        #         # elif e.key() == Qt.Key_Dead_Belowverticalline:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Belowverticalline : Key_Dead_Belowverticalline ")
-        #         # elif e.key() == Qt.Key_Dead_Breve:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Breve : Key_Dead_Breve ")
-        #         # elif e.key() == Qt.Key_Dead_Capital_Schwa:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Capital_Schwa : Key_Dead_Capital_Schwa ")
-        #         # elif e.key() == Qt.Key_Dead_Caron:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Caron : Key_Dead_Caron ")
-        #         # elif e.key() == Qt.Key_Dead_Cedilla:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Cedilla : Key_Dead_Cedilla ")
-        #         # elif e.key() == Qt.Key_Dead_Circumflex:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Circumflex : Key_Dead_Circumflex ")
-        #         # elif e.key() == Qt.Key_Dead_Currency:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Currency : Key_Dead_Currency ")
-        #         # elif e.key() == Qt.Key_Dead_Diaeresis:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Diaeresis : Key_Dead_Diaeresis ")
-        #         # elif e.key() == Qt.Key_Dead_Doubleacute:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Doubleacute : Key_Dead_Doubleacute ")
-        #         # elif e.key() == Qt.Key_Dead_Doublegrave:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Doublegrave : Key_Dead_Doublegrave ")
-        #         # elif e.key() == Qt.Key_Dead_e:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_e : Key_Dead_e ")
-        #         # elif e.key() == Qt.Key_Dead_E:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_E : Key_Dead_E ")
-        #         # elif e.key() == Qt.Key_Dead_Grave:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Grave : Key_Dead_Grave ")
-        #         # elif e.key() == Qt.Key_Dead_Greek:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Greek : Key_Dead_Greek ")
-        #         # elif e.key() == Qt.Key_Dead_Hook:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Hook : Key_Dead_Hook ")
-        #         # elif e.key() == Qt.Key_Dead_Horn:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Horn : Key_Dead_Horn ")
-        #         # elif e.key() == Qt.Key_Dead_i:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_i : Key_Dead_i ")
-        #         # elif e.key() == Qt.Key_Dead_I:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_I : Key_Dead_I ")
-        #         # elif e.key() == Qt.Key_Dead_Invertedbreve:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Invertedbreve : Key_Dead_Invertedbreve ")
-        #         # elif e.key() == Qt.Key_Dead_Iota:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Iota : Key_Dead_Iota ")
-        #         # elif e.key() == Qt.Key_Dead_Longsolidusoverlay:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Longsolidusoverlay : Key_Dead_Longsolidusoverlay ")
-        #         # elif e.key() == Qt.Key_Dead_Lowline:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Lowline : Key_Dead_Lowline ")
-        #         # elif e.key() == Qt.Key_Dead_Macron:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Macron : Key_Dead_Macron ")
-        #         # elif e.key() == Qt.Key_Dead_o:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_o : Key_Dead_o ")
-        #         # elif e.key() == Qt.Key_Dead_O:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_O : Key_Dead_O ")
-        #         # elif e.key() == Qt.Key_Dead_Ogonek:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Ogonek : Key_Dead_Ogonek ")
-        #         # elif e.key() == Qt.Key_Dead_Semivoiced_Sound:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Semivoiced_Sound : Key_Dead_Semivoiced_Sound ")
-        #         # elif e.key() == Qt.Key_Dead_Small_Schwa:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Small_Schwa : Key_Dead_Small_Schwa ")
-        #         # elif e.key() == Qt.Key_Dead_Stroke:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Stroke : Key_Dead_Stroke ")
-        #         # elif e.key() == Qt.Key_Dead_Tilde:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Tilde : Key_Dead_Tilde ")
-        #         # elif e.key() == Qt.Key_Dead_u:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_u : Key_Dead_u ")
-        #         # elif e.key() == Qt.Key_Dead_U:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_U : Key_Dead_U ")
-        #         # elif e.key() == Qt.Key_Dead_Voiced_Sound:
-        #         #     self.label11.setText(f"keyboard event monitor:\nKey_Dead_Voiced_Sound : Key_Dead_Voiced_Sound ")
-        #         # elif e.key() == Qt.Key_degree:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_degree : Key_degree ")
-        #     # elif e.key() == Qt.Key_Delete:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Delete : Key_Delete ")
-        #     # elif e.key() == Qt.Key_diaeresis:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_diaeresis : Key_diaeresis ")
-        #     # elif e.key() == Qt.Key_Direction_L:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Direction_L : Key_Direction_L ")
-        #     # elif e.key() == Qt.Key_Direction_R:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Direction_R : Key_Direction_R ")
-        #     # elif e.key() == Qt.Key_Display:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Display : Key_Display ")
-        #     # elif e.key() == Qt.Key_division:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_division : Key_division ")
-        #     # elif e.key() == Qt.Key_Documents:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Documents : Key_Documents ")
-        #     # elif e.key() == Qt.Key_Dollar:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Dollar : Key_Dollar ")
-        #     # elif e.key() == Qt.Key_DOS:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_DOS : Key_DOS ")
-        #     # elif e.key() == Qt.Key_Down:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Down : Key_Down ")
-        #     # elif e.key() == Qt.Key_E:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_E : Key_E ")
-        #     # elif e.key() == Qt.Key_Eacute:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Eacute : Key_Eacute ")
-        #     # elif e.key() == Qt.Key_Ecircumflex:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Ecircumflex : Key_Ecircumflex ")
-        #     # elif e.key() == Qt.Key_Ediaeresis:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Ediaeresis : Key_Ediaeresis ")
-        #     # elif e.key() == Qt.Key_Egrave:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Egrave : Key_Egrave ")
-        #     # elif e.key() == Qt.Key_Eisu_Shift:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Eisu_Shift : Key_Eisu_Shift ")
-        #     # elif e.key() == Qt.Key_Eisu_toggle:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Eisu_toggle : Key_Eisu_toggle ")
-        #     # elif e.key() == Qt.Key_Eject:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Eject : Key_Eject ")
-        #     # elif e.key() == Qt.Key_End:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_End : Key_End ")
-        #     # elif e.key() == Qt.Key_Enter:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Enter : Key_Enter ")
-        #     # elif e.key() == Qt.Key_Equal:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Equal : Key_Equal ")
-        #     # elif e.key() == Qt.Key_Escape:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Escape : Key_Escape ")
-        #     #     self.label10.setText(f"event monitor:\nkeyPressEvent : Key_Escape")
-        #     # elif e.key() == Qt.Key_ETH:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ETH : Key_ETH ")
-        #     # elif e.key() == Qt.Key_Excel:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Excel : Key_Excel ")
-        #     # elif e.key() == Qt.Key_Exclam:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Exclam : Key_Exclam ")
-        #     # elif e.key() == Qt.Key_exclamdown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_exclamdown : Key_exclamdown ")
-        #     # elif e.key() == Qt.Key_Execute:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Execute : Key_Execute ")
-        #     # elif e.key() == Qt.Key_Exit:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Exit : Key_Exit ")
-        #     # elif e.key() == Qt.Key_Explorer:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Explorer : Key_Explorer ")
-        #     # elif e.key() == Qt.Key_F:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F : Key_F ")
-        #     # elif e.key() == Qt.Key_F1:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F1 : Key_F1 ")
-        #     # elif e.key() == Qt.Key_F10:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F10 : Key_F10 ")
-        #     # elif e.key() == Qt.Key_F11:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F11 : Key_F11 ")
-        #     # elif e.key() == Qt.Key_F12:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F12 : Key_F12 ")
-        #     # elif e.key() == Qt.Key_F13:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F13 : Key_F13 ")
-        #     # elif e.key() == Qt.Key_F14:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F14 : Key_F14 ")
-        #     # elif e.key() == Qt.Key_F15:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F15 : Key_F15 ")
-        #     # elif e.key() == Qt.Key_F16:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F16 : Key_F16 ")
-        #     # elif e.key() == Qt.Key_F17:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F17 : Key_F17 ")
-        #     # elif e.key() == Qt.Key_F18:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F18 : Key_F18 ")
-        #     # elif e.key() == Qt.Key_F19:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F19 : Key_F19 ")
-        #     # elif e.key() == Qt.Key_F2:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F2 : Key_F2 ")
-        #     # elif e.key() == Qt.Key_F20:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F20 : Key_F20 ")
-        #     # elif e.key() == Qt.Key_F21:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F21 : Key_F21 ")
-        #     # elif e.key() == Qt.Key_F22:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F22 : Key_F22 ")
-        #     # elif e.key() == Qt.Key_F23:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F23 : Key_F23 ")
-        #     # elif e.key() == Qt.Key_F24:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F24 : Key_F24 ")
-        #     # elif e.key() == Qt.Key_F25:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F25 : Key_F25 ")
-        #     # elif e.key() == Qt.Key_F26:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F26 : Key_F26 ")
-        #     # elif e.key() == Qt.Key_F27:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F27 : Key_F27 ")
-        #     # elif e.key() == Qt.Key_F28:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F28 : Key_F28 ")
-        #     # elif e.key() == Qt.Key_F29:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F29 : Key_F29 ")
-        #     # elif e.key() == Qt.Key_F3:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F3 : Key_F3 ")
-        #     # elif e.key() == Qt.Key_F30:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F30 : Key_F30 ")
-        #     # elif e.key() == Qt.Key_F31:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F31 : Key_F31 ")
-        #     # elif e.key() == Qt.Key_F32:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F32 : Key_F32 ")
-        #     # elif e.key() == Qt.Key_F33:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F33 : Key_F33 ")
-        #     # elif e.key() == Qt.Key_F34:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F34 : Key_F34 ")
-        #     # elif e.key() == Qt.Key_F35:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F35 : Key_F35 ")
-        #     # elif e.key() == Qt.Key_F4:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F4 : Key_F4 ")
-        #     # elif e.key() == Qt.Key_F5:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F5 : Key_F5 ")
-        #     # elif e.key() == Qt.Key_F6:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F6 : Key_F6 ")
-        #     # elif e.key() == Qt.Key_F7:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F7 : Key_F7 ")
-        #     # elif e.key() == Qt.Key_F8:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F8 : Key_F8 ")
-        #     # elif e.key() == Qt.Key_F9:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_F9 : Key_F9 ")
-        #     # elif e.key() == Qt.Key_Favorites:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Favorites : Key_Favorites ")
-        #     # elif e.key() == Qt.Key_Finance:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Finance : Key_Finance ")
-        #     # elif e.key() == Qt.Key_Find:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Find : Key_Find ")
-        #     # elif e.key() == Qt.Key_Flip:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Flip : Key_Flip ")
-        #     # elif e.key() == Qt.Key_Forward:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Forward : Key_Forward ")
-        #     # elif e.key() == Qt.Key_G:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_G : Key_G ")
-        #     # elif e.key() == Qt.Key_Game:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Game : Key_Game ")
-        #     # elif e.key() == Qt.Key_Go:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Go : Key_Go ")
-        #     # elif e.key() == Qt.Key_Greater:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Greater : Key_Greater ")
-        #     # elif e.key() == Qt.Key_Green:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Green : Key_Green ")
-        #     # elif e.key() == Qt.Key_Guide:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Guide : Key_Guide ")
-        #     # elif e.key() == Qt.Key_guillemotleft:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_guillemotleft : Key_guillemotleft ")
-        #     # elif e.key() == Qt.Key_guillemotright:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_guillemotright : Key_guillemotright ")
-        #     # elif e.key() == Qt.Key_H:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_H : Key_H ")
-        #     # elif e.key() == Qt.Key_Hangul:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul : Key_Hangul ")
-        #     # elif e.key() == Qt.Key_Hangul_Banja:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_Banja : Key_Hangul_Banja ")
-        #     # elif e.key() == Qt.Key_Hangul_End:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_End : Key_Hangul_End ")
-        #     # elif e.key() == Qt.Key_Hangul_Hanja:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_Hanja : Key_Hangul_Hanja ")
-        #     # elif e.key() == Qt.Key_Hangul_Jamo:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_Jamo : Key_Hangul_Jamo ")
-        #     # elif e.key() == Qt.Key_Hangul_Jeonja:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_Jeonja : Key_Hangul_Jeonja ")
-        #     # elif e.key() == Qt.Key_Hangul_PostHanja:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_PostHanja : Key_Hangul_PostHanja ")
-        #     # elif e.key() == Qt.Key_Hangul_PreHanja:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_PreHanja : Key_Hangul_PreHanja ")
-        #     # elif e.key() == Qt.Key_Hangul_Romaja:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_Romaja : Key_Hangul_Romaja ")
-        #     # elif e.key() == Qt.Key_Hangul_Special:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_Special : Key_Hangul_Special ")
-        #     # elif e.key() == Qt.Key_Hangul_Start:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangul_Start : Key_Hangul_Start ")
-        #     # elif e.key() == Qt.Key_Hangup:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hangup : Key_Hangup ")
-        #     # elif e.key() == Qt.Key_Hankaku:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hankaku : Key_Hankaku ")
-        #     # elif e.key() == Qt.Key_Help:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Help : Key_Help ")
-        #     # elif e.key() == Qt.Key_Henkan:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Henkan : Key_Henkan ")
-        #     # elif e.key() == Qt.Key_Hibernate:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hibernate : Key_Hibernate ")
-        #     # elif e.key() == Qt.Key_Hiragana:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hiragana : Key_Hiragana ")
-        #     # elif e.key() == Qt.Key_Hiragana_Katakana:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hiragana_Katakana : Key_Hiragana_Katakana ")
-        #     # elif e.key() == Qt.Key_History:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_History : Key_History ")
-        #     # elif e.key() == Qt.Key_Home:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Home : Key_Home ")
-        #     # elif e.key() == Qt.Key_HomePage:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_HomePage : Key_HomePage ")
-        #     # elif e.key() == Qt.Key_HotLinks:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_HotLinks : Key_HotLinks ")
-        #     # elif e.key() == Qt.Key_Hyper_L:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hyper_L : Key_Hyper_L ")
-        #     # elif e.key() == Qt.Key_Hyper_R:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Hyper_R : Key_Hyper_R ")
-        #     # elif e.key() == Qt.Key_hyphen:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_hyphen : Key_hyphen ")
-        #     # elif e.key() == Qt.Key_I:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_I : Key_I ")
-        #     # elif e.key() == Qt.Key_Iacute:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Iacute : Key_Iacute ")
-        #     # elif e.key() == Qt.Key_Icircumflex:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Icircumflex : Key_Icircumflex ")
-        #     # elif e.key() == Qt.Key_Idiaeresis:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Idiaeresis : Key_Idiaeresis ")
-        #     # elif e.key() == Qt.Key_Igrave:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Igrave : Key_Igrave ")
-        #     # elif e.key() == Qt.Key_Info:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Info : Key_Info ")
-        #     # elif e.key() == Qt.Key_Insert:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Insert : Key_Insert ")
-        #     # elif e.key() == Qt.Key_iTouch:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_iTouch : Key_iTouch ")
-        #     # elif e.key() == Qt.Key_J:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_J : Key_J ")
-        #     # elif e.key() == Qt.Key_K:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_K : Key_K ")
-        #     # elif e.key() == Qt.Key_Kana_Lock:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Kana_Lock : Key_Kana_Lock ")
-        #     # elif e.key() == Qt.Key_Kana_Shift:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Kana_Shift : Key_Kana_Shift ")
-        #     # elif e.key() == Qt.Key_Kanji:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Kanji : Key_Kanji ")
-        #     # elif e.key() == Qt.Key_Katakana:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Katakana : Key_Katakana ")
-        #     # elif e.key() == Qt.Key_KeyboardBrightnessDown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_KeyboardBrightnessDown : Key_KeyboardBrightnessDown ")
-        #     # elif e.key() == Qt.Key_KeyboardBrightnessUp:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_KeyboardBrightnessUp : Key_KeyboardBrightnessUp ")
-        #     # elif e.key() == Qt.Key_KeyboardLightOnOff:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_KeyboardLightOnOff : Key_KeyboardLightOnOff ")
-        #     # elif e.key() == Qt.Key_L:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_L : Key_L ")
-        #     # elif e.key() == Qt.Key_LastNumberRedial:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LastNumberRedial : Key_LastNumberRedial ")
-        #     # elif e.key() == Qt.Key_Launch0:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch0 : Key_Launch0 ")
-        #     # elif e.key() == Qt.Key_Launch1:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch1 : Key_Launch1 ")
-        #     # elif e.key() == Qt.Key_Launch2:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch2 : Key_Launch2 ")
-        #     # elif e.key() == Qt.Key_Launch3:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch3 : Key_Launch3 ")
-        #     # elif e.key() == Qt.Key_Launch4:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch4 : Key_Launch4 ")
-        #     # elif e.key() == Qt.Key_Launch5:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch5 : Key_Launch5 ")
-        #     # elif e.key() == Qt.Key_Launch6:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch6 : Key_Launch6 ")
-        #     # elif e.key() == Qt.Key_Launch7:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch7 : Key_Launch7 ")
-        #     # elif e.key() == Qt.Key_Launch8:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch8 : Key_Launch8 ")
-        #     # elif e.key() == Qt.Key_Launch9:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Launch9 : Key_Launch9 ")
-        #     # elif e.key() == Qt.Key_LaunchA:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchA : Key_LaunchA ")
-        #     # elif e.key() == Qt.Key_LaunchB:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchB : Key_LaunchB ")
-        #     # elif e.key() == Qt.Key_LaunchC:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchC : Key_LaunchC ")
-        #     # elif e.key() == Qt.Key_LaunchD:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchD : Key_LaunchD ")
-        #     # elif e.key() == Qt.Key_LaunchE:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchE : Key_LaunchE ")
-        #     # elif e.key() == Qt.Key_LaunchF:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchF : Key_LaunchF ")
-        #     # elif e.key() == Qt.Key_LaunchG:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchG : Key_LaunchG ")
-        #     # elif e.key() == Qt.Key_LaunchH:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchH : Key_LaunchH ")
-        #     # elif e.key() == Qt.Key_LaunchMail:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchMail : Key_LaunchMail ")
-        #     # elif e.key() == Qt.Key_LaunchMedia:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LaunchMedia : Key_LaunchMedia ")
-        #     # elif e.key() == Qt.Key_Left:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Left : Key_Left ")
-        #     # elif e.key() == Qt.Key_Less:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Less : Key_Less ")
-        #     # elif e.key() == Qt.Key_LightBulb:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LightBulb : Key_LightBulb ")
-        #     # elif e.key() == Qt.Key_LogOff:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_LogOff : Key_LogOff ")
-        #     # elif e.key() == Qt.Key_M:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_M : Key_M ")
-        #     # elif e.key() == Qt.Key_macron:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_macron : Key_macron ")
-        #     # elif e.key() == Qt.Key_MailForward:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MailForward : Key_MailForward ")
-        #     # elif e.key() == Qt.Key_Market:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Market : Key_Market ")
-        #     # elif e.key() == Qt.Key_masculine:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_masculine : Key_masculine ")
-        #     # elif e.key() == Qt.Key_Massyo:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Massyo : Key_Massyo ")
-        #     # elif e.key() == Qt.Key_MediaLast:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MediaLast : Key_MediaLast ")
-        #     # elif e.key() == Qt.Key_MediaNext:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MediaNext : Key_MediaNext ")
-        #     # elif e.key() == Qt.Key_MediaPause:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MediaPause : Key_MediaPause ")
-        #     # elif e.key() == Qt.Key_MediaPlay:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MediaPlay : Key_MediaPlay ")
-        #     # elif e.key() == Qt.Key_MediaPrevious:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MediaPrevious : Key_MediaPrevious ")
-        #     # elif e.key() == Qt.Key_MediaRecord:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MediaRecord : Key_MediaRecord ")
-        #     # elif e.key() == Qt.Key_MediaStop:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MediaStop : Key_MediaStop ")
-        #     # elif e.key() == Qt.Key_MediaTogglePlayPause:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MediaTogglePlayPause : Key_MediaTogglePlayPause ")
-        #     # elif e.key() == Qt.Key_Meeting:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Meeting : Key_Meeting ")
-        #     # elif e.key() == Qt.Key_Memo:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Memo : Key_Memo ")
-        #     # elif e.key() == Qt.Key_Menu:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Menu : Key_Menu ")
-        #     # elif e.key() == Qt.Key_MenuKB:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MenuKB : Key_MenuKB ")
-        #     # elif e.key() == Qt.Key_MenuPB:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MenuPB : Key_MenuPB ")
-        #     # elif e.key() == Qt.Key_Messenger:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Messenger : Key_Messenger ")
-        #     # elif e.key() == Qt.Key_Meta:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Meta : Key_Meta ")
-        #     # elif e.key() == Qt.Key_MicMute:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MicMute : Key_MicMute ")
-        #     # elif e.key() == Qt.Key_MicVolumeDown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MicVolumeDown : Key_MicVolumeDown ")
-        #     # elif e.key() == Qt.Key_MicVolumeUp:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MicVolumeUp : Key_MicVolumeUp ")
-        #     # elif e.key() == Qt.Key_Minus:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Minus : Key_Minus ")
-        #     # elif e.key() == Qt.Key_Mode_switch:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Mode_switch : Key_Mode_switch ")
-        #     # elif e.key() == Qt.Key_MonBrightnessDown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MonBrightnessDown : Key_MonBrightnessDown ")
-        #     # elif e.key() == Qt.Key_MonBrightnessUp:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MonBrightnessUp : Key_MonBrightnessUp ")
-        #     # elif e.key() == Qt.Key_mu:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_mu : Key_mu ")
-        #     # elif e.key() == Qt.Key_Muhenkan:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Muhenkan : Key_Muhenkan ")
-        #     # elif e.key() == Qt.Key_Multi_key:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Multi_key : Key_Multi_key ")
-        #     # elif e.key() == Qt.Key_MultipleCandidate:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MultipleCandidate : Key_MultipleCandidate ")
-        #     # elif e.key() == Qt.Key_multiply:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_multiply : Key_multiply ")
-        #     # elif e.key() == Qt.Key_Music:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Music : Key_Music ")
-        #     # elif e.key() == Qt.Key_MySites:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_MySites : Key_MySites ")
-        #     # elif e.key() == Qt.Key_N:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_N : Key_N ")
-        #     # elif e.key() == Qt.Key_New:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_New : Key_New ")
-        #     # elif e.key() == Qt.Key_News:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_News : Key_News ")
-        #     # elif e.key() == Qt.Key_No:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_No : Key_No ")
-        #     # elif e.key() == Qt.Key_nobreakspace:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_nobreakspace : Key_nobreakspace ")
-        #     # elif e.key() == Qt.Key_notsign:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_notsign : Key_notsign ")
-        #     # elif e.key() == Qt.Key_Ntilde:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Ntilde : Key_Ntilde ")
-        #     # elif e.key() == Qt.Key_NumberSign:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_NumberSign : Key_NumberSign ")
-        #     # elif e.key() == Qt.Key_NumLock:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_NumLock : Key_NumLock ")
-        #     # elif e.key() == Qt.Key_O:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_O : Key_O ")
-        #     # elif e.key() == Qt.Key_Oacute:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Oacute : Key_Oacute ")
-        #     # elif e.key() == Qt.Key_Ocircumflex:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Ocircumflex : Key_Ocircumflex ")
-        #     # elif e.key() == Qt.Key_Odiaeresis:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Odiaeresis : Key_Odiaeresis ")
-        #     # elif e.key() == Qt.Key_OfficeHome:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_OfficeHome : Key_OfficeHome ")
-        #     # elif e.key() == Qt.Key_Ograve:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Ograve : Key_Ograve ")
-        #     # elif e.key() == Qt.Key_onehalf:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_onehalf : Key_onehalf ")
-        #     # elif e.key() == Qt.Key_onequarter:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_onequarter : Key_onequarter ")
-        #     # elif e.key() == Qt.Key_onesuperior:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_onesuperior : Key_onesuperior ")
-        #     # elif e.key() == Qt.Key_Ooblique:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Ooblique : Key_Ooblique ")
-        #     # elif e.key() == Qt.Key_Open:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Open : Key_Open ")
-        #     # elif e.key() == Qt.Key_OpenUrl:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_OpenUrl : Key_OpenUrl ")
-        #     # elif e.key() == Qt.Key_Option:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Option : Key_Option ")
-        #     # elif e.key() == Qt.Key_ordfeminine:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ordfeminine : Key_ordfeminine ")
-        #     # elif e.key() == Qt.Key_Otilde:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Otilde : Key_Otilde ")
-        #     # elif e.key() == Qt.Key_P:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_P : Key_P ")
-        #     # elif e.key() == Qt.Key_PageDown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_PageDown : Key_PageDown ")
-        #     # elif e.key() == Qt.Key_PageUp:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_PageUp : Key_PageUp ")
-        #     # elif e.key() == Qt.Key_paragraph:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_paragraph : Key_paragraph ")
-        #     # elif e.key() == Qt.Key_ParenLeft:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ParenLeft : Key_ParenLeft ")
-        #     # elif e.key() == Qt.Key_ParenRight:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ParenRight : Key_ParenRight ")
-        #     # elif e.key() == Qt.Key_Paste:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Paste : Key_Paste ")
-        #     # elif e.key() == Qt.Key_Pause:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Pause : Key_Pause ")
-        #     # elif e.key() == Qt.Key_Percent:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Percent : Key_Percent ")
-        #     # elif e.key() == Qt.Key_Period:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Period : Key_Period ")
-        #     # elif e.key() == Qt.Key_periodcentered:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_periodcentered : Key_periodcentered ")
-        #     # elif e.key() == Qt.Key_Phone:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Phone : Key_Phone ")
-        #     # elif e.key() == Qt.Key_Pictures:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Pictures : Key_Pictures ")
-        #     # elif e.key() == Qt.Key_Play:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Play : Key_Play ")
-        #     # elif e.key() == Qt.Key_Plus:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Plus : Key_Plus ")
-        #     # elif e.key() == Qt.Key_plusminus:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_plusminus : Key_plusminus ")
-        #     # elif e.key() == Qt.Key_PowerDown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_PowerDown : Key_PowerDown ")
-        #     # elif e.key() == Qt.Key_PowerOff:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_PowerOff : Key_PowerOff ")
-        #     # elif e.key() == Qt.Key_PreviousCandidate:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_PreviousCandidate : Key_PreviousCandidate ")
-        #     # elif e.key() == Qt.Key_Print:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Print : Key_Print ")
-        #     # elif e.key() == Qt.Key_Printer:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Printer : Key_Printer ")
-        #     # elif e.key() == Qt.Key_Q:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Q : Key_Q ")
-        #     # elif e.key() == Qt.Key_Question:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Question : Key_Question ")
-        #     # elif e.key() == Qt.Key_questiondown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_questiondown : Key_questiondown ")
-        #     # elif e.key() == Qt.Key_QuoteDbl:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_QuoteDbl : Key_QuoteDbl ")
-        #     # elif e.key() == Qt.Key_QuoteLeft:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_QuoteLeft : Key_QuoteLeft ")
-        #     # elif e.key() == Qt.Key_R:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_R : Key_R ")
-        #     # elif e.key() == Qt.Key_Red:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Red : Key_Red ")
-        #     # elif e.key() == Qt.Key_Redo:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Redo : Key_Redo ")
-        #     # elif e.key() == Qt.Key_Refresh:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Refresh : Key_Refresh ")
-        #     # elif e.key() == Qt.Key_registered:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_registered : Key_registered ")
-        #     # elif e.key() == Qt.Key_Reload:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Reload : Key_Reload ")
-        #     # elif e.key() == Qt.Key_Reply:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Reply : Key_Reply ")
-        #     #
-        #     # elif e.key() == Qt.Key_Right:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Right : Key_Right ")
-        #     # elif e.key() == Qt.Key_Romaji:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Romaji : Key_Romaji ")
-        #     # elif e.key() == Qt.Key_RotateWindows:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_RotateWindows : Key_RotateWindows ")
-        #     # elif e.key() == Qt.Key_RotationKB:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_RotationKB : Key_RotationKB ")
-        #     # elif e.key() == Qt.Key_RotationPB:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_RotationPB : Key_RotationPB ")
-        #     # elif e.key() == Qt.Key_S:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_S : Key_S ")
-        #     # elif e.key() == Qt.Key_Save:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Save : Key_Save ")
-        #     # elif e.key() == Qt.Key_ScreenSaver:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ScreenSaver : Key_ScreenSaver ")
-        #     # elif e.key() == Qt.Key_ScrollLock:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ScrollLock : Key_ScrollLock ")
-        #     # elif e.key() == Qt.Key_Search:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Search : Key_Search ")
-        #     # elif e.key() == Qt.Key_section:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_section : Key_section ")
-        #     # elif e.key() == Qt.Key_Select:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Select : Key_Select ")
-        #     # elif e.key() == Qt.Key_Semicolon:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Semicolon : Key_Semicolon ")
-        #     # elif e.key() == Qt.Key_Send:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Send : Key_Send ")
-        #     # elif e.key() == Qt.Key_Settings:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Settings : Key_Settings ")
-        #     # elif e.key() == Qt.Key_Shift:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Shift : Key_Shift ")
-        #     # elif e.key() == Qt.Key_Shop:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Shop : Key_Shop ")
-        #     # elif e.key() == Qt.Key_SingleCandidate:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_SingleCandidate : Key_SingleCandidate ")
-        #     # elif e.key() == Qt.Key_Slash:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Slash : Key_Slash ")
-        #     # elif e.key() == Qt.Key_Sleep:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Sleep : Key_Sleep ")
-        #     # elif e.key() == Qt.Key_Space:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Space : Key_Space ")
-        #     # elif e.key() == Qt.Key_Spell:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Spell : Key_Spell ")
-        #     # elif e.key() == Qt.Key_SplitScreen:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_SplitScreen : Key_SplitScreen ")
-        #     # elif e.key() == Qt.Key_ssharp:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ssharp : Key_ssharp ")
-        #     # elif e.key() == Qt.Key_Standby:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Standby : Key_Standby ")
-        #     # elif e.key() == Qt.Key_sterling:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_sterling : Key_sterling ")
-        #     # elif e.key() == Qt.Key_Stop:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Stop : Key_Stop ")
-        #     # elif e.key() == Qt.Key_Subtitle:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Subtitle : Key_Subtitle ")
-        #     # elif e.key() == Qt.Key_Super_L:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Super_L : Key_Super_L ")
-        #     # elif e.key() == Qt.Key_Super_R:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Super_R : Key_Super_R ")
-        #     # elif e.key() == Qt.Key_Support:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Support : Key_Support ")
-        #     # elif e.key() == Qt.Key_Suspend:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Suspend : Key_Suspend ")
-        #     # elif e.key() == Qt.Key_SysReq:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_SysReq : Key_SysReq ")
-        #     # elif e.key() == Qt.Key_T:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_T : Key_T ")
-        #     # elif e.key() == Qt.Key_Tab:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Tab : Key_Tab ")
-        #     # elif e.key() == Qt.Key_TaskPane:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_TaskPane : Key_TaskPane ")
-        #     # elif e.key() == Qt.Key_Terminal:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Terminal : Key_Terminal ")
-        #     # elif e.key() == Qt.Key_THORN:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_THORN : Key_THORN ")
-        #     # elif e.key() == Qt.Key_threequarters:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_threequarters : Key_threequarters ")
-        #     # elif e.key() == Qt.Key_threesuperior:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_threesuperior : Key_threesuperior ")
-        #     # elif e.key() == Qt.Key_Time:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Time : Key_Time ")
-        #     # elif e.key() == Qt.Key_ToDoList:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ToDoList : Key_ToDoList ")
-        #     # elif e.key() == Qt.Key_ToggleCallHangup:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ToggleCallHangup : Key_ToggleCallHangup ")
-        #     # elif e.key() == Qt.Key_Tools:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Tools : Key_Tools ")
-        #     # elif e.key() == Qt.Key_TopMenu:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_TopMenu : Key_TopMenu ")
-        #     # elif e.key() == Qt.Key_TouchpadOff:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_TouchpadOff : Key_TouchpadOff ")
-        #     # elif e.key() == Qt.Key_TouchpadOn:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_TouchpadOn : Key_TouchpadOn ")
-        #     # elif e.key() == Qt.Key_TouchpadToggle:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_TouchpadToggle : Key_TouchpadToggle ")
-        #     # elif e.key() == Qt.Key_Touroku:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Touroku : Key_Touroku ")
-        #     # elif e.key() == Qt.Key_Travel:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Travel : Key_Travel ")
-        #     # elif e.key() == Qt.Key_TrebleDown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_TrebleDown : Key_TrebleDown ")
-        #     # elif e.key() == Qt.Key_TrebleUp:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_TrebleUp : Key_TrebleUp ")
-        #     # elif e.key() == Qt.Key_twosuperior:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_twosuperior : Key_twosuperior ")
-        #     # elif e.key() == Qt.Key_U:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_U : Key_U ")
-        #     # elif e.key() == Qt.Key_Uacute:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Uacute : Key_Uacute ")
-        #     # elif e.key() == Qt.Key_Ucircumflex:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Ucircumflex : Key_Ucircumflex ")
-        #     # elif e.key() == Qt.Key_Udiaeresis:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Udiaeresis : Key_Udiaeresis ")
-        #     # elif e.key() == Qt.Key_Ugrave:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Ugrave : Key_Ugrave ")
-        #     # elif e.key() == Qt.Key_Underscore:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Underscore : Key_Underscore ")
-        #     # elif e.key() == Qt.Key_Undo:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Undo : Key_Undo ")
-        #     # elif e.key() == Qt.Key_unknown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_unknown : Key_unknown ")
-        #     # elif e.key() == Qt.Key_Up:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Up : Key_Up ")
-        #     # elif e.key() == Qt.Key_UWB:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_UWB : Key_UWB ")
-        #     # elif e.key() == Qt.Key_V:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_V : Key_V ")
-        #     # elif e.key() == Qt.Key_Video:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Video : Key_Video ")
-        #     # elif e.key() == Qt.Key_View:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_View : Key_View ")
-        #     # elif e.key() == Qt.Key_VoiceDial:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_VoiceDial : Key_VoiceDial ")
-        #     # elif e.key() == Qt.Key_VolumeDown:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_VolumeDown : Key_VolumeDown ")
-        #     # elif e.key() == Qt.Key_VolumeMute:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_VolumeMute : Key_VolumeMute ")
-        #     # elif e.key() == Qt.Key_VolumeUp:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_VolumeUp : Key_VolumeUp ")
-        #     # elif e.key() == Qt.Key_W:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_W : Key_W ")
-        #     # elif e.key() == Qt.Key_WakeUp:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_WakeUp : Key_WakeUp ")
-        #     # elif e.key() == Qt.Key_WebCam:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_WebCam : Key_WebCam ")
-        #     # elif e.key() == Qt.Key_WLAN:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_WLAN : Key_WLAN ")
-        #     # elif e.key() == Qt.Key_Word:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Word : Key_Word ")
-        #     # elif e.key() == Qt.Key_WWW:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_WWW : Key_WWW ")
-        #     # elif e.key() == Qt.Key_X:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_X : Key_X ")
-        #     # elif e.key() == Qt.Key_Xfer:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Xfer : Key_Xfer ")
-        #     # elif e.key() == Qt.Key_Y:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Y : Key_Y ")
-        #     # elif e.key() == Qt.Key_Yacute:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Yacute : Key_Yacute ")
-        #     # elif e.key() == Qt.Key_ydiaeresis:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ydiaeresis : Key_ydiaeresis ")
-        #     # elif e.key() == Qt.Key_Yellow:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Yellow : Key_Yellow ")
-        #     # elif e.key() == Qt.Key_yen:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_yen : Key_yen ")
-        #     # elif e.key() == Qt.Key_Yes:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Yes : Key_Yes ")
-        #     # elif e.key() == Qt.Key_Z:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Z : Key_Z ")
-        #     # elif e.key() == Qt.Key_Zenkaku:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Zenkaku : Key_Zenkaku ")
-        #     # elif e.key() == Qt.Key_Zenkaku_Hankaku:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Zenkaku_Hankaku : Key_Zenkaku_Hankaku ")
-        #     # elif e.key() == Qt.Key_Zoom:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_Zoom : Key_Zoom ")
-        #     # elif e.key() == Qt.Key_ZoomIn:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ZoomIn : Key_ZoomIn ")
-        #     # elif e.key() == Qt.Key_ZoomOut:
-        #     #     self.label11.setText(f"keyboard event monitor:\nKey_ZoomOut : Key_ZoomOut ")
-
         # deprecated test
         # def inputbox_changed(self):
         #     DebuggingUtil.commentize("inputbox 텍스트 change event 감지 되었습니다")
         #     print(self.inputbox.ment())
-        #
+        # 
         # def inputbox_edit_finished(self):
         #     DebuggingUtil.commentize("inputbox edit finish event 감지 되었습니다")
-        #
+        # 
         # def inputbox_return_pressed(self):
         #     DebuggingUtil.commentize("inputbox return pressed event 감지 되었습니다")
 
@@ -3512,9 +2866,9 @@ class UiUtil:
                 self.setGeometry(1600 - int(self.display_width_default), 0, int(self.display_width_default), int(self.display_height[0]))
                 self.windows_size_mode = 0
 
-        def set_shortcut(self, btn_name_promised, function):
+        def set_shortcut(self, shortcut_key_promised, function):
             # self.shortcut = QShortcut(QKeySequence(self.available_shortcut_list[btn_name_promised]), self)  # ctrl+1 2개 키들의 조합 설정
-            self.shortcut = QShortcut(self.available_shortcut_list[btn_name_promised], self)  # ctrl+n+d 3개 키들의 조합 설정 시도
+            self.shortcut = QShortcut(self.available_shortcut_list[shortcut_key_promised], self)  # ctrl+n+d 3개 키들의 조합 설정 시도
             self.shortcut.activated.connect(function)
             pass
 
@@ -3530,7 +2884,7 @@ class UiUtil:
             # 이 경우에는 콘솔이 아니라 pyside6 로 만든 UI 에서 나타났다.
             # 새벽에 이 문제를 만나서 잠깐 넋나갔는데 아침에 다시보니 그때 경험이 떠올라서 실험해보니 잘 해결되었다. 덕분에 pyside6에서 위젯에 폰트 적용하는 법도 터득
 
-            # pyside6 버튼 내부폰트 설정
+            # pyside6 버튼 내장폰트 설정
             # pyside6 built in fixed width font
             # font = QFont("Monospace")
             # font = QFont("Ubuntu Mono")
@@ -3558,12 +2912,16 @@ class UiUtil:
             button.setFont(Pyside6Util.get_font_for_pyside6(font_path=FontsUtil.GMARKETSANSTTFLIGHT_TTF))
             if btn_text_align == "right":
                 # button.setStyleSheet("QPushButton { text-align: right; color: rgba(255,255,255, 0.9); height: 20px; font-size: 8px}")
-                button.setStyleSheet("QPushButton { text-align: right; color: rgba(255,255,255, 0.9);               font-size: 8px}")
+                # button.setStyleSheet("QPushButton { text-align: right; color: rgba(255,255,255, 0.9);               font-size: 8px}")
+                button.setStyleSheet("QPushButton { text-align: right; color: rgba(255,255,255, 0.9);               font-size: 13px}")
+                # button.setStyleSheet("QPushButton { text-align: right; color: rgba(255,255,255, 0.9); height: 20px; font-size: 13px}")
                 button.setFixedWidth(65)
                 # button.setMinimumWidth(button.sizeHint().width())
             else:
                 # button.setStyleSheet("QPushButton { text-align: left; color: rgba(255,255,255, 0.9); height: 20px; font-size: 8px}")
-                button.setStyleSheet("QPushButton { text-align: left; color: rgba(255,255,255, 0.9);                 font-size: 8px}")
+                # button.setStyleSheet("QPushButton { text-align: left; color: rgba(255,255,255, 0.9);                 font-size: 8px}")
+                button.setStyleSheet("QPushButton { text-align: left; color: rgba(255,255,255, 0.9);                 font-size: 13px}")
+                # button.setStyleSheet("QPushButton { text-align: left; color: rgba(255,255,255, 0.9); height: 20px; font-size: 13px}")
                 button.setFixedWidth(225)
                 # button.setMinimumWidth(button.sizeHint().width())
             return button
@@ -3591,6 +2949,7 @@ class UiUtil:
 
         @rpa_program_method_decorator
         def should_i_reboot_this_computer(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_reboot_this_computer()
 
         @QtCore.Slot()
@@ -3599,14 +2958,17 @@ class UiUtil:
 
         @rpa_program_method_decorator
         def should_i_show_animation_information_from_web(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_show_animation_information_from_web()
 
         @rpa_program_method_decorator
         def should_i_exit_this_program(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_exit_this_program()
 
         @rpa_program_method_decorator
         def should_i_find_direction_via_naver_map(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_find_direction_via_naver_map()
 
         @rpa_program_method_decorator
@@ -3615,10 +2977,12 @@ class UiUtil:
 
         @rpa_program_method_decorator
         def should_i_download_youtube_as_webm(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_download_youtube_as_webm()
 
         @rpa_program_method_decorator
         def should_i_download_youtube_as_webm_alt(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_download_youtube_as_webm_alt()
 
         @rpa_program_method_decorator
@@ -3627,6 +2991,7 @@ class UiUtil:
 
         @rpa_program_method_decorator
         def should_i_shutdown_this_computer(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_shutdown_this_computer()
 
         @rpa_program_method_decorator
@@ -3649,10 +3014,12 @@ class UiUtil:
 
         @rpa_program_method_decorator
         def should_i_back_up_target(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_back_up_target()
 
         @rpa_program_method_decorator
         def should_i_start_test(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_start_test_core()
 
         @rpa_program_method_decorator
@@ -3662,18 +3029,22 @@ class UiUtil:
 
         @rpa_program_method_decorator
         def should_i_enter_to_power_saving_mode(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_enter_to_power_saving_mode()
 
         @rpa_program_method_decorator
         def should_i_translate_eng_to_kor(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_translate_eng_to_kor()
 
         @rpa_program_method_decorator
         def should_i_translate_kor_to_eng(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_translate_kor_to_eng()
 
         @rpa_program_method_decorator
         def should_i_empty_trash_can(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_do(ment="쓰레기통을 비울까요?", function=BusinessLogicUtil.empty_recycle_bin, auto_click_negative_btn_after_seconds=10)
 
         @rpa_program_method_decorator
@@ -3686,10 +3057,12 @@ class UiUtil:
 
         @rpa_program_method_decorator
         def should_i_connect_to_rdp1(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_connect_to_rdp1()
 
         @rpa_program_method_decorator
         def should_i_record_macro(self):
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.should_i_record_macro()
 
         @rpa_program_method_decorator
@@ -3866,7 +3239,7 @@ class UiUtil:
 
             # 매크로녹화시작 로깅
             log_title = "매크로녹화시작"
-            contents = f"{StateManagementUtil.line_length_promised}{BusinessLogicUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title}"
+            contents = f"{StateManagementUtil.LINE_LENGTH_PROMISED}{BusinessLogicUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title}"
             DebuggingUtil.debug_as_cli(contents)
             self.save_macro_log(contents=contents)
 
@@ -3965,7 +3338,7 @@ class UiUtil:
             # 매크로녹화종료 로깅
             log_title = "매크로녹화종료"
             self.time_recording_end = self.elapsed_full_recording_time
-            contents = f"{StateManagementUtil.line_length_promised}{BusinessLogicUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title}"
+            contents = f"{StateManagementUtil.LINE_LENGTH_PROMISED}{BusinessLogicUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title}"
             DebuggingUtil.debug_as_cli(contents)
             self.save_macro_log(contents=contents)
 
@@ -4162,7 +3535,7 @@ class UiUtil:
 
     class CustomQthread(QThread):
         """pyside6 app 전용 객체"""
-        finished = Signal()  # run()의 완료 신호를 보내기 위해 필요, run() 은 상속된 QThread 객체의 run()을 통해서 오버라이딩 되는 것 보인다.
+        finished = Signal()  # run()의 성공 신호를 보내기 위해 필요, run() 은 상속된 QThread 객체의 run()을 통해서 오버라이딩 되는 것 보인다.
 
         def __init__(self, q_application):  # 이 생성자는 q_application 를 받기 위해서 내가 작성 q_application 가 필요없는 void method QThread 이용 시 그냥 없애면 되는 생성자.
             super().__init__()
@@ -4177,7 +3550,7 @@ class UiUtil:
 
             def tmp2(q_application: QApplication):
                 global dialog2
-                dialog2 = UiUtil.CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(ment="테스트", buttons=["실행", "실행하지 않기"]), is_app_instance_mode=False)
+                dialog2 = UiUtil.CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(ment="테스트", btns=["실행", "실행하지 않기"]), is_app_instance_mode=False)
                 if dialog2.btn_text_clicked == "실행":
                     TextToSpeechUtil.speak_ments("정상적으로 동작합니다", sleep_after_play=0.65)
 
@@ -4200,7 +3573,7 @@ class UiUtil:
             keyboard_main_listener = pynput.keyboard.GlobalHotKeys(hotkeys=shortcut_keys_up_promised)
             keyboard_main_listener.start()
 
-            self.finished.emit()  # 작업이 완료되었음을 신호로 알림 # flutter 상태관리와 비슷
+            self.finished.emit()  # 작업이 성공되었음을 신호로 알림 # flutter 상태관리와 비슷
             print("QThread 실행 증...")
 
     class SharedObject(QObject):
@@ -4257,7 +3630,7 @@ class UiUtil:
     @staticmethod
     def pop_up_as_complete(title: str, ment: str, auto_click_positive_btn_after_seconds: int, input_text_default=""):
         """결과팝업, 자동클릭설정가능"""
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         FileSystemUtil.play_wav_file(file_abspath=StateManagementUtil.POP_SOUND_WAV)
 
         app_foo = None
@@ -4271,7 +3644,7 @@ class UiUtil:
         else:
             is_input_text_box = True
 
-        dialog = UiUtil.CustomQdialog(title=title, ment=ment, buttons=["확인"], is_input_box=is_input_text_box, input_box_text_default=input_text_default, auto_click_positive_btn_after_seconds=auto_click_positive_btn_after_seconds)
+        dialog = UiUtil.CustomQdialog(title=title, ment=ment, btns=["확인"], is_input_box=is_input_text_box, input_box_text_default=input_text_default, auto_click_positive_btn_after_seconds=auto_click_positive_btn_after_seconds)
         dialog.exec()
         btn_text_clicked = dialog.btn_text_clicked
 
@@ -4335,12 +3708,12 @@ class TextToSpeechUtil:
         async def is_containing_special_characters(start_index: int, end_index: int, text: str):
             pattern = "[~!@#$%^&*()_+|<>?:{}]"  # , 는 제외인가?
             if re.search(pattern, text[start_index:end_index]):
-                # print(f"쓰레드 {start_index}에서 {end_index}까지 작업 완료 True return")
+                # print(f"쓰레드 {start_index}에서 {end_index}까지 작업 성공 True return")
                 result_list.append(True)
                 # return True
             else:
                 result_list.append(False)
-                # print(f"쓰레드 {start_index}에서 {end_index}까지 작업 완료 False return")
+                # print(f"쓰레드 {start_index}에서 {end_index}까지 작업 성공 False return")
                 # return False
 
         # 비동기 이벤트 루프 설정
@@ -4544,7 +3917,7 @@ class TextToSpeechUtil:
 
     @staticmethod
     def get_length_of_mp3(target_abspath: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             audio = MP3(target_abspath)
             return audio.info.length
@@ -4557,7 +3930,7 @@ class TextToSpeechUtil:
     @staticmethod
     def run_loop_for_speak_as_async_deprecated(ment):
         async def speak_as_async(ment):
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             # pyglet_player 가 play() 하고 있으면 before_mp3_length_used_in_speak_as_async 만큼 대기
             DebuggingUtil.debug_as_cli(rf'before_mp3_length_used_in_speak_as_async 만큼 재생 대기')
 
@@ -4622,7 +3995,7 @@ class TextToSpeechUtil:
                             # 음악파일의 앞부분에 빈소리를 추가해주려고 한다. ffmpeg를 이용하여 silent.mp3(1초간 소리가 없는 mp3 파일)을 소리를 재생해야할 mp3 파일의 앞부분에 합쳐서 재생시도.
                             silent_mp3 = rf"{cache_mp3}\silent.mp3"
                             if not os.path.exists(silent_mp3):
-                                BusinessLogicUtil.debug_as_gui("사일런트 mp3 파일이 없습니다")
+                                BusinessLogicUtil.debug("사일런트 mp3 파일이 없습니다")
                                 break
                             if not os.path.exists(ment_mp3):
                                 cmd = rf'echo y | "ffmpeg" -i "concat:{os.path.abspath(silent_mp3)}|{os.path.abspath(ment__mp3)}" -acodec copy -metadata "title=Some Song" "{os.path.abspath(ment_mp3)}" -map_metadata 0:-1  >nul 2>&1'
@@ -4697,7 +4070,7 @@ class TextToSpeechUtil:
             except Exception:
                 DebuggingUtil.trouble_shoot("%%%FOO%%%")
 
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(speak_as_async(ment))
@@ -4762,7 +4135,7 @@ class TextToSpeechUtil:
         # 비동기 이벤트 함수 설정 (simple for void async processing)
         async def process_thread_speak(ment):
             # while not exit_event.is_set(): # 쓰레드 이벤트 제어
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             ment = str(ment)
             ment = ment.strip()
             if ment == "":
@@ -4771,7 +4144,7 @@ class TextToSpeechUtil:
                 ment = TextToSpeechUtil.remove_special_characters(text=ment)
             while True:
                 ments = [x.strip() for x in ment.replace(".", ",").split(",")]  # from "abc,abc.abc,abc." to ["abc","abc","abc","abc"] # , or . 를 넣으면 나누어 읽도록 업데이트
-                ments = [x for x in ments if x.strip()]  # 리스트 요소 "" 제거,  ["", A] ->  [A]
+                ments = [x for x in ments if x.strip()]  # 리스트 요소 "" 제거,  from ["", A] to [A]
                 # [print(sample) for sample in ments ]
                 # print(rf'ments : {ments}')
                 # print(rf'type(ments) : {type(ments)}')
@@ -4800,7 +4173,7 @@ class TextToSpeechUtil:
 
     @staticmethod
     def speak_ment(ment, sleep_after_play=1.00):  # 많이 쓸 수록 프로그램이 느려진다
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         ment = str(ment)
         ment = ment.strip()
         if TextToSpeechUtil.is_containing_special_characters_without_thread(text=ment):
@@ -4846,7 +4219,7 @@ class TextToSpeechUtil:
                     try:
                         silent_mp3 = rf"{cache_mp3}\silent.mp3"
                         if not os.path.exists(silent_mp3):
-                            BusinessLogicUtil.debug_as_gui("사일런트 mp3 파일이 없습니다")
+                            BusinessLogicUtil.debug("사일런트 mp3 파일이 없습니다")
                             break
                         if not os.path.exists(ment_mp3):
                             cmd = rf'echo y | "ffmpeg" -i "concat:{os.path.abspath(silent_mp3)}|{os.path.abspath(ment__mp3)}" -acodec copy -metadata "title=Some Song" "{os.path.abspath(ment_mp3)}" -map_metadata 0:-1  >nul 2>&1'
@@ -4882,7 +4255,7 @@ class TextToSpeechUtil:
 
     @staticmethod
     def speak_ment_without_async_and_return_last_word_mp3_length(ment, sleep_after_play=1.00):  # 많이 쓸 수록 프로그램이 느려진다
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         ment = str(ment)
         ment = ment.strip()
         if TextToSpeechUtil.is_containing_special_characters_with_thread(text=ment):
@@ -4937,7 +4310,7 @@ class TextToSpeechUtil:
                         # 음악파일의 앞부분에 빈소리를 추가해주려고 한다. ffmpeg를 이용하여 silent.mp3(1초간 소리가 없는 mp3 파일)을 소리를 재생해야할 mp3 파일의 앞부분에 합쳐서 재생시도.
                         silent_mp3 = rf"{cache_mp3}\silent.mp3"
                         if not os.path.exists(silent_mp3):
-                            BusinessLogicUtil.debug_as_gui("사일런트 mp3 파일이 없습니다")
+                            BusinessLogicUtil.debug("사일런트 mp3 파일이 없습니다")
                             break
                         if not os.path.exists(ment_mp3):
                             cmd = rf'echo y | "ffmpeg" -i "concat:{os.path.abspath(silent_mp3)}|{os.path.abspath(ment__mp3)}" -acodec copy -metadata "title=Some Song" "{os.path.abspath(ment_mp3)}" -map_metadata 0:-1  >nul 2>&1'
@@ -5004,20 +4377,20 @@ class TextToSpeechUtil:
 
     @staticmethod
     def speak_server_hh_mm():  # '몇 시야' or usr_input_txt == '몇시야':
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         server_hour = BusinessLogicUtil.get_time_as_('%H')
         server_minute = BusinessLogicUtil.get_time_as_('%M')
         TextToSpeechUtil.speak_ments(f'{server_hour}시 {server_minute}분 입니다', sleep_after_play=0.65)
 
     @staticmethod
     def speak_server_ss():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         server_seconds = BusinessLogicUtil.get_time_as_('%S')
         TextToSpeechUtil.speak_ments(f'{server_seconds}초', sleep_after_play=0.65)
 
     @staticmethod
     def speak_today_time_info():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         yyyy = BusinessLogicUtil.get_time_as_('%Y')
         MM = BusinessLogicUtil.get_time_as_('%m')
         dd = BusinessLogicUtil.get_time_as_('%d')
@@ -5125,7 +4498,7 @@ class DbTomlUtil:
         try:
             db_abspath = StateManagementUtil.DB_TOML
             # db_template =Park4139.db_template
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             if not os.path.exists(os.path.dirname(db_abspath)):
                 os.makedirs(os.path.dirname(db_abspath))  # 이거 파일도 만들어지나? 테스트 해보니 안만들어짐 디렉토리만 만들어짐
             # DebuggingUtil.commentize("db 파일 존재 검사 시도")
@@ -5142,7 +4515,7 @@ class DbTomlUtil:
     @staticmethod
     def read_db_toml():
         try:
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             print("DB 의 모든 자료를 가져왔습니다")
             return toml.load(StateManagementUtil.DB_TOML)
         except:
@@ -5156,7 +4529,7 @@ class DbTomlUtil:
     def select_db_toml(key):
         try:
             key = str(key)
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             db_abspath = StateManagementUtil.DB_TOML
             try:
                 # return toml.load(DB_TOML)[key]
@@ -5175,7 +4548,7 @@ class DbTomlUtil:
         try:
             db_abspath = StateManagementUtil.DB_TOML
             key: str = str(key)
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             # 기존의 DB 의 데이터
             with open(db_abspath, 'r', encoding='utf-8') as f:
                 db = toml.load(f)
@@ -5207,7 +4580,7 @@ class DbTomlUtil:
         try:
             key = str(key)
             db_abspath = StateManagementUtil.DB_TOML
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             db_abspath = StateManagementUtil.DB_TOML
             # 기존의 DB 의 데이터
             with open(db_abspath, 'r', encoding='utf-8') as f:
@@ -5238,7 +4611,7 @@ class DbTomlUtil:
     @staticmethod
     def back_up_db_toml():
         try:
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             BusinessLogicUtil.back_up_target(StateManagementUtil.DB_TOML)
         except:
             DebuggingUtil.trouble_shoot("%%%FOO%%%")
@@ -5246,14 +4619,14 @@ class DbTomlUtil:
     @staticmethod
     def delete_db_toml():
         try:
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             FileSystemUtil.convert_as_zip_with_timestamp(StateManagementUtil.DB_TOML)
         except:
             DebuggingUtil.trouble_shoot("%%%FOO%%%")
 
     @staticmethod
     def is_accesable_local_database():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         if not os.path.exists(StateManagementUtil.DB_TOML):
             DbTomlUtil.create_db_toml()
             return False
@@ -5274,7 +4647,7 @@ class Pyside6Util:
 class SeleniumUtil:
     @staticmethod
     def get_driver_for_selenium():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         import selenium.webdriver as webdriver
         # DebuggingUtil.commentize("웹 드라이버 설정")
         options = SeleniumUtil.get_webdriver_options_customed()
@@ -5287,18 +4660,22 @@ class SeleniumUtil:
         driver = webdriver.Chrome(options=options)
         driver.get('about:blank')
         driver.execute_script("Object.defineProperty(navigator, 'plugins', {get: function() {return[1, 2, 3, 4, 5]}})")  # hide plugin 0EA
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         driver.execute_script("Object.defineProperty(navigator, 'languages', {get: function() {return ['ko-KR', 'ko']}})")  # hide own lanuages
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         driver.execute_script("const getParameter = WebGLRenderingContext.getParameter;WebGLRenderingContext.prototype.getParameter = function(parameter) {if (parameter === 37445) {return 'NVIDIA Corporation'} if (parameter === 37446) {return 'NVIDIA GeForce GTX 980 Ti OpenGL Engine';}return getParameter(parameter);};")  # hide own gpu # WebGL렌더러를 Nvidia회사와 GTX980Ti엔진인 ‘척’ 하는 방법입니다.
         return driver
 
     @staticmethod
     def get_webdriver_options_customed():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         import selenium.webdriver as webdriver
         options = webdriver.ChromeOptions()
+
+        # 백그라운드 실행 설정
+        # headless 옵션은 브라우저를 화면에 표시하지 않고 백그라운드에서 실행하는 모드 설정
         options.add_argument('headless')
+
         # options.add_argument('window-size=1920x1080')
         options.add_argument('window-size=3440x1440')  # size 하드코딩 되어 있는 부분을 pyautogui 에서 size() 로 대체하는 것이 좋겠다.
         options.add_argument("lang=ko_KR")  # 한국어!
@@ -5351,7 +4728,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def validate_and_return(value: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             print(rf'value : {value}')
             print(rf'type(value) : {type(value)}')
@@ -5379,24 +4756,24 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_download_youtube_as_webm_alt():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="다운로드하고 싶은 URL을 제출해주세요?", buttons=["제출", "제출하지 않기"], is_input_box=True)
+            dialog = UiUtil.CustomQdialog(ment="다운로드하고 싶은 URL을 입력해주세요", btns=["입력", "입력하지 않기"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
-            if btn_text_clicked == "제출":
+            if btn_text_clicked == "입력":
                 BusinessLogicUtil.download_from_youtube_to_webm_alt(dialog.input_box.text())
             else:
                 break
 
     @staticmethod
     def should_i_shutdown_this_computer():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="시스템을 종료할까요?", buttons=["종료", "종료하지 않기"])
+            dialog = UiUtil.CustomQdialog(ment="시스템을 종료할까요?", btns=["종료", "종료하지 않기"])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "종료":
                 FileSystemUtil.shutdown_this_computer()
@@ -5405,11 +4782,11 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_back_up_target():  # please_type_abspath_to_back_up
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="빽업할 타겟경로를 입력하세요", buttons=["입력", "입력하지 않기"], is_input_box=True)
+            dialog = UiUtil.CustomQdialog(ment="빽업할 타겟경로를 입력하세요", btns=["입력", "입력하지 않기"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "입력":
                 BusinessLogicUtil.back_up_target(dialog.input_box.text())
@@ -5418,8 +4795,9 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_start_test_core():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="테스트를 시작할까요?", buttons=["시작하기", "시작하지 않기"])
+            dialog = UiUtil.CustomQdialog(ment="테스트를 시작할까요?", btns=["시작하기", "시작하지 않기"])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
             if btn_text_clicked == "시작하기":
@@ -5429,24 +4807,40 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_enter_to_power_saving_mode():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="절전모드로 진입할까요?", buttons=["진입", "진입하지 않기"])
+            dialog = UiUtil.CustomQdialog(ment="절전모드로 진입할까요?", btns=["진입", "10분 뒤 진입", "20분 뒤 진입", "30분 뒤 진입", "1시간 뒤 진입", "진입하지 않기"])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "진입":
+                FileSystemUtil.enter_power_saving_mode()
+            elif btn_text_clicked == "10분 뒤 진입":
+                UiUtil.pop_up_as_complete(title="작업중간보고", ment="10분 뒤 절전모드 진입을 시도합니다", input_text_default="", auto_click_positive_btn_after_seconds=3)
+                BusinessLogicUtil.sleep(min=10)
+                FileSystemUtil.enter_power_saving_mode()
+            elif btn_text_clicked == "20분 뒤 진입":
+                UiUtil.pop_up_as_complete(title="작업중간보고", ment="20분 뒤 절전모드 진입을 시도합니다", input_text_default="", auto_click_positive_btn_after_seconds=3)
+                BusinessLogicUtil.sleep(min=20)
+                FileSystemUtil.enter_power_saving_mode()
+            elif btn_text_clicked == "30분 뒤 진입":
+                UiUtil.pop_up_as_complete(title="작업중간보고", ment="30분 뒤 절전모드 진입을 시도합니다", input_text_default="", auto_click_positive_btn_after_seconds=3)
+                BusinessLogicUtil.sleep(min=30)
+                FileSystemUtil.enter_power_saving_mode()
+            elif btn_text_clicked == "1시간 뒤 진입":
+                UiUtil.pop_up_as_complete(title="작업중간보고", ment="1시간 뒤 절전모드 진입을 시도합니다", input_text_default="", auto_click_positive_btn_after_seconds=3)
+                BusinessLogicUtil.sleep(min=60)
                 FileSystemUtil.enter_power_saving_mode()
             else:
                 break
 
     @staticmethod
     def should_i_translate_eng_to_kor():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="WRITE SOMETHING YOU WANT TO TRANSLATE", buttons=["Translate this to Korean", "Don't"], is_input_box=True)
+            dialog = UiUtil.CustomQdialog(ment="WRITE SOMETHING YOU WANT TO TRANSLATE", btns=["Translate this to Korean", "Don't"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "Translate this to Korean":
                 BusinessLogicUtil.translate_eng_to_kor(dialog.input_box.text())
@@ -5455,11 +4849,11 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_translate_kor_to_eng():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment='번역하고 싶은 내용을 입력하세요', buttons=["영어로 번역", "번역하지 않기"], is_input_box=True)
+            dialog = UiUtil.CustomQdialog(ment='번역하고 싶은 내용을 입력하세요', btns=["영어로 번역", "번역하지 않기"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "영어로 번역":
                 BusinessLogicUtil.translate_kor_to_eng(dialog.input_box.text())
@@ -5468,12 +4862,12 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_exit_this_program():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             # dialog = UiUtil.CustomQdialog(context="앱을 종료할까요?", buttons=["종료", "종료하지 않기"])
-            dialog = UiUtil.CustomQdialog(ment="프로그램을 종료할까요?", buttons=["종료", "종료하지 않기"])
+            dialog = UiUtil.CustomQdialog(ment="프로그램을 종료할까요?", btns=["종료", "종료하지 않기"])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "종료":
                 # app.quit()
@@ -5486,11 +4880,11 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_show_animation_information_from_web():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="nyaa.si 에서 검색할 내용을 입력하세요", buttons=["검색", "검색하지 않기"], is_input_box=True)
+            dialog = UiUtil.CustomQdialog(ment="nyaa.si 에서 검색할 내용을 입력하세요", btns=["검색", "검색하지 않기"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "검색":
                 BusinessLogicUtil.search_animation_data_from_web(dialog.input_box.text())
@@ -5499,11 +4893,11 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_find_direction_via_naver_map():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="어디로 길을 찾아드릴까요?", buttons=["찾아줘", "찾아주지 않아도 되"], is_input_box=True)
+            dialog = UiUtil.CustomQdialog(ment="어디로 길을 찾아드릴까요?", btns=["찾아줘", "찾아주지 않아도 되"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "찾아줘":
                 BusinessLogicUtil.find_direction_via_naver_map(dialog.input_box.text())
@@ -5513,11 +4907,11 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_reboot_this_computer():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment='시스템을 재시작할까요?', buttons=[MentsUtil.YES, MentsUtil.NO])
+            dialog = UiUtil.CustomQdialog(ment='시스템을 재시작할까요?', btns=[MentsUtil.YES, MentsUtil.NO])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == MentsUtil.YES:
                 BusinessLogicUtil.reboot_this_computer()
@@ -5530,10 +4924,9 @@ class BusinessLogicUtil:
         if previous_question == None:
             previous_question = clipboard.paste()
         while True:
-            dialog = UiUtil.CustomQdialog(ment='AI 에게 할 질문을 입력하세요', buttons=["질문하기", "질문하지 않기"], is_input_box=True, input_box_text_default=previous_question)
+            dialog = UiUtil.CustomQdialog(ment='AI 에게 할 질문을 입력하세요', btns=["질문하기", "질문하지 않기"], is_input_box=True, input_box_text_default=previous_question)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == "질문하기":
                 BusinessLogicUtil.ask_to_web(dialog.input_box.text())
@@ -5543,11 +4936,11 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_connect_to_rdp1():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment='rdp1에 원격접속할까요?', buttons=[MentsUtil.YES, MentsUtil.NO])
+            dialog = UiUtil.CustomQdialog(ment='rdp1에 원격접속할까요?', btns=[MentsUtil.YES, MentsUtil.NO])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
             DebuggingUtil.debug_as_cli(btn_text_clicked)
             if btn_text_clicked == MentsUtil.YES:
                 BusinessLogicUtil.connect_remote_rdp1()
@@ -5556,8 +4949,9 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_record_macro():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="매크로 레코드를 어떻게 시작할까요?", buttons=["새로 시작하기", "이어서 시작하기", "시작하지 않기"])
+            dialog = UiUtil.CustomQdialog(ment="매크로 레코드를 어떻게 시작할까요?", btns=["새로 시작하기", "이어서 시작하기", "시작하지 않기"])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
             if btn_text_clicked == "새로 시작하기":
@@ -5600,25 +4994,41 @@ class BusinessLogicUtil:
 
     @staticmethod
     # def should_i_do_that(ment: str, function, auto_click_negative_btn_after_seconds: int = 30, auto_click_positive_btn_after_seconds: int = None):
-    def should_i_do(ment: str, function: Callable = None, auto_click_negative_btn_after_seconds: int = None, auto_click_positive_btn_after_seconds: int = None):
-        # TtsUtil.speak_ments(ment=ment, sleep_after_play=0.65, thread_join_mode=True)
-        if auto_click_negative_btn_after_seconds == None and auto_click_positive_btn_after_seconds == None:
-            auto_click_negative_btn_after_seconds = 30
-        DebuggingUtil.commentize(ment=ment)
-        while True:
-            dialog = UiUtil.CustomQdialog(ment=ment, buttons=[MentsUtil.YES, MentsUtil.NO], auto_click_negative_btn_after_seconds=auto_click_negative_btn_after_seconds, auto_click_positive_btn_after_seconds=auto_click_positive_btn_after_seconds)
-            dialog.exec()
-            btn_text_clicked = dialog.btn_text_clicked
-            print(rf'btn_text_clicked : {btn_text_clicked}')
-            if btn_text_clicked == MentsUtil.YES:
-                if function != None:
-                    function()
-            else:
+    def should_i_do(ment: str, function: Callable = None, is_void_mode: bool = True, auto_click_negative_btn_after_seconds: int = None, auto_click_positive_btn_after_seconds: int = None):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        # function() 이 void 함수 일때 시도, is_void_mode= True 설정인 경우, is_void_mode 파라미터 제거 대기
+        if is_void_mode != True:
+            if auto_click_negative_btn_after_seconds == None and auto_click_positive_btn_after_seconds == None:
+                auto_click_negative_btn_after_seconds = 30
+            while True:
+                dialog = UiUtil.CustomQdialog(ment=ment, btns=[MentsUtil.YES, MentsUtil.NO], auto_click_negative_btn_after_seconds=auto_click_negative_btn_after_seconds, auto_click_positive_btn_after_seconds=auto_click_positive_btn_after_seconds)
+                dialog.exec()
+                if dialog.btn_text_clicked == MentsUtil.YES:
+                    if function != None:
+                        function()
+                else:
+                    break
                 break
-            break
+        # function() 이 return 함수 일때 시도, is_void_mode= false 설정인 경우,
+        # else:
+        #     if auto_click_negative_btn_after_seconds == None and auto_click_positive_btn_after_seconds == None:
+        #         auto_click_negative_btn_after_seconds = 30
+        #     while True:
+        #         dialog = UiUtil.CustomQdialog(ment=ment, btns=[MentsUtil.YES, MentsUtil.NO], auto_click_negative_btn_after_seconds=auto_click_negative_btn_after_seconds, auto_click_positive_btn_after_seconds=auto_click_positive_btn_after_seconds, is_input_box=True)
+        #         dialog.exec()
+        #         btn_text_clicked = dialog.btn_text_clicked
+        #         if btn_text_clicked == MentsUtil.YES:
+        #             if function != None:
+        #                 print(rf'function(url=dialog.input_box.text()) : {function(url=dialog.input_box.text())}')
+        #                 # function(url=dialog.input_box.text()) # fail
+        #                 partial(function, url=dialog.input_box.text()) # fail
+        #         else:
+        #             break
+        #         break
 
     @staticmethod
     def should_i_check_your_promised_routines_before_coding(routines: [str]):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """
         예정된 routines 수행 다하면 보상을 주는 게임을 실행할지 묻는 함수 mkmk
         """
@@ -5644,11 +5054,11 @@ class BusinessLogicUtil:
             if is_first_entry == True:
                 ment = '혹시 코딩을 할 계획이 있으신가요?, 코딩 전 루틴을 가이드할까요?'
                 # TextToSpeechUtil.speak_ments(ment=ment, sleep_after_play=0.55)
-                dialog = UiUtil.CustomQdialog(ment=ment, buttons=["하나씩 가이드해줘", "한번에 가이드해줘", "모두 미리 수행했어"], auto_click_positive_btn_after_seconds=30)
+                dialog = UiUtil.CustomQdialog(ment=ment, btns=["하나씩 가이드해줘", "한번에 가이드해줘", "모두 미리 수행했어"], auto_click_positive_btn_after_seconds=30)
                 is_first_entry = False
             else:
                 TextToSpeechUtil.speak_ments(ment='루틴을 하나씩 가이드할까요?', sleep_after_play=0.65)
-                dialog = UiUtil.CustomQdialog(ment='루틴을 하나씩 가이드할까요?', buttons=["하나씩 가이드해줘", "한번에 가이드해줘", "모두 미리 수행했어"], auto_click_positive_btn_after_seconds=30)
+                dialog = UiUtil.CustomQdialog(ment='루틴을 하나씩 가이드할까요?', btns=["하나씩 가이드해줘", "한번에 가이드해줘", "모두 미리 수행했어"], auto_click_positive_btn_after_seconds=30)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
             if btn_text_clicked == "모두 미리 수행했어":
@@ -5656,7 +5066,7 @@ class BusinessLogicUtil:
                 if len(routines) == 0:
                     ment = "모든 루틴을 계획대로 잘 수행하셨군요, 계획대로 잘 하셨습니다, 랜덤보상을 하나드릴게요"
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                    UiUtil.pop_up_as_complete(title="작업완료보고", ment=ment, auto_click_positive_btn_after_seconds=5)
+                    UiUtil.pop_up_as_complete(title="작업성공보고", ment=ment, auto_click_positive_btn_after_seconds=5)
                     # 랜덤보상들 여기에 작성하기
                     FileSystemUtil.explorer(StateManagementUtil.MUSIC_FOR_WORK)
                     break
@@ -5670,14 +5080,14 @@ class BusinessLogicUtil:
                     print(rf'type(routines) : {type(routines)}')
                     print(rf'len(routines) : {len(routines)}')
 
-                    dialog = UiUtil.CustomQdialog(ment=rf"{routines[cursor_position]} 하셨어요?", buttons=[MentsUtil.DONE, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=3600)
+                    dialog = UiUtil.CustomQdialog(ment=rf"{routines[cursor_position]} 하셨어요?", btns=[MentsUtil.DONE, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=3600)
                     dialog.exec()
                     if dialog.btn_text_clicked == MentsUtil.DONE:
                         del routines[cursor_position]  # 리스트의 특정 인덱스 삭제
                         if len(routines) == 0:
                             ment = "루틴을 하나하나 계획대로 잘 수행하셨군요,\n 계획대로 잘 하셨습니다,\n 미루지 않았으니 내일도 좋은일 가득할 거에요,\n 랜덤보상을 하나드릴게요"
                             TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                            UiUtil.pop_up_as_complete(title="작업완료보고", ment=ment, auto_click_positive_btn_after_seconds=5)
+                            UiUtil.pop_up_as_complete(title="작업성공보고", ment=ment, auto_click_positive_btn_after_seconds=5)
                             # 랜덤보상들 여기에 작성하기
                             FileSystemUtil.explorer(StateManagementUtil.MUSIC_FOR_WORK)
                             break
@@ -5685,15 +5095,15 @@ class BusinessLogicUtil:
                         # ment = f'정말로 "{routines[cursor_position]}" 하는 것을 다음으로 미루시겠어요?, 미루지 않는 습관은 인생에 중요한데도요?'
                         ment = f'정말로 "{routines[cursor_position]}" 하는 것을 다음으로 미루시겠어요?,\n 미루지 않는 습관은 인생에 중요한데도요?'
                         TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                        dialog = UiUtil.CustomQdialog(ment=ment, buttons=[MentsUtil.OK_I_WILL_DO_IT_NOW, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=3600)
+                        dialog = UiUtil.CustomQdialog(ment=ment, btns=[MentsUtil.OK_I_WILL_DO_IT_NOW, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=3600)
                         dialog.exec()
                         if dialog.btn_text_clicked == MentsUtil.OK_I_WILL_DO_IT_NOW:
-                            dialog = UiUtil.CustomQdialog(ment=f"{routines[cursor_position]} 하셨어요?", buttons=[MentsUtil.DONE, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=3600)
+                            dialog = UiUtil.CustomQdialog(ment=f"{routines[cursor_position]} 하셨어요?", btns=[MentsUtil.DONE, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=3600)
                             dialog.exec()
                             if dialog.btn_text_clicked == MentsUtil.DONE:
                                 del routines[cursor_position]  # 리스트의 특정 인덱스 삭제 # routines의 cursor_position에 대한 인덱스 삭제
                             elif dialog.btn_text_clicked == MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME:
-                                dialog = UiUtil.CustomQdialog(ment="이것만 미룰까요?", buttons=["이것만 미뤄", "전부 미뤄"], auto_click_negative_btn_after_seconds=3600)
+                                dialog = UiUtil.CustomQdialog(ment="이것만 미룰까요?", btns=["이것만 미뤄", "전부 미뤄"], auto_click_negative_btn_after_seconds=3600)
                                 dialog.exec()
                                 if dialog.btn_text_clicked == "이것만 미뤄":
                                     cursor_position = cursor_position + 1
@@ -5701,11 +5111,11 @@ class BusinessLogicUtil:
                                 elif dialog.btn_text_clicked == "전부 미뤄":
                                     TextToSpeechUtil.speak_ments("네 알겠어요. 전부 미룰게요. 기억해둘게요. 나중에 다시하실 수 있게요", sleep_after_play=0.65)
                                     routines_left: str = "\n".join(routines)
-                                    dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", buttons=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
+                                    dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
                                     dialog.exec()
                                     break
                         elif dialog.btn_text_clicked == MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME:
-                            dialog = UiUtil.CustomQdialog(ment="이것만 미룰까요?", buttons=["남은 루틴 이것만 미뤄", "남은 루틴 전부 미뤄"], auto_click_negative_btn_after_seconds=3600)
+                            dialog = UiUtil.CustomQdialog(ment="이것만 미룰까요?", btns=["남은 루틴 이것만 미뤄", "남은 루틴 전부 미뤄"], auto_click_negative_btn_after_seconds=3600)
                             dialog.exec()
                             if dialog.btn_text_clicked == "남은 루틴 이것만 미뤄":
                                 cursor_position = cursor_position + 1
@@ -5713,7 +5123,7 @@ class BusinessLogicUtil:
                             elif dialog.btn_text_clicked == "남은 루틴 전부 미뤄":
                                 TextToSpeechUtil.speak_ments("네 알겠어요 남은 루틴을 전부 미룰게요. 기억해둘게요 나중에 다시하실 수 있게요", sleep_after_play=0.65)
                                 routines_left: str = "\n".join(routines)
-                                dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", buttons=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
+                                dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
                                 dialog.exec()
                                 break
                 break
@@ -5721,45 +5131,47 @@ class BusinessLogicUtil:
             elif btn_text_clicked == "한번에 가이드해줘":
                 TextToSpeechUtil.speak_ments("네 한번에 가이드를 할게요 예정된 루틴목록입니다", sleep_after_play=0.65)
                 routines_promised: str = "\n".join(routines)
-                dialog = UiUtil.CustomQdialog(ment=f"<예정된 루틴목록>\n\n{routines_promised}", buttons=[MentsUtil.DONE, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=10)
+                dialog = UiUtil.CustomQdialog(ment=f"<예정된 루틴목록>\n\n{routines_promised}", btns=[MentsUtil.DONE, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=10)
                 dialog.exec()
                 if dialog.btn_text_clicked == MentsUtil.DONE:
                     ment = "계획대로 잘 하셨습니다, 미루지 않았으니 내일도 좋은일 가득할 거에요, 랜덤보상을 하나드릴게요"
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                    UiUtil.pop_up_as_complete(title="작업완료보고", ment=ment, auto_click_positive_btn_after_seconds=5)
+                    UiUtil.pop_up_as_complete(title="작업성공보고", ment=ment, auto_click_positive_btn_after_seconds=5)
                     # 랜덤보상들 여기에 작성하기
                     FileSystemUtil.explorer(StateManagementUtil.MUSIC_FOR_WORK)
                     break
                 elif dialog.btn_text_clicked == MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME:
                     TextToSpeechUtil.speak_ments("네 알겠어요 남은 루틴을 전부 미룰게요. 기억해둘게요 나중에 다시하실 수 있게요", sleep_after_play=0.65)
                     routines_left: str = "\n".join(routines)
-                    dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", buttons=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
+                    dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
                     dialog.exec()
                     break
             break
 
     @staticmethod
     def should_i_download_youtube_as_webm():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        text_previous_from_clipboard = None
         while True:
-            dialog = UiUtil.CustomQdialog(ment="다운로드하고 싶은 URL을 제출해주세요?", buttons=["제출", "제출하지 않기"], is_input_box=True, auto_click_negative_btn_after_seconds=30)
+            if text_previous_from_clipboard != clipboard.paste():
+                text_previous_from_clipboard = clipboard.paste()
+            else:
+                text_previous_from_clipboard = ""
+            dialog = UiUtil.CustomQdialog(ment="다운로드하고 싶은 URL을 입력해주세요", btns=["입력", "입력하지 않기"], is_input_box=True, input_box_text_default=text_previous_from_clipboard)
             dialog.exec()
-            # dialog.show()
-            btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.commentize("btn_text_clicked")
-            DebuggingUtil.debug_as_cli(btn_text_clicked)
-            if btn_text_clicked == "제출":
-                BusinessLogicUtil.download_from_youtube_to_webm(dialog.input_box.text())
+            if dialog.btn_text_clicked == "입력":
+                BusinessLogicUtil.download_from_youtube_to_webm(urls=dialog.input_box.text())
             else:
                 break
 
     @staticmethod
     def should_i_merge_directories():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="머지할 타겟경로들을 입력하세요", buttons=["입력", "입력하지 않기"], is_input_box=True, auto_click_negative_btn_after_seconds=10)
+            dialog = UiUtil.CustomQdialog(ment="머지할 타겟경로들을 입력하세요", btns=["입력", "입력하지 않기"], is_input_box=True, auto_click_negative_btn_after_seconds=10)
             dialog.exec()
-            btn_text_clicked = dialog.btn_text_clicked
             directoryies = dialog.input_box.text()
-            if btn_text_clicked == "입력":
+            if dialog.btn_text_clicked == "입력":
                 FileSystemUtil.merge_directories(directoryies=directoryies)
                 break
             else:
@@ -5767,8 +5179,9 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_convert_mkv_to_wav():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="convert 할 MKV파일경로를 입력하세요", buttons=["입력", "입력하지 않기"], is_input_box=True, auto_click_negative_btn_after_seconds=10)
+            dialog = UiUtil.CustomQdialog(ment="convert 할 MKV파일경로를 입력하세요", btns=["입력", "입력하지 않기"], is_input_box=True, auto_click_negative_btn_after_seconds=10)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
             file_mkv = dialog.input_box.text()
@@ -5780,11 +5193,12 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_gather_empty_directory():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            dialog = UiUtil.CustomQdialog(ment="타겟경로를 순회하며 빈폴더를 약속된 폴더로 모을까요?", buttons=["모으기", "모으지 않기"], is_input_box=True)
+            dialog = UiUtil.CustomQdialog(ment="빈폴더를 순회하며 수집할 타겟경로를 입력하세요", btns=["입력", "입력하지 않기"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            if btn_text_clicked == "모으기":
+            if btn_text_clicked == "입력":
                 target_abspath = dialog.input_box.text()
                 target_abspath = target_abspath.strip()
                 target_abspath = target_abspath.replace("\"", "")
@@ -5804,7 +5218,7 @@ class BusinessLogicUtil:
                     continue
 
                 # Park4139Park4139.Tts.speak("타겟경로를 순회하며 리프 디렉토리만 약속된 폴더로 모읍니다")
-                # dst = rf"D:\$cache_prisonized\$leaf_directories"
+                # dst = rf"D:\[noe] [8TB] [ext]\$leaf_directories"
                 # Park4139.make_leaf_directory(dst)
                 # if os.path.isdir(target_abspath):
                 #     for dirpath, dirnames, filenames in os.walk(target_abspath, topdown=False):
@@ -5815,24 +5229,48 @@ class BusinessLogicUtil:
                 #     if Park4139.is_empty_directory(target_abspath) == True:
                 #         Park4139.move_without_overwrite(src=target_abspath, dst=dst)
 
-                dst = rf"D:\$cache_prisonized\$empty_directories"
-                FileSystemUtil.make_leaf_directory(dst)
+                # 빈 디렉토리 제거
+                FileSystemUtil.make_leaf_directory(leaf_directory_abspath=StateManagementUtil.EMPTY_DIRECTORYIES)
                 if os.path.isdir(target_abspath):
                     for dirpath, dirnames, filenames in os.walk(target_abspath, topdown=False):
                         if not dirnames and not filenames:
                             if os.path.isdir(dirpath):
                                 FileSystemUtil.is_empty_directory(dirpath)
-                                print(rf"empty directory : {dirpath}")
-                                FileSystemUtil.move_target_without_overwrite(target_abspath=dirpath, dst=dst)
-                TextToSpeechUtil.speak_ments("타겟경로를 순회하며 빈폴더를 약속된 폴더로 모았습니다", sleep_after_play=0.65)
+                                FileSystemUtil.move_target_without_overwrite(target_abspath=dirpath, dst=StateManagementUtil.EMPTY_DIRECTORYIES)
+                DebuggingUtil.print_via_colorama(ment=rf"빈디렉토리제거성공", colorama_color=ColoramaColorUtil.LIGHTCYAN_EX)
+
+                # 빈 트리 리프디렉토리별로 해체한 뒤 제거
+                for index, directory in enumerate(target_abspath):
+                    if FileSystemUtil.is_empty_tree(directory):
+                        for root, directories, files in os.walk(directory, topdown=True):
+                            for directory in directories:
+                                directory = os.path.abspath(os.path.join(root, directory))
+                                if FileSystemUtil.is_leaf_directory(directory):
+                                    FileSystemUtil.move_target_without_overwrite(target_abspath=directory, dst=StateManagementUtil.EMPTY_DIRECTORYIES)
+                                    DebuggingUtil.print_via_colorama(rf'directory : {directory}', colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+                DebuggingUtil.print_via_colorama(ment=rf"빈트리제거성공", colorama_color=ColoramaColorUtil.LIGHTCYAN_EX)
+
+                # 빈 디렉토리 제거
+                FileSystemUtil.make_leaf_directory(leaf_directory_abspath=StateManagementUtil.EMPTY_DIRECTORYIES)
+                if os.path.isdir(target_abspath):
+                    for dirpath, dirnames, filenames in os.walk(target_abspath, topdown=False):
+                        if not dirnames and not filenames:
+                            if os.path.isdir(dirpath):
+                                FileSystemUtil.is_empty_directory(dirpath)
+                                FileSystemUtil.move_target_without_overwrite(target_abspath=dirpath, dst=StateManagementUtil.EMPTY_DIRECTORYIES)
+                DebuggingUtil.print_via_colorama(ment=rf"빈디렉토리제거성공", colorama_color=ColoramaColorUtil.LIGHTCYAN_EX)
+
+                # TextToSpeechUtil.speak_ments("타겟경로를 순회하며 빈폴더를 약속된 폴더로 모았습니다", sleep_after_play=0.65) # 시끄러웠다,
+                UiUtil.pop_up_as_complete(title="작업성공보고", ment=f"타겟경로를 순회하며 빈폴더를 약속된 폴더로 모았습니다", auto_click_positive_btn_after_seconds=2)
             else:
                 break
 
     @staticmethod
     def should_i_gather_useless_files():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             while True:
-                dialog = UiUtil.CustomQdialog(ment="타겟경로를 순회하며 약속된 불필요한 파일을 약속된 폴더로 모을까요?", buttons=["모으기", "모으지 않기"], is_input_box=True)
+                dialog = UiUtil.CustomQdialog(ment="타겟경로를 순회하며 약속된 불필요한 파일을 약속된 폴더로 모을까요?", btns=["모으기", "모으지 않기"], is_input_box=True)
                 dialog.exec()
                 btn_text_clicked = dialog.btn_text_clicked
                 if btn_text_clicked == "모으기":
@@ -5855,7 +5293,7 @@ class BusinessLogicUtil:
                         continue
                     try:
                         # useless_files 수집 [ using clipboard ] # os 명령어를 사용하기에 빠를 것으로 기대
-                        useless_directories = rf"D:\$cache_prisonized\$useless_files"
+                        useless_directories = StateManagementUtil.USELESS_DIRECTORIES
                         FileSystemUtil.make_leaf_directory(useless_directories)
                         useless_files = []
                         is_target_moved_done = False
@@ -5889,7 +5327,7 @@ class BusinessLogicUtil:
                             FileSystemUtil.move_target_without_overwrite(target_abspath=useless_file, dst=useless_directories)  # mkmk
                             is_target_moved_done = True
                         if is_target_moved_done == True:
-                            TextToSpeechUtil.speak_ments("타겟경로를 순회하며, 약속된 불필요한 파일을, 약속된 디렉토리로 모았습니다", sleep_after_play=0.65)
+                            UiUtil.pop_up_as_complete(title="작업성공보고", ment="타겟경로를 순회하며, 약속된 불필요한 파일을, 약속된 디렉토리로 모았습니다", auto_click_positive_btn_after_seconds=2)
                     except:
                         DebuggingUtil.trouble_shoot("%%%FOO%%%")
 
@@ -5902,7 +5340,7 @@ class BusinessLogicUtil:
                     #         file_name = file_name.strip()
                     #         file_name = file_name.strip("\n")
                     #         useless_files.append(file_name)
-                    #     dst = rf"D:\$cache_prisonized\$useless_files"
+                    #     dst = rf"D:\[noe] [8TB] [ext]\$useless_directories"
                     #     Park4139.make_leaf_directory(dst)
                     #     # os.chmod(file_path, 0o777) # 0o777 소유자만 7의 권한부여, 나머지는 권한 없앰 # 777 누구나
                     #     os.chmod(directory_abspath, 0o777)
@@ -5929,6 +5367,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_gather_special_files():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """분류되지 않은 하나의 폴더로 모음"""
         # while True:
         #     dialog = UiUtil.CustomQdialog(ment="타겟경로를 순회하며 특별한 파일을 약속된 폴더로 모을까요?", buttons=["모으기", "모으지 않기"], is_input_text_box=True)
@@ -5955,7 +5394,7 @@ class BusinessLogicUtil:
         #         special_files = [
         #             "[subplease]",
         #         ]
-        #         dst = rf"D:\$cache_prisonized\$special_files"
+        #         dst = rf"D:\[noe] [8TB] [ext]\$special_files"
         #         FileSystemUtil.make_leaf_directory(dst)
         #         isSpoken = False
         #         if os.path.isdir(target_abspath):
@@ -5976,12 +5415,13 @@ class BusinessLogicUtil:
 
     @staticmethod
     def should_i_classify_special_files():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """분류된 여러 폴더로 모음"""
         is_nested_loop_broken = False
         previous_abspath = ""
         while True:
             while True:
-                dialog1 = UiUtil.CustomQdialog(ment="파일분류를 위해 순회할 디렉토리의 타겟경로를 입력해주세요", buttons=["제출", "제출하지 않기"], is_input_box=True, input_box_text_default=previous_abspath)
+                dialog1 = UiUtil.CustomQdialog(ment="파일분류를 위해 순회할 디렉토리의 타겟경로를 입력해주세요", btns=["제출", "제출하지 않기"], is_input_box=True, input_box_text_default=previous_abspath)
                 dialog1.exec()
                 btn_text_clicked = dialog1.btn_text_clicked
                 if btn_text_clicked == "제출하지 않기":
@@ -6000,17 +5440,21 @@ class BusinessLogicUtil:
                             connected_drives.append(drive_path)
                             if target_abspath == drive_path:
                                 TextToSpeechUtil.speak_ments("입력된 타겟경로는 너무 광범위하여 진행할 수 없도록 설정되어 있습니다", sleep_after_play=0.65)
+                                is_nested_loop_broken = True
                                 break
                     if not os.path.exists(target_abspath):
                         TextToSpeechUtil.speak_ments("입력된 타겟경로가 존재하지 않습니다", sleep_after_play=0.65)
                         continue
                     if target_abspath == "":
                         continue
-                    special_directories_promised = [
-                        "blahblahblah_boom_boom_boom",
+                    special_dirs_promised = [
+                        # "blahblahblah_boom_boom_boom",
                     ]
+                    previous_keyword = clipboard.paste()
+                    if previous_keyword == target_abspath:
+                        previous_keyword = ""
 
-                    dialog2 = UiUtil.CustomQdialog(ment="분류할 파일에 포함되어 있을 키워드를 입력해주세요", buttons=["제출", "제출하지 않기"], is_input_box=True)
+                    dialog2 = UiUtil.CustomQdialog(ment="분류할 파일에 포함되어 있을 키워드를 입력해주세요", btns=["제출", "제출하지 않기"], is_input_box=True, input_box_text_default=previous_keyword)
                     dialog2.exec()
                     btn_text_clicked2 = dialog2.btn_text_clicked
                     if btn_text_clicked2 == "제출":
@@ -6018,53 +5462,48 @@ class BusinessLogicUtil:
                         file_path = file_path.strip()
                         if file_path == "":
                             TextToSpeechUtil.speak_ments("입력된 타겟경로가 존재하지 않습니다", sleep_after_play=0.65)
-                            continue
-                        special_directories_promised.append(dialog2.input_box.text())
-                        destination_directory_of_files_classified = rf"D:\$cache_prisonized\$special_files"
-                        for special_file in special_directories_promised:
-                            FileSystemUtil.make_leaf_directory(rf"{destination_directory_of_files_classified}\{special_file}")
-                        # FileSystemUtil.make_leaf_directory(destination_directory_of_files_classified)
-                        isSpoken = False
-                        file_abspaths_searched = []
-                        if os.path.isdir(target_abspath):
-                            for root, dirs, files in os.walk(target_abspath, topdown=False):  # os.walk()는 with walking 으로 동작한다
-                                for file in files:
-                                    file_abspath = os.path.join(root, file)
-                                    for file_path in special_directories_promised:
-                                        if file_path in os.path.basename(file_abspath):
-                                            # print(rf"target file to be classifed :{file_abspath}")
-                                            file_abspaths_searched.append(file_abspath)
-                        file_abspaths_searched_for_print = "\n".join(file_abspaths_searched)  # [str] to str with 개행
-                        dialog3 = UiUtil.CustomQdialog(ment=f"<검색된 파일 목록>\n\n검색된 파일 개수 : {len(file_abspaths_searched)}\n{file_abspaths_searched_for_print}\n\n 검색된 내용대로 계속진행을 할까요?", buttons=[MentsUtil.YES, MentsUtil.NO])
-                        dialog3.exec()
-                        btn_text_clicked = dialog3.btn_text_clicked
-                        target_cnt_moved = 0
-                        if btn_text_clicked == MentsUtil.NO:
                             break
-                        if btn_text_clicked == MentsUtil.YES:
-                            for index, special_directory in enumerate(special_directories_promised):
-                                for file_abspath_searched in file_abspaths_searched:
-                                    if special_directory in os.path.basename(file_abspath_searched):
-                                        file_basename = os.path.basename(file_abspath_searched)
-                                        directory_gathered = rf"{destination_directory_of_files_classified}\{special_directories_promised[index]}"
-                                        FileSystemUtil.move_target_without_overwrite(target_abspath=file_abspath_searched, dst=directory_gathered)
-                                        target_cnt_moved = target_cnt_moved + 1
-                        if isSpoken == False:
-                            TextToSpeechUtil.speak_ments(f"총 {target_cnt_moved}개의 타겟경로를 순회하며 특별한 파일을 약속된 폴더로 분류했습니다", sleep_after_play=0.65)
-                            dialog3 = UiUtil.CustomQdialog(ment=f"분류된 파일을 확인하시겠어요?", buttons=[MentsUtil.YES, MentsUtil.NO])
+                        if "\n" in file_path:
+                            file_paths = file_path.split("\n")
+                            TextToSpeechUtil.speak_ments(f"{len(file_paths)}개의 키워드들이 입력되었습니다, 파일분류를 시작합니다", sleep_after_play=0.65)
+                        else:
+                            file_paths = [file_path]
+                        for file_path in file_paths:
+                            file_path = file_path.strip()
+                            if file_path != "":
+                                special_dirs_promised.append(file_path)
+                            # destination_directory_of_files_classified = StateManagementUtil.SPECIAL_DIRECTORY # e: drive 에 저장
+                            dst_dir_of_files_classified = rf"{target_abspath}\`"  # 입력된 타겟경로에 ` 폴더를 만들어 저장
+                            for special_file in special_dirs_promised:
+                                FileSystemUtil.make_leaf_directory(rf"{dst_dir_of_files_classified}\{special_file}")
+                            # FileSystemUtil.make_leaf_directory(destination_directory_of_files_classified)
+                            file_abspaths_searched = []
+                            if os.path.isdir(target_abspath):
+                                for root, dirs, files in os.walk(target_abspath, topdown=False):  # os.walk()는 with walking 으로 동작한다
+                                    for file in files:
+                                        file_abspath = os.path.join(root, file)
+                                        for file_path in special_dirs_promised:
+                                            if file_path in os.path.basename(file_abspath):
+                                                file_abspaths_searched.append(file_abspath)
+                            file_abspaths_searched_for_print = "\n".join(file_abspaths_searched)  # [str] to str with 개행
+                            # dialog3 = UiUtil.CustomQdialog(ment=f"<검색된 파일 목록>\n\n검색된 파일 개수 : {len(file_abspaths_searched)}\n{file_abspaths_searched_for_print}\n\n 검색된 내용대로 계속진행을 할까요?", btns=[MentsUtil.YES, MentsUtil.NO] )
+                            dialog3 = UiUtil.CustomQdialog(ment=f"<검색된 파일 목록>\n\n검색된 파일 개수 : {len(file_abspaths_searched)}\n{file_abspaths_searched_for_print}\n\n 검색된 내용대로 계속진행을 할까요?", btns=[MentsUtil.YES, MentsUtil.NO], auto_click_positive_btn_after_seconds=0)  # 자동화를 위해서 대체
                             dialog3.exec()
-                            btn_text_clicked = dialog3.btn_text_clicked
-                            if btn_text_clicked == MentsUtil.YES:
-                                FileSystemUtil.explorer(destination_directory_of_files_classified)
-                                # FileSystemUtil.explorer(rf"{destination_directory_of_files_classified}\{special_directories[index]}")
-                                # break
-                            isSpoken = True
+                            if dialog3.btn_text_clicked == MentsUtil.NO:
+                                break
+                            if dialog3.btn_text_clicked == MentsUtil.YES:
+                                for index, special_dir in enumerate(special_dirs_promised):
+                                    for file_abspath_searched in file_abspaths_searched:
+                                        if special_dir in os.path.basename(file_abspath_searched):
+                                            # UiUtil.pop_up_as_complete(title="디버깅", ment=f"index : {index} \n special_dir: {special_dir}", auto_click_positive_btn_after_seconds=600)
+                                            FileSystemUtil.move_target_without_overwrite(target_abspath=file_abspath_searched, dst=rf"{dst_dir_of_files_classified}\{special_dirs_promised[index]}")
+                            special_dirs_promised = []
             if is_nested_loop_broken == True:
                 break
 
     @staticmethod
     def do_random_schedules():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         int_random = random.randint(0, 7)
         # Park4139Park4139.Tts.speak(f'랜덤숫자 {int_random} 나왔습니다')
         # mkmk
@@ -6087,7 +5526,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def make_me_go_to_sleep():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         StateManagementUtil.count_of_make_me_go_to_sleep.append("!!")
         TextToSpeechUtil.speak_ments(ment=f'이제 그만 주무세요, 새벽 {BusinessLogicUtil.get_time_as_('%H')}입니다', sleep_after_play=0.95, thread_join_mode=True)
         TextToSpeechUtil.speak_ments(ment='건강을 위해서 자는 것이 좋습니다, 더 나은 삶을 위해 주무셔야 합니다', sleep_after_play=0.95, thread_join_mode=True)
@@ -6113,13 +5552,44 @@ class BusinessLogicUtil:
             BusinessLogicUtil.should_i_do(ment=ment, function=BusinessLogicUtil.back_up_project_and_change_to_power_saving_mode(), auto_click_negative_btn_after_seconds=20)
 
     @staticmethod
-    def sleep(milliseconds):
-        seconds = milliseconds / 1000
-        time.sleep(seconds)
+    def sleep(milliseconds=None, sec=None, min=None, hour=None, printing_mode=True):
+
+        # 리스트 내 요소가 3개만 None 인지 확인 하는 방법
+        def check_none_count(params_list):
+            count = sum(element is None for element in params_list)
+            return count
+
+        params_list = [milliseconds, sec, min, hour]
+        if check_none_count(params_list) == 3:
+            # milliseconds = None, sec = None, min = None, hour = None, 이 중 하나만 None 이 아니면 동작
+            time_to_sleep = None
+            if milliseconds is not None:
+                seconds = milliseconds / 1000
+                if printing_mode:
+                    DebuggingUtil.print_via_colorama(f"{milliseconds} ms sleep() ...", colorama_color=ColoramaColorUtil.WHITE)
+                time_to_sleep = seconds
+            elif sec is not None:
+                if printing_mode:
+                    DebuggingUtil.print_via_colorama(f"{sec} seconds sleep() ...", colorama_color=ColoramaColorUtil.WHITE)
+                time_to_sleep = sec
+            elif min is not None:
+                if printing_mode:
+                    DebuggingUtil.print_via_colorama(f"{min} minutes sleep() ...", colorama_color=ColoramaColorUtil.WHITE)
+                time_to_sleep = 60 * min
+            elif hour is not None:
+                if printing_mode:
+                    DebuggingUtil.print_via_colorama(f"{hour} hours sleep() ...", colorama_color=ColoramaColorUtil.WHITE)
+                time_to_sleep = 60 * 60 * hour
+            if time_to_sleep is not None:
+                time.sleep(time_to_sleep)
+        else:
+            DebuggingUtil.print_via_colorama(f'sleep() 메소드는 milliseconds, sec, min, hour 중 하나만 단위만 설정할 수 있습니다', colorama_color=ColoramaColorUtil.RED)
+
+            # raise Error() 위의 코드말고 이런식으로 처리할까 싶은데
 
     @staticmethod
     def get_os_sys_environment_variable(environment_variable_name: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         DebuggingUtil.commentize("모든 시스템 환경변수 출력")
         for i in os.environ:
             DebuggingUtil.debug_as_cli(i)
@@ -6127,7 +5597,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def update_os_sys_environment_variable(environment_variable_name: str, new_path: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """시스템 환경변수 path 업데이트"""
         DebuggingUtil.commentize("테스트가 필요한 함수를 적용하였습니다")
         DebuggingUtil.commentize("기대한 결과가 나오지 않을 수 있습니다")
@@ -6142,13 +5612,13 @@ class BusinessLogicUtil:
 
     @staticmethod
     def get_name_space():  # name space # namespace # 파이썬 네임스페이스
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         dir()
         return dir()
 
     @staticmethod
     def back_up_target(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             while True:
                 # 전처리
@@ -6218,7 +5688,7 @@ class BusinessLogicUtil:
                             if BusinessLogicUtil.is_regex_in_contents(line, regex):
                                 DebuggingUtil.commentize(f"zip 파일 목록에 대하여 {regex} 타임스탬프 정규식 테스트를 통과했습니다")
                                 # Park4139.debug_as_cli(line)
-                                # 2023-12-03 일 20:03 trouble shooting 완료
+                                # 2023-12-03 일 20:03 trouble shooting 성공
                                 # 빽업 시 타임스탬프에 언더바 넣도록 변경했는데 regex 는 변경 하지 않아서 난 실수 있었음.
                                 time_to_backed_up = re.findall(regex, line)
                                 time_to_backed_up_ = time_to_backed_up[0][0:10].replace(" ", "-") + " " + time_to_backed_up[0][11:16].replace(" ", ":") + ".00"
@@ -6252,7 +5722,7 @@ class BusinessLogicUtil:
                                         os.chdir(StateManagementUtil.PROJECT_DIRECTORY)
                                         break
                 os.chdir(StateManagementUtil.PROJECT_DIRECTORY)
-                UiUtil.pop_up_as_complete(title="작업완료보고", ment=f"약속된 백업이 완료되었습니다\n{target_abspath}", auto_click_positive_btn_after_seconds=3)
+                UiUtil.pop_up_as_complete(title="작업성공보고", ment=f"약속된 백업이 성공되었습니다\n{target_abspath}", auto_click_positive_btn_after_seconds=3)
                 break
         except:
             DebuggingUtil.trouble_shoot("%%%FOO%%%")
@@ -6260,7 +5730,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def monitor_target_edited_and_back_up(target_abspath: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             if os.path.isfile(target_abspath):
                 if FileSystemUtil.is_file_changed(target_abspath):
@@ -6273,7 +5743,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def monitor_target_edited_and_sync(target_abspath: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             if os.path.isfile(target_abspath):
                 if FileSystemUtil.is_file_changed(target_abspath):
@@ -6285,7 +5755,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def print_and_open_py_pkg_global_path():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         for path in sys.path:
             DebuggingUtil.debug_as_cli(path)
             if BusinessLogicUtil.is_regex_in_contents(target=path, regex='site-packages') == True:
@@ -6294,7 +5764,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def taskkill(program_img_name):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         program_img_name = program_img_name.replace("\'", "")
         program_img_name = program_img_name.replace("\"", "")
         FileSystemUtil.get_cmd_output(f'taskkill /f /im "{program_img_name}"')
@@ -6303,10 +5773,10 @@ class BusinessLogicUtil:
     # 2023-12-07 목요일 16:51 최신화 함수
     @staticmethod
     def afterpause(function):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
 
         def wrapper(*args, **kwargs):
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             function(*args, **kwargs)
             TestUtil.pause()
             pass
@@ -6342,7 +5812,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def parse_youtube_video_id(url):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """
         code written by stack overflow (none regex way)
         파이썬에 내장 url 구문 분석 기능
@@ -6374,22 +5844,22 @@ class BusinessLogicUtil:
 
     @staticmethod
     def download_clip(url: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             if url.strip() == "":
                 DebuggingUtil.debug_as_cli(rf"다운로드할 url이 아닙니다 {url}")
                 break
             # 다운로드가 안되면 주석 풀어 시도
-            # os.system(rf'{Park4139.yt_dlp_cmd} -U')
+            # os.system(rf'{StateManagementUtil.YT_DLP_CMD} -U')
 
             # Park4139.raise_error('의도적으로 에러를 발생 중...')
             # if
             #     Park4139.debug_as_cli(rf'다운로드가 된 url 입니다 {url}')
             #
 
-            DebuggingUtil.commentize('다운로드 옵션 파싱 중...')
+            print('다운로드 옵션 파싱 중...')
             video_id = ''
-            # lines = subprocess.check_output(rf'{Park4139.yt_dlp_cmd} -F {url}', shell=True).decode('utf-8').split("\n")
+            # lines = subprocess.check_output(rf'{StateManagementUtil.YT_DLP_CMD} -F {url}', shell=True).decode('utf-8').split("\n")
 
             cmd = rf'{StateManagementUtil.YT_DLP_CMD} -F {url}'
             lines = FileSystemUtil.get_cmd_output(cmd=cmd)
@@ -6444,42 +5914,39 @@ class BusinessLogicUtil:
             # directories = ["storage"]
             # for directory in directories:
             #     if not os.path.isdir(rf'{os.getcwd()}\{directory}'):
-            #         DebuggingUtil.commentize(rf'storage 디렉토리 생성 중...')
+            #         print(rf'storage 디렉토리 생성 중...')
             #         os.makedirs(rf'{directory}')
 
             # 2023년 12월 12일 (화) 16:02:06
             # 다운로드의 최고 품질이 아닐 수 있다. 그래도
             # 차선책으로 두는 것이 낫겠다
-            # cmd = rf'{Park4139.yt_dlp_cmd} -f best "{url}"'
+            # cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f best "{url}"'
 
-            # cmd = rf'{Park4139.yt_dlp_cmd} -f {video_id}+{audio_id} {url}' # 초기에 만든 선택적인 방식
-            # cmd = rf'{Park4139.yt_dlp_cmd} -f "best[ext=webm]" {url}' # 마음에 안드는 결과
+            # cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f {video_id}+{audio_id} {url}' # 초기에 만든 선택적인 방식
+            # cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f "best[ext=webm]" {url}' # 마음에 안드는 결과
             cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f "bestvideo[ext=webm]+bestaudio[ext=webm]" {url}'  # 지금 가장 마음에 드는 방법
-            # cmd = rf'{Park4139.yt_dlp_cmd} -f "bestvideo[ext=webm]+bestaudio[ext=webm]/best[ext=webm]/best" {url}' # 아직 시도하지 않은 방법
+            # cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f "bestvideo[ext=webm]+bestaudio[ext=webm]/best[ext=webm]/best" {url}' # 아직 시도하지 않은 방법
             if video_id == "" or audio_id == "" == 1:
                 # text = "다운로드를 진행할 수 없습니다\n다운로드용 video_id 와 audio_id를 설정 후\nurl을 다시 붙여넣어 다운로드를 다시 시도하세요\n{url}"
-                dialog = UiUtil.CustomQdialog(ment=f"에러코드[E004]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", buttons=["확인"], is_input_box=True, input_box_text_default=url)
-                DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-                dialog.exec()
-                DebuggingUtil.commentize("불완전한 다운로드 명령어가 감지되었습니다....")
+                print("불완전한 다운로드 명령어가 감지되었습니다....")
                 TextToSpeechUtil.speak_ments(ment="불완전한 다운로드 명령어가 감지되었습니다", sleep_after_play=0.65)
-                DebuggingUtil.debug_as_cli(cmd)
+                dialog = UiUtil.CustomQdialog(ment=f"에러코드[E004]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", btns=["확인"], is_input_box=True, input_box_text_default=url)
+                dialog.exec()
+                print(cmd)
                 break
 
             try:
                 lines = FileSystemUtil.get_cmd_output(cmd=cmd)
             except:
-                DebuggingUtil.debug_as_cli(cmd)
+                print(cmd)
 
-            storage = None
-            try:
-                storage = rf'{os.path.dirname(StateManagementUtil.PROJECT_DIRECTORY)}\storage'
-            except:
-                DebuggingUtil.debug_as_cli(cmd)
+            # storage = rf'{os.path.dirname(StateManagementUtil.PROJECT_DIRECTORY)}\storage'
+            storage = rf"D:\[noe] [8TB] [ext]\`"
+
             if not os.path.exists(storage):
                 os.makedirs(storage)
 
-            DebuggingUtil.commentize("다운로드 파일 이동 시도 중...")
+            print("다운로드 파일 이동 시도 중...")
             file = ""
             try:
                 clip_id = BusinessLogicUtil.parse_youtube_video_id(url)
@@ -6493,55 +5960,51 @@ class BusinessLogicUtil:
 
                 src = os.path.abspath(file)
                 src_renamed = rf"{storage}\{os.path.basename(file)}"
-                DebuggingUtil.commentize("다운로드 상태 중간 점검 결과")
-                DebuggingUtil.debug_as_cli(f'src : {src}')
 
                 DebuggingUtil.debug_as_cli(f'src_renamed : {src_renamed}')
                 if src == os.getcwd():  # 여기 또 os.getcwd() 있는 부분 수정하자..
-                    DebuggingUtil.commentize("실행불가능한 명령어가 실행되어 다운로드 할 수 없었습니다")
-                    TextToSpeechUtil.speak_ments(ment="실행불가능한 명령어가 실행되어 다운로드 할 수 없었습니다", sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=f"에러코드[E001]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", buttons=["확인"], is_input_box=True, input_box_text_default=url)
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    # E001 : 실행불가능한 명령어입력 감지
+                    # S001 : 다운로드 가능한 video_id 와 audio_id 를 가용목록에 추가해주세요.
+                    dialog = UiUtil.CustomQdialog(ment=f"에러코드[E001]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", btns=["확인"], is_input_box=True, input_box_text_default=url)
                     dialog.exec()
-                    DebuggingUtil.debug_as_cli("다운로드 가능한 video_id 와 audio_id 를 가용목록에 추가해주세요")
+                    DebuggingUtil.debug_as_cli("cmd")
                     DebuggingUtil.debug_as_cli(cmd)
                     break
-
                 # shutil.move(src, storage)
                 if src != os.getcwd():  # 여기 또 os.getcwd() 있는 부분 수정하자..
                     FileSystemUtil.move_target_without_overwrite(src, src_renamed)
 
             except:
                 DebuggingUtil.trouble_shoot("202312030009x")
-
-            DebuggingUtil.commentize(rf'다운로드 결과 확인 중...')
+            print(rf'다운로드 결과 확인 중...')
             try:
                 src_moved = rf'{storage}\{file}'
-                UiUtil.pop_up_as_complete(title="작업완료보고", ment=f"다운로드가 완료되었습니다\n{src_moved}", auto_click_positive_btn_after_seconds=1)
 
-                dialog = UiUtil.CustomQdialog(ment="다운로드된 영상을 재생할까요?", buttons=["재생하기", "재생하지 않기"], auto_click_negative_btn_after_seconds=3)
-                dialog.exec()
-                btn_text_clicked = dialog.btn_text_clicked
-                DebuggingUtil.debug_as_cli(btn_text_clicked)
-                if btn_text_clicked == "재생하기":
-                    FileSystemUtil.explorer(target_abspath=src_moved)
+                # 4 줄 주석처리
+                # dialog = UiUtil.CustomQdialog(ment="다운로드된 영상을 재생할까요?", btns=["재생하기", "재생하지 않기"], auto_click_negative_btn_after_seconds=3)
+                # dialog.exec()
+                # if dialog.btn_text_clicked == "재생하기":
+                #     FileSystemUtil.explorer(target_abspath=src_moved)
+
+                # UiUtil.pop_up_as_complete(title="작업성공보고", ment=f"다운로드가 성공되었습니다\n{src_moved}", auto_click_positive_btn_after_seconds=2) # 성공 뜨는게 귀찮아서 주석처리함,
+
             except Exception:
                 DebuggingUtil.trouble_shoot("202312030013")
 
-            DebuggingUtil.commentize(rf'다운로드 결과 로깅 중...')
-            cmd = f'echo "{url}" >> success_yt_dlp.log'
-            FileSystemUtil.get_cmd_output(cmd=cmd)
+            # 다운로드 로깅 처리
+            # cmd = f'echo "{url}" >> success_yt_dlp.log'
+            # FileSystemUtil.get_cmd_output(cmd=cmd)
             break
 
     @staticmethod
     def download_clip_alt(url: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             if url.strip() == "":
                 DebuggingUtil.debug_as_cli(rf"다운로드할 url이 아닙니다 {url}")
                 break
 
-            DebuggingUtil.commentize('다운로드 옵션 파싱 중...')
+            print('다운로드 옵션 파싱 중...')
             video_id = ''
             cmd = rf'{StateManagementUtil.YT_DLP_CMD} -F {url}'
             lines = FileSystemUtil.get_cmd_output(cmd=cmd)
@@ -6582,24 +6045,23 @@ class BusinessLogicUtil:
                                 break
             cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f {video_id}+{audio_id} {url}'  # 초기에 만든 선택적인 방식
             if video_id == "" or audio_id == "" == 1:
-                dialog = UiUtil.CustomQdialog(ment=f"에러코드[E000]\n불완전한 다운로드 명령어가 감지되었습니다. 에러코드를 관리자에게 문의해주세요", buttons=["확인"], is_input_box=True, input_box_text_default=url)
-                DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-                dialog.exec()
-                DebuggingUtil.commentize("불완전한 다운로드 명령어가 감지되었습니다....")
+                print("불완전한 다운로드 명령어가 감지되었습니다....")
                 TextToSpeechUtil.speak_ments(ment="불완전한 다운로드 명령어가 감지되었습니다", sleep_after_play=0.65)
+                dialog = UiUtil.CustomQdialog(ment=f"에러코드[E000]\n불완전한 다운로드 명령어가 감지되었습니다. 에러코드를 관리자에게 문의해주세요", btns=["확인"], is_input_box=True, input_box_text_default=url)
+                dialog.exec()
                 DebuggingUtil.debug_as_cli(cmd)
                 break
 
-            DebuggingUtil.commentize(rf'명령어 실행 중...')
+            print(rf'명령어 실행 중...')
             FileSystemUtil.get_cmd_output(cmd=cmd)
 
-            DebuggingUtil.commentize(rf'storage 생성 중...')
+            print(rf'storage 생성 중...')
             storage = rf'{os.path.dirname(StateManagementUtil.PROJECT_DIRECTORY)}\storage'
 
             if not os.path.exists(storage):
                 os.makedirs(storage)
 
-            DebuggingUtil.commentize("다운로드 파일 이동 시도 중...")
+            print("다운로드 파일 이동 시도 중...")
             file = ""
             try:
                 clip_id = BusinessLogicUtil.parse_youtube_video_id(url)
@@ -6613,17 +6075,17 @@ class BusinessLogicUtil:
 
                 src = os.path.abspath(file)
                 src_renamed = rf"{storage}\{os.path.basename(file)}"
-                DebuggingUtil.commentize("debug_as_cli(f'src : {src}')")
+                print("debug_as_cli(f'src : {src}')")
                 DebuggingUtil.debug_as_cli(f'src : {src}')
 
                 DebuggingUtil.debug_as_cli(f'src_renamed : {src_renamed}')
                 if src == os.getcwd():  # 여기 또 os.getcwd() 있는 부분 수정하자..
-                    DebuggingUtil.commentize("실행불가능한 명령어가 실행되어 다운로드 할 수 없었습니다")
+                    print("실행불가능한 명령어가 실행되어 다운로드 할 수 없었습니다")
                     TextToSpeechUtil.speak_ments(ment="실행불가능한 명령어가 실행되어 다운로드 할 수 없었습니다", sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=f"에러코드[E003]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", buttons=["확인"], is_input_box=True, input_box_text_default=url)
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    dialog = UiUtil.CustomQdialog(ment=f"에러코드[E003]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", btns=["확인"], is_input_box=True, input_box_text_default=url)
+
                     dialog.exec()
-                    DebuggingUtil.debug_as_cli("______________________________________________________다운로드 가능한 video_id 와 audio_id 를 가용목록에 추가해주세요")
+                    DebuggingUtil.debug_as_cli(f"{StateManagementUtil.LINE_LENGTH_PROMISED}다운로드 가능한 video_id 와 audio_id 를 가용목록에 추가해주세요")
                     DebuggingUtil.debug_as_cli(cmd)
                     break
 
@@ -6633,10 +6095,10 @@ class BusinessLogicUtil:
             except:
                 DebuggingUtil.trouble_shoot("202312030009")
 
-            DebuggingUtil.commentize(rf'다운로드 결과 확인 중...')
+            print(rf'다운로드 결과 확인 중...')
             try:
                 src_moved = rf'{storage}\{file}'
-                UiUtil.pop_up_as_complete(title="작업완료보고", ment=f"{src_moved} 가 다운로드 되었습니다", auto_click_positive_btn_after_seconds=5)
+                UiUtil.pop_up_as_complete(title="작업성공보고", ment=f"{src_moved} 가 다운로드 되었습니다", auto_click_positive_btn_after_seconds=5)
                 # 다운로드된 영상을 재생할까요?
                 # Park4139Park4139.Tts.speak(ment = "다운로드된 영상을 재생합니다", sleep_after_play=0.65)
                 # cmd = rf'explorer "{src_moved}"'
@@ -6644,48 +6106,31 @@ class BusinessLogicUtil:
             except Exception:
                 DebuggingUtil.trouble_shoot("202312030013")
 
-            DebuggingUtil.commentize(rf'다운로드 결과 로깅 중...')
+            print(rf'다운로드 결과 로깅 중...')
             cmd = f'echo "{url}" >> success_yt_dlp.log'
             FileSystemUtil.get_cmd_output(cmd=cmd)
             break
 
     @staticmethod
-    def download_from_youtube_to_webm(urls_from_prompt):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+    def download_from_youtube_to_webm(urls):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
-            urls = [
-                # allowed download url pattern example
-                # 'https://www.youtube.com/watch?v=ilAgjIOb6e8',  !!!!!!check comma being !!!!!!!!
-                # 'https://www.youtube.com/watch?v=AX7BcBD8-BA&list=PLuHgQVnccGMBjEtHz-BmkIm5OR4sgPH75',
-                # 'https://www.youtube.com/watch?v=cDp5WmdUn5I&list=FLvc8kv-i5fvFTJBFAk6n1SA&index=2',
-                # 'ilAgjIOb6e8',
-                # SBS 고래와 나
-            ]
-            urls_from_prompt = str(urls_from_prompt).strip()
-            DebuggingUtil.commentize('________________________________________________________________ 프롬프트로 입력 validation')
-            if urls_from_prompt == None:
+            urls = str(urls).strip()
+            if urls == None:
                 TextToSpeechUtil.speak_ments(ment="다운로드할 대상 목록에 아무것도 입력되지 않았습니다", sleep_after_play=0.65)
                 break
-
-            if urls_from_prompt == "None":
+            if urls == "None":
                 TextToSpeechUtil.speak_ments(ment="다운로드할 대상 목록에 이상한 것이 입력되었습니다", sleep_after_play=0.65)
                 break
 
-            try:
-                urls_from_prompt_as_list = urls_from_prompt.split("\n")
-            except AttributeError:
-                traceback.print_exc(file=sys.stdout)
-                urls_from_prompt_as_list = urls_from_prompt
-            if len(urls_from_prompt_as_list) != 0:
-                for i in urls_from_prompt_as_list:
-                    if i != "":
-                        urls.append(str(i).strip())
+            if "\n" in urls:
+                urls = urls.split("\n")
+            else:
+                urls = [urls]
 
-            DebuggingUtil.commentize('________________________________________________________________ 프롬프트로 입력된 Urls')
-            DebuggingUtil.debug_as_cli(f"len(urls_from_prompt_as_list) : {len(urls_from_prompt_as_list)}")
-            DebuggingUtil.debug_as_cli(urls_from_prompt_as_list)
-            for i in urls_from_prompt_as_list:
-                DebuggingUtil.debug_as_cli(i)
+            urls = [x for x in urls if x.strip("\n")]  # 리스트 요소 "" 제거,  from ["", A] to [A]       [""] to []
+            UiUtil.pop_up_as_complete(title="작업중간보고", ment=f"{len(urls)} 개의 url이 입력되었습니다", auto_click_positive_btn_after_seconds=1)
+
             try:
                 urls.append(sys.argv[1])
             except IndexError:
@@ -6710,15 +6155,13 @@ class BusinessLogicUtil:
 
             # DebuggingUtil.commentize('다운로드 할게 없으면 LOOP break')
             if len(urls) == 0:
-                UiUtil.pop_up_as_complete(title="작업완료보고", ment=f"다운로드할 대상이 없습니다", auto_click_positive_btn_after_seconds=5)
+                UiUtil.pop_up_as_complete(title="작업성공보고", ment=f"다운로드할 대상이 없습니다", auto_click_positive_btn_after_seconds=5)
                 # TtsUtil.speak_ments(ment="다운로드할 대상이 없습니다", sleep_after_play=0.65)
                 break
             if len(urls) != 1:
                 TextToSpeechUtil.speak_ments(f"{str(len(urls))}개의 다운로드 대상이 확인되었습니다", sleep_after_play=0.65)
             for url in urls:
-                # DebuggingUtil.commentize('url에 공백이 있어도 다운로드 가능 SETTING')
-                url = url.strip()
-
+                url = url.strip()  # url에 공백이 있어도 다운로드 가능하도록 설정
                 if '&list=' in url:
                     DebuggingUtil.commentize(' clips mode')
                     clips = Playlist(url)  # 이걸로도 parsing 기능 수행 생각 중
@@ -6734,14 +6177,14 @@ class BusinessLogicUtil:
                     # os.system(f'echo "여기서부터 비디오 리스트 종료 {url}" >> success_yt_dlp.log')
                 else:
                     if BusinessLogicUtil.parse_youtube_video_id(url) != None:
-                        DebuggingUtil.commentize('________________________________________________________________ youtube video id parsing mode')
+                        DebuggingUtil.commentize('{StateManagementUtil.LINE_LENGTH_PROMISED}__________ youtube video id parsing mode')
                         try:
                             BusinessLogicUtil.download_clip(f'https://www.youtube.com/watch?v={BusinessLogicUtil.parse_youtube_video_id(url)}')
                         except Exception:
                             DebuggingUtil.trouble_shoot("%%%FOO%%%")
                             continue
                     else:
-                        DebuggingUtil.commentize('________________________________________________________________ experimental mode')
+                        DebuggingUtil.commentize('{StateManagementUtil.LINE_LENGTH_PROMISED}__________ experimental mode')
                         print("???????????????????")
                         try:
                             url_parts_useless = [
@@ -6763,7 +6206,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def get_display_setting():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         height = ''
         width = ''
         for monitor_info in get_monitors():
@@ -6787,7 +6230,7 @@ class BusinessLogicUtil:
     #     Park4139.debug_as_cli(f'{police_line.upper()}')
     @staticmethod
     def is_regex_in_contents(target, regex):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pattern = re.compile(regex)
         m = pattern.search(target)
         if m:
@@ -6804,7 +6247,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def is_regex_in_contents_with_case_ignored(contents, regex):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pattern = re.compile(regex, re.IGNORECASE)
         m = pattern.search(contents)
         if m:
@@ -6815,13 +6258,13 @@ class BusinessLogicUtil:
     @staticmethod
     # 출력의 결과는 tasklist /svc 와 유사하다.
     def print_python_process_for_killing_zombie_process():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         for process in psutil.process_iter():
             DebuggingUtil.debug_as_cli(process.name(), "\t" + str(process.pid), "\t" + process.status())
 
     @staticmethod
     def toogle_console_color(color_bg, colors_texts):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         to_right_nbsp = ''
         to_right_nbsp_cnt = 150
         for i in range(0, to_right_nbsp_cnt):
@@ -6832,7 +6275,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def recommand_console_color():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         colors = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
         while True:
             try:
@@ -6863,7 +6306,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def make_matrix_console():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         os.system('color 0A')
         os.system('color 02')
         while True:
@@ -6876,7 +6319,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def make_party_console():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         commands = [
             'color 03',
             'color 09',
@@ -6935,7 +6378,7 @@ class BusinessLogicUtil:
     # 이 메소드를 만들면서 권한을 얻는 여러가지 방법을 stack over flow 를 따라 시도해보았으나 적다한 해결책을 찾지 못함. pyautogui 로 시도 방법은 남아있으나
     # 일단은 regacy 한 방법으로 임시로 해결해두었다.
     def update_global_pkg_park4139():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         local_pkg = rf"{StateManagementUtil.PROJECT_DIRECTORY}\pkg_park4139"
         global_pkg = rf"C:\Python312\Lib\site-packages\pkg_park4139"
         updateignore_txt = rf"{StateManagementUtil.PROJECT_DIRECTORY}\pkg_park4139\updateignore.txt"
@@ -6959,7 +6402,7 @@ class BusinessLogicUtil:
                 # 디버깅
                 # Park4139TestUtil.pause()
                 DebuggingUtil.debug_as_cli(f'{cmd}')
-                DebuggingUtil.debug_as_cli("______________________________________________________")
+                DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}")
                 return "REPLACED global pkg_Park4139 AS local_pkg"
             else:
                 return "pkg_Park4139 NOT FOUND AT GLOBAL LOCATION"
@@ -6969,7 +6412,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def merge_video_and_sound(file_v_abspath, file_a_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         DebuggingUtil.commentize('다운로드 디렉토리 생성')
         directories = ["storage"]
         for directory in directories:
@@ -7047,13 +6490,13 @@ class BusinessLogicUtil:
 
     @staticmethod
     def cls():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         import os
         os.system('cls')
 
     @staticmethod
     def replace_with_auto_no(contents: str, unique_word: str, auto_cnt_starting_no=0):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """
 
         input   = "-----1-----1----1------"
@@ -7085,7 +6528,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def replace_with_auto_no_orderless(contents: str, unique_word: str, auto_cnt_starting_no=0):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # DebuggingUtil.commentize("항상 필요했던 부분인데 만들었다. 편하게 개발하자. //웹 서비스 형태로 아무때서나 접근이되면 더 좋을 것 같다.  웹 개발툴 을 만들어 보자")
         before = unique_word
         after = 0 + auto_cnt_starting_no
@@ -7109,7 +6552,7 @@ class BusinessLogicUtil:
 
     # @staticmethod
     # def move_with_overwrite(src: str, dst: str):
-    #     DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+    #     DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
     #     try:
     #         # 목적지에 있는 중복타겟 삭제
     #         os.remove(dst)
@@ -7125,12 +6568,12 @@ class BusinessLogicUtil:
 
     @staticmethod
     def raise_error(str: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         raise shutil.Error(str)
 
     @staticmethod
     def git_push_by_auto():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         GIT_HUB_ADDRESS = StateManagementUtil.GIT_HUB_ADDRESS
         GIT_HUB_REPOSITORY_URL = rf"{GIT_HUB_ADDRESS}/archive_py"
         while True:
@@ -7150,8 +6593,8 @@ class BusinessLogicUtil:
                             # os.system('color df')  # OPERATION
                             DebuggingUtil.debug_as_cli(f"push success")
                             if int('08') <= int(BusinessLogicUtil.get_time_as_('%H')) <= int('23'):  # 자는데 하도 시끄러워서 추가한 코드
-                                # TextToSpeechUtil.speak_ments("깃허브에 프로젝트 푸쉬를 완료했습니다", sleep_after_play=0.65)
-                                UiUtil.pop_up_as_complete(title="작업완료보고", ment="깃허브에 프로젝트 푸쉬를 완료했습니다", auto_click_positive_btn_after_seconds=5)
+                                # TextToSpeechUtil.speak_ments("깃허브에 프로젝트 푸쉬를 성공했습니다", sleep_after_play=0.65)
+                                UiUtil.pop_up_as_complete(title="작업성공보고", ment="깃허브에 프로젝트 푸쉬를 성공했습니다", auto_click_positive_btn_after_seconds=5)
                                 BusinessLogicUtil.should_i_do(ment="깃허브에서 직접확인하시겠요요?", function=partial(FileSystemUtil.explorer, GIT_HUB_REPOSITORY_URL), auto_click_negative_btn_after_seconds=5)
                                 break
                             break
@@ -7171,7 +6614,7 @@ class BusinessLogicUtil:
     @staticmethod
     def save_all_list():  # 수정 필요, 모든 파일 디렉토리 말고, 특정디렉토리로 수정한는 것도 할것
         """모든 파일 디렉토리에 대한 정보를 텍스트 파일로 저장하는 함수"""
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         os.system('chcp 65001 >nul')
         opening_directory = os.getcwd()
         proper_tree_txt = rf"{StateManagementUtil.PROJECT_DIRECTORY}\$cache_all_tree\proper_tree.txt"
@@ -7197,8 +6640,8 @@ class BusinessLogicUtil:
                     file_cnt = file_cnt + 1
                     f.write(str(file_cnt) + " " + os.path.join(dirpath, file) + "\n")
         f.close()  # close() 를 사용하지 않으려면 with 문을 사용하는 방법도 있다.
-        DebuggingUtil.debug_as_cli("____________________________________________________________________________________________________________ all_list.txt writing e")
-        DebuggingUtil.debug_as_cli("____________________________________________________________________________________________________________ all_list_proper.txt rewriting s")
+        DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}{StateManagementUtil.LINE_LENGTH_PROMISED} all_list.txt writing e")
+        DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}{StateManagementUtil.LINE_LENGTH_PROMISED} all_list_proper.txt rewriting s")
         texts_black = [
             "C:\\$WinREAgent",
             "C:\\mingw64",
@@ -7247,24 +6690,24 @@ class BusinessLogicUtil:
                     pass
         f.close()
         f2.close()
-        DebuggingUtil.debug_as_cli("____________________________________________________________________________________________________________ all_list_proper.txt rewriting e")
+        DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}{StateManagementUtil.LINE_LENGTH_PROMISED} all_list_proper.txt rewriting e")
 
-        DebuggingUtil.debug_as_cli("____________________________________________________________________________________________________________ files opening s")
+        DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}{StateManagementUtil.LINE_LENGTH_PROMISED} files opening s")
         os.chdir(os.getcwd())
         os.system("chcp 65001 >nul")
         # os.system("type all_list.txt")
         # os.system("explorer all_list.txt")
         os.system("explorer all_list_proper.txt")
-        DebuggingUtil.debug_as_cli("____________________________________________________________________________________________________________ files opening e")
+        DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}{StateManagementUtil.LINE_LENGTH_PROMISED} files opening e")
 
         # os.system('del "'+os.getcwd()+'\\all_list.txt"')
         # mk("all_list.txt")
-        DebuggingUtil.debug_as_cli("____________________________________________________________________________________________________________ e")
+        DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}{StateManagementUtil.LINE_LENGTH_PROMISED} e")
 
     @staticmethod
     def get_line_cnt_of_file(target_abspath: str):
         try:
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             line_cnt = 0
             # 파일 변경 감지 이슈: linecache 모듈은 파일의 변경을 감지하지 못합니다.
             # 파일이 변경되었을 때에도 이전에 캐시된 내용을 반환하여 오래된 정보를 사용할 수 있습니다.
@@ -7288,7 +6731,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def back_up_by_manual(target_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         starting_directory = os.getcwd()
         try:
             target_dirname = os.path.dirname(target_abspath)
@@ -7321,27 +6764,27 @@ class BusinessLogicUtil:
 
     @staticmethod
     def move_mouse(abs_x: int, abs_y: int):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pyautogui.moveTo(abs_x, abs_y)
 
     @staticmethod
     def move_mouse_rel_x(rel_x: int, rel_y: int):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pyautogui.move(rel_x, rel_y)
 
     @staticmethod
     def get_current_mouse_abs_info():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         return pyautogui.position()  # x, y = get_current_mouse_abs_info() 이런식으로 받을수 있나 테스트
 
     @staticmethod
     def open_mouse_info():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pyautogui.mouseInfo()
 
     @staticmethod
     def press(*presses: str, interval=0.0):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             key = None
             if len(presses) == 1:
@@ -7392,7 +6835,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def shoot_full_screenshot():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             BusinessLogicUtil.taskkill("SnippingTool.exe")
 
@@ -7425,13 +6868,13 @@ class BusinessLogicUtil:
             # Snipping Tool.ink 종료 try3
             # 이미지를 인식해서 닫는방법
 
-            TextToSpeechUtil.speak_ments(ment="스크린샷 저장을 완료했습니다", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ments(ment="스크린샷 저장을 성공했습니다", sleep_after_play=0.65)
         except:
             traceback.print_exc(file=sys.stdout)
 
     @staticmethod
     def shoot_img_for_rpa():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             try:
                 # Snipping Tool.ink 종료
@@ -7476,25 +6919,25 @@ class BusinessLogicUtil:
 
     @staticmethod
     def get_abs_x_and_y_from_img(img_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         return pyautogui.locateOnScreen(img_abspath)  # x, y = get_current_mouse_abs_info() 이런식으로 받을수 있나 테스트
 
     @staticmethod
     def write_fast(presses: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         BusinessLogicUtil.sleep(milliseconds=500)
         BusinessLogicUtil.copy_and_paste_with_keeping_clipboard_current_contents(presses)
         DebuggingUtil.debug_as_cli(rf"{str(presses)} 눌렸어요")
 
     @staticmethod
     def write_slow(presses: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pyautogui.write(presses, interval=0.09)
         DebuggingUtil.debug_as_cli(rf"{str(presses)} 눌렸어요")
 
     @staticmethod
     def ask_to_wrtn(question: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             # 페이지 열기
             url = "https://wrtn.ai/"
@@ -7524,7 +6967,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def find_direction_via_naver_map(destination: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             # 배경화면으로 나가기(옵션로직)
             # Park4139.press("win", "m")
@@ -7578,7 +7021,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def search_animation_data_from_web(btn_text_clicked):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             while 1:
                 # answer = "tate no"
@@ -7670,7 +7113,7 @@ class BusinessLogicUtil:
                 # btn_text_clicked = dialog.btn_text_clicked
                 # Park4139.debug_as_cli(btn_text_clicked)
                 # if btn_text_clicked == "시현하기":
-                dialog = UiUtil.CustomQdialog(ment=results_about_titles_and_magnets, buttons=["확인"])
+                dialog = UiUtil.CustomQdialog(ment=results_about_titles_and_magnets, btns=["확인"])
                 dialog.exec()
                 btn_text_clicked = dialog.btn_text_clicked
                 DebuggingUtil.debug_as_cli(btn_text_clicked)
@@ -7682,7 +7125,7 @@ class BusinessLogicUtil:
                 else:
                     ment = "크롤링 결과가 이상합니다\n크롤링한 마그넷주소의 개수와 타이틀의 개수가 일치하지 않습니다\n크롤링을 계속할까요"
                     TextToSpeechUtil.speak_ments(ment.replace("\n", " "), sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=ment, buttons=["계속하기", "계속하지 않기"])
+                    dialog = UiUtil.CustomQdialog(ment=ment, btns=["계속하기", "계속하지 않기"])
                     dialog.exec()
                     btn_text_clicked = dialog.btn_text_clicked
                     DebuggingUtil.debug_as_cli(btn_text_clicked)
@@ -7693,7 +7136,7 @@ class BusinessLogicUtil:
                 while True:
                     ment = '토렌트에 추가하고 싶은 항목의 숫자인덱스를 입력하세요.\n전부를 원하시면 * 을 입력해주세요'
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=ment, buttons=["계속하기", "그만하기", "크롤링 결과 다시보기"], is_input_box=True)
+                    dialog = UiUtil.CustomQdialog(ment=ment, btns=["계속하기", "그만하기", "크롤링 결과 다시보기"], is_input_box=True)
                     dialog.exec()
                     btn_text_clicked = dialog.btn_text_clicked
                     text_of_from_input_box = str(dialog.input_box.text()).strip()
@@ -7703,14 +7146,14 @@ class BusinessLogicUtil:
                         TextToSpeechUtil.speak_ments(ment="네 그만하겠습니다", sleep_after_play=0.65)
                         break
                     elif btn_text_clicked == "크롤링 결과 다시보기":
-                        dialog = UiUtil.CustomQdialog(ment=results_about_titles_and_magnets, buttons=["확인"])
+                        dialog = UiUtil.CustomQdialog(ment=results_about_titles_and_magnets, btns=["확인"])
                         dialog.exec()
                     elif btn_text_clicked == "계속하기":
                         if text_of_from_input_box.isdigit():
                             mg_num = int(text_of_from_input_box)
                             try:
                                 if magnets[int(mg_num)]:
-                                    DebuggingUtil.debug_as_cli("______________________________________________________다운로드 가능한 범위의 숫자인덱스입니다")
+                                    DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}다운로드 가능한 범위의 숫자인덱스입니다")
                             except IndexError:
                                 TextToSpeechUtil.speak_ments(ment="다운로드 가능한 범위의 숫자인덱스가 아닙니다", sleep_after_play=0.65)
                             ment = f"1건에 대한 마그넷 추가를 진행할까요?\n"  # 단건 마그넷 추가 진행
@@ -7720,7 +7163,7 @@ class BusinessLogicUtil:
                             ment = ment + f"magnet : {magnets[int(mg_num)][0:30]} ...\n"
                             for i in range(0, 4):
                                 ment = ment + f"\n"
-                            dialog = UiUtil.CustomQdialog(ment=ment, buttons=["계속하기", "그만하기"])
+                            dialog = UiUtil.CustomQdialog(ment=ment, btns=["계속하기", "그만하기"])
                             dialog.exec()
                             btn_text_clicked = dialog.btn_text_clicked
                             if btn_text_clicked == "그만하기":
@@ -7732,7 +7175,7 @@ class BusinessLogicUtil:
                             ment = f"{len(magnets)}건에 대한 마그넷 추가를 진행할까요?\n"  # 복수 마그넷 추가 진행
                             for i in range(0, 4):
                                 ment = ment + f"\n"
-                            dialog = UiUtil.CustomQdialog(ment=ment, buttons=["계속하기", "그만하기"])
+                            dialog = UiUtil.CustomQdialog(ment=ment, btns=["계속하기", "그만하기"])
                             dialog.exec()
                             btn_text_clicked = dialog.btn_text_clicked
                             if btn_text_clicked == "그만하기":
@@ -7754,12 +7197,12 @@ class BusinessLogicUtil:
 
     @staticmethod  # move_target_recycle_bin()
     def empty_recycle_bin():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         DebuggingUtil.commentize("휴지통 을 비우는 중...")
         FileSystemUtil.get_cmd_output('PowerShell.exe -NoProfile -Command Clear-RecycleBin -Confirm:$false')
         # 휴지통 삭제 (외장하드까지)
         # for %%a in (cdefghijk L mnopqrstuvwxyz) do (
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # 존재하는 경우 %%a:\$RECYCLE.BIN for /f "tokens=* usebackq" %%b in (`"dir /a:d/b %%a:\$RECYCLE.BIN\"`) do rd / q/s "%%a:\$RECYCLE.BIN\%%~b"
         # 존재하는 경우 %%a:\RECYCLER for /f "tokens=* usebackq" %%b in (`"dir /a:d/b %%a:\RECYCLER\"`) do rd /q/s "%% a:\RECYCLER\%%~b"
         # )
@@ -7776,8 +7219,8 @@ class BusinessLogicUtil:
         # explorer f:\$RECYCLE.BIN
 
     @staticmethod
-    def debug_as_gui(context: str, is_app_instance_mode=False, input_text_default=""):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+    def debug(context: str, is_app_instance_mode=False, input_text_default="", auto_click_positive_btn_after_seconds=3):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """
         이 함수는 특별한 사용요구사항이 있습니다
         pyside6 앱 내에서 해당 함수를 호출할때는 is_app_instance_mode 를 파라미터에 넣지 않고 쓰는 것을 default 로 디자인했습니다.
@@ -7789,35 +7232,38 @@ class BusinessLogicUtil:
         앱 내에서 호출 시에는 is_app_instance_mode 파라미터를 따로 설정하지 않아도 되도록 디자인되어 있습니다.
         앱 외에서 호출 시에는 is_app_instance_mode 파라미터를 True 로 설정해야 동작하도록 디자인되어 있습니다.
         """
-        app_foo: QApplication = None
-        if is_app_instance_mode == True:
-            app_foo: QApplication = QApplication()
-        if input_text_default == "":
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-            is_input_text_box = False
-        else:
-            is_input_text_box = True
-        dialog = UiUtil.CustomQdialog(ment=f"{context}", buttons=["확인"], is_input_box=is_input_text_box, input_box_text_default=input_text_default)
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        dialog.exec()
-        btn_text_clicked = dialog.btn_text_clicked
-        if btn_text_clicked == "":
-            DebuggingUtil.debug_as_cli(f'누르신 버튼은 {btn_text_clicked} 입니다')
-        if is_app_instance_mode == True:
-            if isinstance(app_foo, QApplication):
-                app_foo.exec()
-        if is_app_instance_mode == True:
-            # app_foo.quit()# QApplication 인스턴스 제거시도 : fail
-            # app_foo.deleteLater()# QApplication 인스턴스 파괴시도 : fail
-            # del app_foo # QApplication 인스턴스 파괴시도 : fail
-            # app_foo = None # QApplication 인스턴스 파괴시도 : fail
-            app_foo.shutdown()  # QApplication 인스턴스 파괴시도 : success  # 성공요인은 app.shutdown()이 호출이 되면서 메모리를 해제까지 수행해주기 때문
-            # sys.exit()
-        # return app_foo
+        # app_foo: QApplication = None
+        # if is_app_instance_mode == True:
+        #     app_foo: QApplication = QApplication()
+        # if input_text_default == "":
+        #     DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        #     is_input_text_box = False
+        # else:
+        #     is_input_text_box = True
+        # dialog = UiUtil.CustomQdialog(ment=f"{context}", buttons=["확인"], is_input_box=is_input_text_box, input_box_text_default=input_text_default)
+        # DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        # dialog.exec()
+        # btn_text_clicked = dialog.btn_text_clicked
+        # if btn_text_clicked == "":
+        #     DebuggingUtil.debug_as_cli(f'누르신 버튼은 {btn_text_clicked} 입니다')
+        # if is_app_instance_mode == True:
+        #     if isinstance(app_foo, QApplication):
+        #         app_foo.exec()
+        # if is_app_instance_mode == True:
+        #     # app_foo.quit()# QApplication 인스턴스 제거시도 : fail
+        #     # app_foo.deleteLater()# QApplication 인스턴스 파괴시도 : fail
+        #     # del app_foo # QApplication 인스턴스 파괴시도 : fail
+        #     # app_foo = None # QApplication 인스턴스 파괴시도 : fail
+        #     app_foo.shutdown()  # QApplication 인스턴스 파괴시도 : success  # 성공요인은 app.shutdown()이 호출이 되면서 메모리를 해제까지 수행해주기 때문
+        #     # sys.exit()
+        # # return app_foo
+        DebuggingUtil.print_via_colorama(traceback.print_exc(), colorama_color=ColoramaColorUtil.RED)
+        # traceback.print_exc(file=sys.stdout)
+        UiUtil.pop_up_as_complete(title="디버깅결과보고", ment=context, input_text_default=input_text_default, auto_click_positive_btn_after_seconds=auto_click_positive_btn_after_seconds)
 
     @staticmethod
     def click_mouse_left_btn(abs_x=None, abs_y=None):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         if abs_x and abs_y:
             pyautogui.click(button='left', clicks=1, interval=0)
         else:
@@ -7825,7 +7271,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def click_mouse_right_btn(abs_x=None, abs_y=None):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         if abs_x and abs_y:
             pyautogui.click(button='right', clicks=1, interval=0)
         else:
@@ -7833,7 +7279,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def ask_to_bard(question: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             cmd = f"explorer https://bard.google.com/chat  >nul"
             FileSystemUtil.get_cmd_output(cmd)
@@ -7856,7 +7302,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def ask_to_google(question: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             question_ = question.replace(" ", "+")
             cmd = f'explorer "https://www.google.com/search?q={question_}"  >nul'
@@ -7864,23 +7310,28 @@ class BusinessLogicUtil:
             break
 
     @staticmethod
-    def get_infos_of_img_when_img_recognized_succeed(img_abspath, recognize_loop_limit_cnt=0, is_zoom_toogle_mode=False):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        # Park4139.speak_fast(f"화면 이미지 분석을 시도합니다")
-        BusinessLogicUtil.press('ctrl', '0')  # 이미지 수집할때 크롬은 zoom 을 초기화(ctrl+0) 한뒤에 이미지를 수집.
+    def get_img_when_img_recognized_succeed(img_abspath, recognize_loop_limit_cnt=0, is_zoom_toogle_mode=False):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        # TextToSpeechUtil.speak_ment("화면 이미지 분석을 시도합니다")
+        UiUtil.pop_up_as_complete(title="화면이미지분석 시도 전 보고", ment="화면 이미지 분석을 시도합니다", auto_click_positive_btn_after_seconds=1)
 
-        # 현재 크롬 스탭 (ctrl 0을 눌렀기 100%로 가정)
-        chrom_step = 0
+        BusinessLogicUtil.press('ctrl', '0', interval=0.15)  # 이미지 분석 시 크롬 zoom 초기화(ctrl+0)
+
+        # 고해상도/다크모드 에서 시도
+        for i in range(0, 9):
+            BusinessLogicUtil.press('ctrl', '+')
+
+        chrome_zoom_step = 0
 
         # 루프카운트 제한 n번 default 0번 으로 설정
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         loop_cnt = 0
         # recognize_loop_limit_cnt = recognize_loop_limit_cnt
         if recognize_loop_limit_cnt == 0:
             while True:
                 # 속도개선 시도
                 # pip install opencv-python # 이것은 고급 기능이 포함되지 않은 Python용 OpenCV의 미니 버전입니다. 우리의 목적에는 충분합니다.
-                # confidence=0.7(70%)유사도를 낮춰 인식률개선, region 낮춰 속도개선, grayscale 흑백으로 판단해서 속도개선,
+                # confidence=0.7(70%)유사도를 낮춰 인식률개선시도, region 낮춰 속도개선시도, grayscale 흑백으로 판단해서 속도개선시도,
                 # open cv 설치했는데 적용안되고 있음. 재부팅도 하였는 데도 안됨.
                 # pycharm 에서 import 하는 부분에서 cv2 설치 시도 중에 옵션으로 opencv-python 이 있길래 설치했더니 결국 됨. 혹쉬 경로 설정 필요했나?
                 # xy_infos_of_imgs = pyautogui.locateOnScreen(img_abspath, confidence=0.7, grayscale=True)
@@ -7888,37 +7339,29 @@ class BusinessLogicUtil:
                 DebuggingUtil.commentize("화면 이미지 인식 시도 중...")
                 loop_cnt = loop_cnt + 1
                 try:
-                    infos_of_imgs = pyautogui.locateOnScreen(img_abspath, confidence=0.7, grayscale=True)
-                    DebuggingUtil.debug_as_cli(type(infos_of_imgs))
-                    DebuggingUtil.debug_as_cli(infos_of_imgs)
-                    DebuggingUtil.debug_as_cli(infos_of_imgs != None)
-                    if infos_of_imgs != None:
-                        return infos_of_imgs
+                    img = pyautogui.locateOnScreen(img_abspath, confidence=0.7, grayscale=True)
+                    DebuggingUtil.debug_as_cli(type(img))
+                    DebuggingUtil.debug_as_cli(img)
+                    DebuggingUtil.debug_as_cli(img != None)
+                    if img != None:
+                        return img
                     else:
                         DebuggingUtil.commentize(f"화면 이미지 분석 중...")
                         DebuggingUtil.debug_as_cli(img_abspath)
-                        # Park4139.sleep(milliseconds=35)
-                        # Park4139.sleep(milliseconds=20)
                         BusinessLogicUtil.sleep(milliseconds=15)
                         if is_zoom_toogle_mode == True:
-                            if chrom_step == 14:
-                                chrom_step = 0
-                            elif chrom_step < 7:
+                            if chrome_zoom_step == 14:
+                                chrome_zoom_step = 0
+                            elif chrome_zoom_step < 7:
                                 BusinessLogicUtil.press('ctrl', '-')
-                                chrom_step = chrom_step + 1
-                            elif 7 <= chrom_step:
+                                chrome_zoom_step = chrome_zoom_step + 1
+                            elif 7 <= chrome_zoom_step:
                                 BusinessLogicUtil.press('ctrl', '+')
-                                chrom_step = chrom_step + 1
+                                chrome_zoom_step = chrome_zoom_step + 1
                 except pyautogui.ImageNotFoundException:
                     DebuggingUtil.commentize(f"{loop_cnt}번의 화면인식시도를 했지만 인식하지 못하였습니다")
                     pass
-                # infos_of_imgs = pyautogui.locateOnScreen(img_abspath, confidence=0.5, grayscale=True)
-                # infos_of_imgs = pyautogui.locateOnScreen(img_abspath, confidence=0.9, grayscale=True)
-                # Park4139.sleep(milliseconds=1000)# confidence 를 구하는데 시간을 줘야 할것 같았다
-
         else:
-            BusinessLogicUtil.press("ctrl", "0")
-            BusinessLogicUtil.press("ctrl", "0")
             while True:
                 loop_cnt = loop_cnt + 1
                 DebuggingUtil.commentize("화면 이미지 인식 시도 중...")
@@ -7926,37 +7369,32 @@ class BusinessLogicUtil:
                     DebuggingUtil.commentize(f"{loop_cnt}번의 화면인식시도를 했지만 인식하지 못하였습니다")
                     return None
                 try:
-                    infos_of_imgs = pyautogui.locateOnScreen(img_abspath, confidence=0.7, grayscale=True)
-                    DebuggingUtil.debug_as_cli(type(infos_of_imgs))
-                    DebuggingUtil.debug_as_cli(infos_of_imgs)
-                    DebuggingUtil.debug_as_cli(infos_of_imgs != None)
-                    if infos_of_imgs != None:
-                        return infos_of_imgs
+                    img = pyautogui.locateOnScreen(img_abspath, confidence=0.7, grayscale=True)
+                    DebuggingUtil.debug_as_cli(type(img))
+                    DebuggingUtil.debug_as_cli(img)
+                    DebuggingUtil.debug_as_cli(img != None)
+                    if img != None:
+                        return img
                 except:
                     DebuggingUtil.debug_as_cli(img_abspath)
-                    # Park4139.sleep(milliseconds=150)
-                    # Park4139.sleep(milliseconds=70)
-                    # Park4139.sleep(milliseconds=35)
-                    # Park4139.sleep(milliseconds=20)
-                    # Park4139.sleep(milliseconds=15)
                     BusinessLogicUtil.sleep(milliseconds=10)
                     if is_zoom_toogle_mode == True:
-                        if chrom_step == 14:
-                            chrom_step = 0
-                        elif chrom_step < 7:
+                        if chrome_zoom_step == 14:
+                            chrome_zoom_step = 0
+                        elif chrome_zoom_step < 7:
                             BusinessLogicUtil.press('ctrl', '-')
-                            chrom_step = chrom_step + 1
-                        elif 7 <= chrom_step:
+                            chrome_zoom_step = chrome_zoom_step + 1
+                        elif 7 <= chrome_zoom_step:
                             BusinessLogicUtil.press('ctrl', '+')
-                            chrom_step = chrom_step + 1
+                            chrome_zoom_step = chrome_zoom_step + 1
 
     @staticmethod
     def click_center_of_img_recognized_by_mouse_left(img_abspath: str, recognize_loop_limit_cnt=0, is_zoom_toogle_mode=False):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-        infos_of_img = BusinessLogicUtil.get_infos_of_img_when_img_recognized_succeed(img_abspath, recognize_loop_limit_cnt, is_zoom_toogle_mode)
-        if not infos_of_img == None:
-            center_x = infos_of_img.left + (infos_of_img.width / 2)
-            center_y = infos_of_img.top + (infos_of_img.height / 2)
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        img = BusinessLogicUtil.get_img_when_img_recognized_succeed(img_abspath, recognize_loop_limit_cnt, is_zoom_toogle_mode)
+        if not img == None:
+            center_x = img.left + (img.width / 2)
+            center_y = img.top + (img.height / 2)
             BusinessLogicUtil.move_mouse(abs_x=center_x, abs_y=center_y)
             BusinessLogicUtil.click_mouse_left_btn(abs_x=center_x, abs_y=center_y)
             return True
@@ -7965,12 +7403,12 @@ class BusinessLogicUtil:
 
     @staticmethod
     def connect_remote_rdp1():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         FileSystemUtil.get_cmd_output(cmd=rf"{StateManagementUtil.RDP_82106_BAT}")
 
     @staticmethod
     def shoot_custom_screenshot():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             try:
                 # Snipping Tool.ink 종료
@@ -8015,7 +7453,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def download_from_youtube_to_webm_alt(urls_from_prompt):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             urls = []
             urls_from_prompt = str(urls_from_prompt).strip()
@@ -8034,7 +7472,7 @@ class BusinessLogicUtil:
                 for i in urls_from_prompt_as_list:
                     if i != "":
                         urls.append(str(i).strip())
-            DebuggingUtil.commentize('________________________________________________________________ 프롬프트로 입력된 Urls')
+            DebuggingUtil.commentize('{StateManagementUtil.LINE_LENGTH_PROMISED}__________ 프롬프트로 입력된 Urls')
             DebuggingUtil.debug_as_cli(f"len(urls_from_prompt_as_list) : {len(urls_from_prompt_as_list)}")
             DebuggingUtil.debug_as_cli(urls_from_prompt_as_list)
             for i in urls_from_prompt_as_list:
@@ -8046,7 +7484,7 @@ class BusinessLogicUtil:
             except Exception:
                 DebuggingUtil.trouble_shoot("202312071455")
                 pass
-            DebuggingUtil.commentize('________________________________________________________________ urls 중복제거(ordered way)')
+            DebuggingUtil.commentize('{StateManagementUtil.LINE_LENGTH_PROMISED}__________ urls 중복제거(ordered way)')
             urls_not_duplicatated_as_ordered = []
             for url in urls:
                 if url not in urls_not_duplicatated_as_ordered:
@@ -8059,7 +7497,7 @@ class BusinessLogicUtil:
 
             # DebuggingUtil.commentize('다운로드 할게 없으면 LOOP break')
             if len(urls) == 0:
-                DebuggingUtil.debug_as_cli("______________________________________________________다운로드할 대상이 없습니다")
+                DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}다운로드할 대상이 없습니다")
                 TextToSpeechUtil.speak_ments(ment="다운로드할 대상이 없습니다", sleep_after_play=0.65)
                 break
             DbTomlUtil.update_db_toml(key="yt_dlp_tried_urls", value=urls)
@@ -8081,13 +7519,13 @@ class BusinessLogicUtil:
                     os.system(f'echo "여기서부터 비디오 리스트 종료 {url}" >> success_yt_dlp.log')
                 else:
                     if BusinessLogicUtil.parse_youtube_video_id(url) != None:
-                        DebuggingUtil.commentize('________________________________________________________________ youtube video id parsing mode')
+                        DebuggingUtil.commentize('{StateManagementUtil.LINE_LENGTH_PROMISED}__________ youtube video id parsing mode')
                         try:
                             BusinessLogicUtil.download_clip_alt(f'https://www.youtube.com/watch?v={BusinessLogicUtil.parse_youtube_video_id(url)}')
                         except Exception:
                             DebuggingUtil.trouble_shoot("%%%FOO%%%")
                     else:
-                        DebuggingUtil.commentize('________________________________________________________________ experimental mode')
+                        DebuggingUtil.commentize('{StateManagementUtil.LINE_LENGTH_PROMISED}__________ experimental mode')
                         print("???????????????????2")
                         try:
                             url_parts_useless = [
@@ -8108,12 +7546,12 @@ class BusinessLogicUtil:
 
     @staticmethod
     def speak_that_service_is_in_preparing():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         TextToSpeechUtil.speak_ments(ment="아직 준비되지 않은 서비스 입니다", sleep_after_play=0.65)
 
     @staticmethod
     def ask_to_web(question):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             # 윈도우즈 모든창 최소화
             # Park4139.press('win', 'm')
@@ -8144,12 +7582,12 @@ class BusinessLogicUtil:
                 BusinessLogicUtil.press("ctrl", "-")
 
             # 사용자에게 질문 답변
-            TextToSpeechUtil.speak_ments(ment="AI 에게 질문을 완료했습니다", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ments(ment="AI 에게 질문을 성공했습니다", sleep_after_play=0.65)
             break
 
     @staticmethod
     def is_shortcut_pressed_within_10_secs(key_plus_key: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """
         is_shortcut_pressed("ctrl+s")
         """
@@ -8171,7 +7609,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def translate_eng_to_kor(question: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             while True:
                 try:
@@ -8213,7 +7651,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def translate_kor_to_eng(question: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             while True:
                 try:
@@ -8254,7 +7692,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def run_cmd_exe_as_admin():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             while True:
                 # run.exe 관리자모드로 실행
@@ -8272,7 +7710,7 @@ class BusinessLogicUtil:
     @staticmethod
     def copy_and_paste_with_keeping_clipboard_current_contents(contents_new):
         # 제 프로그램의 클립보드 문제 발견했습니다, 클립보드 copy 를 수행전 내용을 변수에 저장해두었다가 copy 기능이 끝나면 되돌릴 수 있도록 만들었습니다
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # 변수에 클립보드에 있던 이전내용 저장
         clipboard_current_contents = clipboard.paste()
 
@@ -8287,7 +7725,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def is_void_function(func):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """
             함수가 void 함수인지 아닌지 판단하는 함수입니다.
 
@@ -8302,7 +7740,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def get_count_args(func):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         return func.__code__.co_argcount
 
     @staticmethod
@@ -8316,17 +7754,17 @@ class BusinessLogicUtil:
 
     @staticmethod
     def speak_alt_for_emergency(contents: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         BusinessLogicUtil.translate_eng_to_kor(contents)
 
     @staticmethod
     def get_all_pid_and_process_name():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         """모든 프로세스명 돌려주는 함수"""
         process_info = ""
 
         def enum_windows_callback(hwnd, _):
-            DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+            DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
             nonlocal process_info
             if win32gui.IsWindowVisible(hwnd):
                 _, pid = win32process.GetWindowThreadProcessId(hwnd)
@@ -8342,7 +7780,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def get_process_name_by_pid(pid):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             data = FileSystemUtil.get_cmd_output(cmd=f'tasklist | findstr "{pid}"')
             return data[0].split(" ")[0]
@@ -8351,45 +7789,45 @@ class BusinessLogicUtil:
 
     @staticmethod
     def move_window_to_front_by_pid(pid):  # deprecated
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pass
 
     @staticmethod
     def activate_window_by_pid(pid: int):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         if not str(pid).isdigit():
-            BusinessLogicUtil.debug_as_gui(f"pid 분석결과 숫자가 아닌 것으로 판단됨 \n\n{pid}")
+            BusinessLogicUtil.debug(f"pid 분석결과 숫자가 아닌 것으로 판단됨 \n\n{pid}")
         pid = int(pid)
         try:
             process = psutil.Process(pid)
             if process.is_running() and process.status() != psutil.STATUS_ZOMBIE:
                 hwnd = win32gui.FindWindow(None, None)  # PID를 기반으로 창 핸들을 가져옵니다.
                 while hwnd:
-                    _, found_pid = win32process.GetWindowThreadProcessId(hwnd)  # 창이 속한 프로세스의 PID를 가져옵니다.
+                    _, found_pid = win32process.GetWindowThreadProcessId(hwnd)  # 창이 속한 프f로세스의 PID를 가져옵니다.
                     if found_pid == pid:
                         win32gui.SetForegroundWindow(hwnd)  # 창을 활성화합니다.
                         break
                     hwnd = win32gui.FindWindowEx(None, hwnd, None, None)
             else:
-                DebuggingUtil.debug_as_cli("______________________________________________________프로세스가 실행 중이지 않습니다.")
+                DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}프로세스가 실행 중이지 않습니다.")
         except psutil.NoSuchProcess:
-            DebuggingUtil.debug_as_cli("______________________________________________________유효하지 않은 PID입니다.")
+            DebuggingUtil.debug_as_cli("{StateManagementUtil.LINE_LENGTH_PROMISED}유효하지 않은 PID입니다.")
 
     @staticmethod
     def get_target_pid_by_process_name_legacy(target_process_name: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # Q.how to activate certain program window at python?
         pids: str = BusinessLogicUtil.get_all_pid_and_process_name()
         # Park4139.debug_as_gui(f"pids:\n\n{pids}")
         pids: list[str] = [i for i in pids.split("\n") if BusinessLogicUtil.is_regex_in_contents_with_case_ignored(contents=i, regex=target_process_name)]  # 프로세스명이 target_process_name 인 경우만 추출
         pids: str = pids[0].split(",")[1].replace("pid:", "").strip()  # strip() 은 특정 문자를 제거를 위해서 만들어짐. 단어를 제거하기 위해서는 replace() 가 더 적절하다고 chatGPT 는 말한다.
         target_pid = int(pids)  # 추출된 target_process_name 의 pid
-        BusinessLogicUtil.debug_as_gui(f"target_process_name 프로세스 정보\n\n{target_pid}")
+        BusinessLogicUtil.debug(f"target_process_name 프로세스 정보\n\n{target_pid}")
         return target_pid
 
     @staticmethod
     def get_target_pid_by_process_name(target_process_name: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         while True:
             pid: int
             pids: list[str] = FileSystemUtil.get_cmd_output(f"tasklist | findstr {target_process_name}")
@@ -8430,7 +7868,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def print_today_time_info():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         yyyy = BusinessLogicUtil.get_time_as_('%Y')
         MM = BusinessLogicUtil.get_time_as_('%m')
         dd = BusinessLogicUtil.get_time_as_('%d')
@@ -8441,13 +7879,13 @@ class BusinessLogicUtil:
 
     @staticmethod
     def connect_to_remote_computer_via_chrome_desktop():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         url = 'https://remotedesktop.google.com/access'
         FileSystemUtil.get_cmd_output(cmd=f'explorer "{url}"')
 
     @staticmethod
     def translate_eng_to_kor_via_googletrans(text: str):  # 수정할것 update 되었다는데 googletrans 업데이트 해보자
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         # from googletrans import Translator
         # translater = Translator()
         # text_translated = translater.translate([text_eng.split(".")], dest='ko')
@@ -8487,24 +7925,24 @@ class BusinessLogicUtil:
 
     @staticmethod
     def translate_kor_to_eng_foo(request: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         translator = Translator()
         text_translated = translator.translate(str(request), src='ko', dest='en')
-        BusinessLogicUtil.debug_as_gui(context=text_translated, is_app_instance_mode=True)
+        BusinessLogicUtil.debug(context=text_translated, is_app_instance_mode=True)
 
     @staticmethod
     def keyDown(key: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pyautogui.keyDown(key)
 
     @staticmethod
     def keyUp(key: str):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         pyautogui.keyUp(key)
 
     @staticmethod
     def get_font_name_for_mataplot(font_abspath):
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         import matplotlib
         import matplotlib.font_manager as mataplotlig_fontmanager
 
@@ -8525,7 +7963,7 @@ class BusinessLogicUtil:
     def return_korean_week_name():
         weekday: str
         weekday = BusinessLogicUtil.get_time_as_('weekday')
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         if weekday == "0":
             return "월"
         elif weekday == "1":
@@ -8545,8 +7983,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def get_comprehensive_weather_information_from_web():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
-
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             while 1:
                 # answer = "tate no"
@@ -8569,7 +8006,7 @@ class BusinessLogicUtil:
                 # Park4139.debug_as_cli(results.text)
 
                 async def crawl_pm_ranking():
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     driver = None
                     try:
                         driver = SeleniumUtil.get_driver_for_selenium()
@@ -8613,21 +8050,21 @@ class BusinessLogicUtil:
                         global results_about_pm_ranking
                         results_about_pm_ranking = results
                         DebuggingUtil.debug_as_cli(f"async def {inspect.currentframe().f_code.co_name}() is done...")
-                        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     except:
                         DebuggingUtil.trouble_shoot("%%%FOO%%%")
                         # driver.close()
                         driver.quit()
 
                 async def crawl_nationwide_ultrafine_dust():
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     driver = SeleniumUtil.get_driver_for_selenium()
 
                     # # '전국초미세먼지'(bs4 way)
                     DebuggingUtil.commentize("페이지 TARGET URL RAW 소스 분석중")
                     ment = '전국초미세먼지  크롤링 결과'
-                    global ment_about_nationwide_ultrafine_dust
-                    ment_about_nationwide_ultrafine_dust = ment
+                    global title
+                    title = ment
                     target_url = 'https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&qvt=0&query=전국초미세먼지'
                     DebuggingUtil.debug_as_cli(target_url)
                     driver.get(target_url)
@@ -8653,10 +8090,10 @@ class BusinessLogicUtil:
                     global results_about_nationwide_ultrafine_dust
                     results_about_nationwide_ultrafine_dust = results
                     DebuggingUtil.debug_as_cli(f"async def {inspect.currentframe().f_code.co_name}() is done...")
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
 
                 async def crawl_naver_weather():
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     driver = SeleniumUtil.get_driver_for_selenium()
                     # '동안구 관양동 날씨 정보'(bs4 way)
                     DebuggingUtil.commentize("페이지 TARGET URL RAW 소스 분석중")
@@ -8697,10 +8134,10 @@ class BusinessLogicUtil:
                     global results_about_naver_weather
                     results_about_naver_weather = results
                     DebuggingUtil.debug_as_cli(f"async def {inspect.currentframe().f_code.co_name}() is done...")
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
 
                 async def crawl_geo_info():
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     # '지역 정보'(bs4 way)
                     driver = SeleniumUtil.get_driver_for_selenium()
                     DebuggingUtil.commentize("페이지 TARGET URL RAW 소스 분석중")
@@ -8721,13 +8158,13 @@ class BusinessLogicUtil:
                     global results_about_geo
                     results_about_geo = results
                     DebuggingUtil.debug_as_cli(f"async def {inspect.currentframe().f_code.co_name}() is done...")
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
 
                 def run_async_loop1():
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     try:
                         # Park4139.debug_as_cli(f"def {inspect.currentframe().f_code.co_name}() is running...")
-                        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                         loop = asyncio.new_event_loop()
                         asyncio.set_event_loop(loop)
                         loop.run_until_complete(crawl_pm_ranking())
@@ -8735,25 +8172,25 @@ class BusinessLogicUtil:
                         DebuggingUtil.trouble_shoot("%%%FOO%%%")
 
                 def run_async_loop2():
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     # Park4139.debug_as_cli(f"def {inspect.currentframe().f_code.co_name}() is running...")
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
                     loop.run_until_complete(crawl_nationwide_ultrafine_dust())
 
                 def run_async_loop3():
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     # Park4139.debug_as_cli(f"def {inspect.currentframe().f_code.co_name}() is running...")
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
                     loop.run_until_complete(crawl_naver_weather())
 
                 def run_async_loop4():
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     # Park4139.debug_as_cli(f"def {inspect.currentframe().f_code.co_name}() is running...")
-                    DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+                    DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
                     loop.run_until_complete(crawl_geo_info())
@@ -8776,14 +8213,14 @@ class BusinessLogicUtil:
                 thread3.join()
                 thread4.join()
 
-                TextToSpeechUtil.speak_ments(ment='날씨에 대한 웹크롤링 및 데이터 분석이 완료되었습니다', sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ments(ment='날씨에 대한 웹크롤링 및 데이터 분석이 성공되었습니다', sleep_after_play=0.65)
                 # 함수가 break 로 끝이 나면 창들이 창을 닫아야 dialog 들이 사라지도록 dialog 를 global 처리를 해두었음.
                 global dialog4
                 global dialog3
                 global dialog2
                 global dialog1
                 dialog3 = UiUtil.CustomQdialog(title=f"{ment_about_naver_weather}", ment=f"{results_about_naver_weather}")
-                dialog2 = UiUtil.CustomQdialog(title=f"{ment_about_nationwide_ultrafine_dust}", ment=f"{results_about_nationwide_ultrafine_dust}")
+                dialog2 = UiUtil.CustomQdialog(title=f"{title}", ment=f"{results_about_nationwide_ultrafine_dust}")
                 dialog1 = UiUtil.CustomQdialog(title=f"{ment_about_geo}", ment=f"{results_about_geo}")
                 dialog4 = UiUtil.CustomQdialog(title=f"{ment_about_pm_ranking}", ment=f"{results_about_pm_ranking}")
                 dialog1.show()
@@ -8796,21 +8233,21 @@ class BusinessLogicUtil:
 
     @staticmethod
     def back_up_biggest_targets():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         DebuggingUtil.commentize(f"biggest_targets에 대한 빽업을 시도합니다")
         for biggest_target in StateManagementUtil.biggest_targets:
             BusinessLogicUtil.back_up_target(f'{biggest_target}')
 
     @staticmethod
     def back_up_smallest_targets():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         DebuggingUtil.commentize(f"smallest_targets에 대한 빽업을 시도합니다")
         for target in StateManagementUtil.smallest_targets:
             BusinessLogicUtil.back_up_target(f'{target}')
 
     @staticmethod
     def classify_targets_between_smallest_targets_biggest_targets():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         DebuggingUtil.commentize('빽업할 파일들의 크기를 분류합니다.')
         targets = [
             rf"{StateManagementUtil.USERPROFILE}\Desktop\services\helper-from-youtube-url-to-webm",
@@ -8841,9 +8278,9 @@ class BusinessLogicUtil:
 
     @staticmethod
     def gather_storages():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         starting_directory = os.getcwd()
-        dst = rf"{StateManagementUtil.USERPROFILE}\Desktop\services\storage"
+        dst = rf"{StateManagementUtil.USERPROFILE}\Desktop\services\storage"  # 이거 변경하자.
         services = os.path.dirname(dst)
         os.chdir(services)
         storages = []
@@ -8890,7 +8327,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def run_targets_promised():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         try:
             targets = [
                 # Park4139.MUSIC_FOR_WORK,
@@ -8905,7 +8342,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def change_console_color():
-        DebuggingUtil.commentize(f"__________________________________________________{inspect.currentframe().f_code.co_name}")
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
         TextToSpeechUtil.speak_ments(ment="테스트 콘솔의 색상을 바꿔볼게요", sleep_after_play=0.65)
         BusinessLogicUtil.toogle_console_color(color_bg='0', colors_texts=['7', 'f'])
 
@@ -8933,7 +8370,7 @@ class BusinessLogicUtil:
         left_oportunity: int = 10
         ment = f"<UP AND DOWN GAME>\n\nFIND CORRECT NUMBER"
         TextToSpeechUtil.speak_ments(ment, sleep_after_play=1.0)
-        dialog = UiUtil.CustomQdialog(ment=ment, buttons=["START", "EXIT"], is_input_box=False)
+        dialog = UiUtil.CustomQdialog(ment=ment, btns=["START", "EXIT"], is_input_box=False)
         dialog.exec()
         user_input = None
         is_game_strated = False
@@ -8949,7 +8386,7 @@ class BusinessLogicUtil:
                 if left_oportunity == 0:
                     ment = f"LEFT CHANCE IS {left_oportunity} \nTAKE YOUR NEXT CHANCE."
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=ment, buttons=["EXIT"])
+                    dialog = UiUtil.CustomQdialog(ment=ment, btns=["EXIT"])
                     dialog.exec()
                     break
                 elif is_game_strated == False or user_input is None:
@@ -8957,7 +8394,7 @@ class BusinessLogicUtil:
                     if user_input is None:
                         ment = ment + ", AGAIN"
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=ment, buttons=["SUBMIT"], is_input_box=True)
+                    dialog = UiUtil.CustomQdialog(ment=ment, btns=["SUBMIT"], is_input_box=True)
                     dialog.exec()
                     user_input = BusinessLogicUtil.is_user_input_sanitized(dialog.input_box.text())
                     if user_input is not None:
@@ -8966,13 +8403,13 @@ class BusinessLogicUtil:
                 elif user_input == correct_answer:
                     ment = f"CONGRATULATIONS, YOUR NUMBER IS {correct_answer}\nTHIS IS ANSWER, SEE YOU AGAIN"
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=ment, buttons=["EXIT"])
+                    dialog = UiUtil.CustomQdialog(ment=ment, btns=["EXIT"])
                     dialog.exec()
                     break
                 elif correct_answer < user_input:
                     ment = f"YOUR NUMBER IS {user_input}\n\nYOU NEED DOWN\nYOUR LEFT CHANCE IS {left_oportunity}"
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=ment, buttons=["SUBMIT"], is_input_box=True)
+                    dialog = UiUtil.CustomQdialog(ment=ment, btns=["SUBMIT"], is_input_box=True)
                     dialog.exec()
                     user_input = BusinessLogicUtil.is_user_input_sanitized(dialog.input_box.text())
                     if user_input is not None:
@@ -8980,7 +8417,7 @@ class BusinessLogicUtil:
                 elif correct_answer > user_input:
                     ment = f"YOUR NUMBER IS {user_input}\n\nYOU NEED UP\nYOUR LEFT CHANCE IS {left_oportunity}"
                     TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
-                    dialog = UiUtil.CustomQdialog(ment=ment, buttons=["submit"], is_input_box=True)
+                    dialog = UiUtil.CustomQdialog(ment=ment, btns=["submit"], is_input_box=True)
                     dialog.exec()
                     user_input = BusinessLogicUtil.is_user_input_sanitized(dialog.input_box.text())
                     if user_input is not None:
@@ -9056,7 +8493,7 @@ class BusinessLogicUtil:
             if scheduler_loop_cnt == 0:
                 # QThread 설정
                 # thread = CustomQthread(q_application=q_application)
-                # thread.finished.connect(lambda: Park4139Park4139.Tts.speak("QThread 작업이 완료되었습니다"))
+                # thread.finished.connect(lambda: Park4139Park4139.Tts.speak("QThread 작업이 성공되었습니다"))
                 # thread.start()
 
                 # 프로그램 외 전역감지 단축키 이벤트 설정
@@ -9223,6 +8660,9 @@ class BusinessLogicUtil:
 
     @staticmethod
     def run_console_blurred_as_scheduler():
+        # colorama 초기화
+        init(autoreset=True)
+
         # pyautogui 페일세이프 모드 설정
         # pyautogui.FAILSAFE = True # 페일세이프 너무 불편한데. 매크로 작업 시에만 False 하면 어떨까 싶다
         pyautogui.FAILSAFE = False
@@ -9241,7 +8681,7 @@ class BusinessLogicUtil:
 
         # QThread 로 scheduler 동작 테스트 시도
         # thread = SchedulerAsQthread()
-        # thread.finished.connect(lambda: print("쓰레드 작업이 완료되었습니다"))
+        # thread.finished.connect(lambda: print("쓰레드 작업이 성공되었습니다"))
         # thread.start()
         # 이 방법도 결국 되지않았다. Process finished with exit code -1073741819 (0xC0000005) 이 에러와 함께 바로 앱 종료.
 
@@ -9254,7 +8694,7 @@ class BusinessLogicUtil:
         # CustomDialog() 인스턴스 생성 테스트를 해보니, 분명 q_application 과 q_wiget 는 named argument 인데도, positional argument 처럼 순서가 중요했다는 것을 알 수 있었다, q_application 다음에 q_wiget 을 초기화 하자! 이건 pyside6 의 공식 규칙이다.
 
         q_application = QApplication(sys.argv)
-        dialog = UiUtil.CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(ment=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{StateManagementUtil.PROJECT_DIRECTORY}", buttons=["실행", "실행하지 않기"], auto_click_positive_btn_after_seconds=0), is_app_instance_mode=True)
+        dialog = UiUtil.CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(ment=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{StateManagementUtil.PROJECT_DIRECTORY}", btns=["실행", "실행하지 않기"], auto_click_positive_btn_after_seconds=0), is_app_instance_mode=True)
         # dialog = CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(context=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{Park4139.PROJECT_DIRECTORY}", buttons=["실행", "실행하지 않기"], auto_starting_seconds=10), is_app_instance_mode=True)
         if dialog.btn_text_clicked == "실행":
             print(StateManagementUtil.PROJECT_DIRECTORY)
@@ -9277,9 +8717,12 @@ class BusinessLogicUtil:
 
     @staticmethod
     def run_console_blurred_as_gui():
+        # colorama 초기화, 이거 프로젝트의 root 근처의 상단에 설정 해두어야 함. 재호출 될때 많이엄청느려진다.
+        init(autoreset=True)
+
         pyautogui.FAILSAFE = False
         q_application = QApplication(sys.argv)
-        dialog = UiUtil.CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(ment=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{StateManagementUtil.PROJECT_DIRECTORY}", buttons=["실행", "실행하지 않기"], auto_click_positive_btn_after_seconds=0), is_app_instance_mode=True)
+        dialog = UiUtil.CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(ment=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{StateManagementUtil.PROJECT_DIRECTORY}", btns=["실행", "실행하지 않기"], auto_click_positive_btn_after_seconds=0), is_app_instance_mode=True)
         # dialog = CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(context=f"다음의 프로젝트 디렉토리에서 자동화 프로그램이 시작됩니다\n{Park4139.PROJECT_DIRECTORY}", buttons=["실행", "실행하지 않기"], auto_starting_seconds=10), is_app_instance_mode=True)
         if dialog.btn_text_clicked == "실행":
             print(StateManagementUtil.PROJECT_DIRECTORY)
@@ -9325,8 +8768,349 @@ class BusinessLogicUtil:
         BusinessLogicUtil.back_up_target(target_abspath=StateManagementUtil.PROJECT_DIRECTORY)
         FileSystemUtil.enter_power_saving_mode()
 
+    @staticmethod
+    @TestUtil.measure_seconds_performance_once  #
+    def crawl_html_href(url: str):
+        DebuggingUtil.print_via_colorama(f"{StateManagementUtil.LINE_LENGTH_PROMISED} {inspect.currentframe().f_code.co_name}", colorama_color=ColoramaColorUtil.BLUE)
+        # 최하단으로 스크롤 이동 처리를 추가로 해야함. 그렇지 않으면 기대하는 모든 영상을 크롤링 할 수 없음..귀찮..지만 처리했다.
 
-class INPUT(Enum):
-    WRONG = 900000009
-    CORRECT = 800000008
+        # url 전처리
+        url = url.strip()
 
+        # driver 설정
+        DebuggingUtil.print_via_colorama(f"SeleniumUtil.get_driver_for_selenium() 수행 중...", colorama_color=ColoramaColorUtil.BLUE)
+        driver = SeleniumUtil.get_driver_for_selenium()
+
+        DebuggingUtil.print_via_colorama(f"driver.get(target_url) 수행 중...", colorama_color=ColoramaColorUtil.BLUE)
+        target_url = url
+        driver.get(target_url)
+
+        # 자동제어 브라우저 화면 초기 로딩 random.randint(1,n) 초만큼 명시적 대기
+        n = 2
+        seconds = random.randint(1, n)
+        DebuggingUtil.print_via_colorama(f"자동제어 브라우저 화면 초기 로딩 중... {seconds} seconds", colorama_color=ColoramaColorUtil.BLUE)
+        driver.implicitly_wait(seconds)  # 처음페이지 로딩이 끝날 때까지 약 random.randint(1,n)초 대기
+
+        # 최하단으로 자동 스크롤, 페이지 최하단에서 더이상 로딩될 dom 객체가 없을 때 까지
+        DebuggingUtil.print_via_colorama("스크롤 최하단으로 이동 중...", colorama_color=ColoramaColorUtil.BLUE)
+        scroll_cnt = 0
+        previous_scroll_h = None
+        current_scroll_h = None
+        scroll_maxs_monitored = []
+        while True:
+            if current_scroll_h is not None and previous_scroll_h is not None:
+                if previous_scroll_h == current_scroll_h:
+                    scroll_maxs_monitored.append(True)
+                    # break
+
+            # 로딩타이밍 제어가 어려워 추가한 코드. n번 모니터링.
+            n = 6  # success
+            if len(scroll_maxs_monitored) == n:
+                if all(scroll_maxs_monitored) == True:  # [bool] bool list 내 요소가 모두 true 인지 확인
+                    DebuggingUtil.print_via_colorama(ment="스크롤 최하단으로 이동되었습니다", colorama_color=ColoramaColorUtil.BLUE)
+                    break
+
+            # previous_scroll_h 업데이트
+            # previous_scroll_h = driver.execute_script("return document.body.scrollHeight")
+            previous_scroll_h = driver.execute_script("return document.documentElement.scrollHeight")
+
+            # 가능한만큼 스크롤 최하단으로 이동
+            # driver.find_element(By.CSS_SELECTOR, 'body').send_keys(Keys.PAGE_DOWN)  # page_down 을 누르는 방법, success
+            # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")# JavaScript 로 스크롤 최하단으로 이동, 네이버용 코드?
+            driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")  # JavaScript 로 스크롤 최하단으로 이동, 유튜브용 코드?
+            # time.sleep(2)  # 스크롤에 의한 추가적인 dom 객체 로딩 대기, 여러가지 예제를 보니, 일반적으로 2 초 정도 두는 것 같음. 2초 내에 로딩이 되지 않을 때도 있는데.
+            BusinessLogicUtil.sleep(milliseconds=500, printing_mode=False)  # 스크롤에 의한 추가적인 dom 객체 로딩 대기, success, 지금껏 문제 없었음.
+
+            # previous_scroll_h = driver.execute_script("return document.body.scrollHeight")
+            current_scroll_h = driver.execute_script("return document.documentElement.scrollHeight")
+
+            scroll_cnt = scroll_cnt + 1
+
+            DebuggingUtil.print_via_colorama(f'{scroll_cnt}번 째 스크롤 성공 previous_scroll_h : {previous_scroll_h} current_scroll_h : {current_scroll_h}   previous_scroll_h==current_scroll_h : {previous_scroll_h == current_scroll_h}', colorama_color=ColoramaColorUtil.BLUE)
+
+        page_src = driver.page_source
+        soup = BeautifulSoup(page_src, "lxml")
+        driver.close()
+
+        # 모든 태그 가져오기
+        # tags = soup.find_all()
+        # for tag in tags:
+        #     print(tag)
+
+        # body 리소스 확인 : success
+        # bodys = soup.find_all("body")
+        # for body in bodys:
+        #     print(f"body:{body}")
+
+        # 이미지 태그 크롤링
+        # images = soup.find_all("img")
+        # for img in images:
+        #     img_url = img.get("src")
+        #     print("Image URL:", img_url)
+        #
+        # 스크립트 태그 크롤링
+        # scripts = soup.find_all("script")
+        # for script in scripts:
+        #     script_url = script.get("src")
+        #     print("Script URL:", script_url)
+        #
+        # # 스타일시트 크롤링
+        # stylesheets = soup.find_all("link", rel="stylesheet")
+        # for stylesheet in stylesheets:
+        #     stylesheet_url = stylesheet.get("href")
+        #     print("Stylesheet URL:", stylesheet_url)
+
+        # 특정 태그의 class 가 "어쩌구" 인
+        # div_tags = soup.find_all("div", class_="어쩌구")
+
+        # a 태그 크롤링
+        # a_tags = soup.find_all("a")
+        # results = ""
+        # for a_tag in a_tags:
+        #     hrefs = a_tag.get("href")
+        #     if hrefs != None and hrefs != "":
+        #         # print("href", hrefs)
+        #         results = f"{results}{hrefs}\n"
+
+        # 변수에 저장 via selector
+        # name = soup.select('a#video-title')
+        # video_url = soup.select('a#video-title')
+        # view = soup.select('a#video-title')
+
+        # name, video_url 에 저장 via tag_name and id
+        name = soup.find_all("a", id="video-title")
+        video_url = soup.find_all("a", id="video-title")
+
+        # 유튜브 주소 크롤링 및 진행률 표시 via tqdm, 14 초나 걸리는데. 성능이 필요할때는 여러개의 thread 로 처리해보자.
+        a_tags = soup.find_all("a")
+
+        # success
+        # BusinessLogicUtil.debug_as_gui(f"{len(a_tags)}")
+
+        # results를 str으로 처리
+        # results = ""
+        # a_tags_cnt  = 0
+        # with tqdm(total=total_percent,ncols = 79 , desc= "웹 크롤링 진행률") as process_bar:
+        #     for a_tag in a_tags:
+        #         hrefs = a_tag.get("href")
+        #         if hrefs != None and hrefs != "" and "/watch?v=" in hrefs :
+        #             if hrefs not in results:
+        #                 results = f"{results}{hrefs}\n"
+        #                 a_tags_cnt = a_tags_cnt + 1
+        #         time.sleep(0.06)
+        #         process_bar.update(total_percent/len(a_tags))
+
+        # fail
+        # if process_bar.total == 90:
+        #     TextToSpeechUtil.speak_ments(ment='웹 크롤링이 90퍼센트 진행되었습니다. 잠시만 기다려주세요', sleep_after_play=0.65)
+
+        # results를 list 으로 처리, list 으로만 처리하고 str 으로 변형하는 처리를 추가했는데 3초나 빨라졌다. 항상 list 로 처리를 하자.
+        results = []
+        a_tags_cnt = 0
+        for a_tag in a_tags:
+            hrefs = a_tag.get("href")
+            if hrefs != None and hrefs != "" and "/watch?v=" in hrefs:
+                if hrefs not in results:
+                    results.append(hrefs)
+                    a_tags_cnt = a_tags_cnt + 1
+        results = DataStructureUtil.add_prefix_to_string_list(results, 'https://www.youtube.com')  # string list 의 요소마다 suffix 추가
+        results = "\n".join(results)  # list to str
+
+        # fail
+        # dialog = UiUtil.CustomQdialog(title=f"크롤링결과보고", ment=f"{results}", btns=[MentsUtil.YES], auto_click_positive_btn_after_seconds="")
+        # dialog.exec()
+
+        # fail
+        # UiUtil.pop_up_as_complete(title="크롤링결과보고", ment=f"{results}")
+
+        # success
+        # BusinessLogicUtil.debug_as_gui(f"{results}") # 테스트용 팝업    UiUtil 로 옮기는 게 나을 지 고민 중이다.
+
+        # success
+        # 비동기로 진행 가능
+        global dialog
+        dialog = UiUtil.CustomQdialog(title=f"크롤링결과보고", ment=f"({a_tags_cnt}개 추출됨)\n\n{results}")
+        dialog.show()
+
+    @staticmethod
+    def crawl_youtube_video_title_and_url(url: str):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+
+        # url 전처리
+        url = url.strip()
+
+        # driver 설정
+        total_percent = 100
+        driver = SeleniumUtil.get_driver_for_selenium()
+        with tqdm(total=total_percent, ncols=79, desc="driver 설정 진행률") as process_bar:
+            global title
+            title = 'html  href 크롤링 결과'
+            target_url = url
+            driver.get(target_url)
+            page_src = driver.page_source
+            soup = BeautifulSoup(page_src, "lxml")
+            time.sleep(0.0001)
+            process_bar.update(total_percent)
+        driver.close()
+
+        # 변수에 저장 via tag_name and id
+        name = soup.find_all("a", id="video-title")
+        video_url = soup.find_all("a", id="video-title")
+
+        # list 에 저장
+        name_list = []
+        url_list = []
+        # view_list = []
+        for i in range(len(name)):
+            name_list.append(name[i].text.strip())
+            # view_list.append(view[i].get('aria-label').split()[-1])
+        for i in video_url:
+            url_list.append('{}{}'.format('https://www.youtube.com', i.get('href')))
+
+        # dict 에 저장
+        # youtubeDic = {
+        #     '제목': name_list,
+        #     '주소': url_list,
+        #     # '조회수': view_list
+        # }
+
+        # csv 에 저장
+        # import pandas as pd
+        # youtubeDf = pd.DataFrame(youtubeDic)
+        # youtubeDf.to_csv(f'{keyword}.csv', encoding='', index=False)
+
+        # str 에 저장
+        results_list = []
+        for index, url in enumerate(url_list):
+            results_list.append(f"{name_list[index]}   {url_list[index]}")
+        results_str = "\n".join(results_list)  # list to str
+
+        # fail
+        # dialog = UiUtil.CustomQdialog(title=f"크롤링결과보고", ment=f"{results}", btns=[MentsUtil.YES], auto_click_positive_btn_after_seconds="")
+        # dialog.exec()
+
+        # fail
+        # UiUtil.pop_up_as_complete(title="크롤링결과보고", ment=f"{results}")
+
+        # success
+        # BusinessLogicUtil.debug_as_gui(f"{results}") # 테스트용 팝업    UiUtil 로 옮기는 게 나을 지 고민 중이다.
+
+        # success
+        # 비동기로 진행 가능
+        global dialog
+        dialog = UiUtil.CustomQdialog(title=f"크롤링결과보고", ment=f"({len(url_list)}개 url 추출됨)\n\n{results_str}")
+        dialog.show()
+
+    @staticmethod
+    def crawl_youtube_playlist(url: str):
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+
+        # url 전처리
+        url = url.strip()
+
+        # driver 설정
+        total_percent = 100
+        driver = SeleniumUtil.get_driver_for_selenium()
+        with tqdm(total=total_percent, ncols=79, desc="driver 설정 진행률") as process_bar:
+            global title
+            title = 'html  href 크롤링 결과'
+            target_url = url
+            driver.get(target_url)
+            page_src = driver.page_source
+            soup = BeautifulSoup(page_src, "lxml")
+            time.sleep(0.0001)
+            process_bar.update(total_percent)
+        driver.close()
+
+        # 변수에 저장 via tag_name and href
+        names = soup.find_all("a", id="video-title")
+        hrefs = soup.find_all("a", id="video-title")
+        # hrefs = copy.deepcopy(names)
+
+        # list 에 저장
+        name_list = []
+        hrefs_list = []
+        # view_list = []
+        for i in range(len(names)):
+            name_list.append(names[i].text.strip())
+            # view_list.append(view[i].get('aria-label').split()[-1])
+        for i in hrefs:
+            hrefs_list.append('{}{}'.format('https://www.youtube.com', i.get('href')))
+
+        # str 에 저장
+        results_list = []
+        for index, url in enumerate(hrefs_list):
+            # results_list.append(f"{name_list[index]}   {hrefs_list[index]}")
+            results_list.append(f"{hrefs_list[index]}")  # href 만 출력
+        results_str = "\n".join(results_list)  # list to str
+
+        # fail
+        # dialog = UiUtil.CustomQdialog(title=f"크롤링결과보고", ment=f"{results}", btns=[MentsUtil.YES], auto_click_positive_btn_after_seconds="")
+        # dialog.exec()
+
+        # fail
+        # UiUtil.pop_up_as_complete(title="크롤링결과보고", ment=f"{results}")
+
+        # success
+        # BusinessLogicUtil.debug_as_gui(f"{results}") # 테스트용 팝업    UiUtil 로 옮기는 게 나을 지 고민 중이다.
+
+        # success
+        # 비동기로 진행 가능
+        global dialog
+        dialog = UiUtil.CustomQdialog(title=f"크롤링결과보고", ment=f"({len(hrefs_list)}개 playlist 추출됨)\n\n{results_str}")
+        dialog.show()
+
+    @staticmethod
+    def should_i_crawl_a_tag_href():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        while True:
+
+            # 테스트용
+            # url = "https://www.youtube.com/@blahblah/videos"
+
+            dialog = UiUtil.CustomQdialog(ment="해당 페이지의 href 를 크롤링할까요?", btns=[MentsUtil.YES, MentsUtil.NO], is_input_box=True, input_box_text_default=url)
+            dialog.exec()
+            btn_text_clicked = dialog.btn_text_clicked
+
+            if btn_text_clicked == MentsUtil.YES:
+                BusinessLogicUtil.crawl_html_href(url=dialog.input_box.text())
+                break
+            else:
+                break
+
+    @staticmethod
+    def should_i_crawl_youtube_video_title_and_url():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        while True:
+
+            # 테스트용
+            keyword = 'blahblah'
+            url = f'https://www.youtube.com/results?search_query={keyword}'
+
+            dialog = UiUtil.CustomQdialog(ment="해당 페이지의 video title, video url을 크롤링할까요?", btns=[MentsUtil.YES, MentsUtil.NO], is_input_box=True, input_box_text_default=url)
+            dialog.exec()
+            btn_text_clicked = dialog.btn_text_clicked
+
+            if btn_text_clicked == MentsUtil.YES:
+                BusinessLogicUtil.crawl_youtube_video_title_and_url(url=dialog.input_box.text())
+                break
+            else:
+                break
+
+    @staticmethod
+    def should_i_crawl_youtube_playlist():
+        DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}")
+        while True:
+            # 테스트용
+            keyword = 'blahblah'
+            url = f'https://www.youtube.com/@{keyword}/playlists'
+
+            dialog = UiUtil.CustomQdialog(ment="해당 페이지의 video title, video url을 크롤링할까요?", btns=[MentsUtil.YES, MentsUtil.NO], is_input_box=True, input_box_text_default=url)
+            dialog.exec()
+            btn_text_clicked = dialog.btn_text_clicked
+
+            if btn_text_clicked == MentsUtil.YES:
+                BusinessLogicUtil.crawl_youtube_playlist(url=dialog.input_box.text())
+                break
+            else:
+                break

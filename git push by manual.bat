@@ -29,7 +29,7 @@ git status | find "working tree clean"
 
 
 
-:: GET PROJECT_DIRECTORY
+:: GET PROJECT_DIRECTORY NAME
 SET PROJECT_DIRECTORY=%cd%
 for %%F in ("%CD%") do set "PROJECT_DIRECTORY_DIRNAME=%%~nxF"
 

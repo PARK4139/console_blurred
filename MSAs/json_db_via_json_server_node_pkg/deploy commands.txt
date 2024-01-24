@@ -1,0 +1,16 @@
+
+
+
+
+
+npm install json-server
+json-server --version
+run cmd.exe as admin
+setx path "%PATH%;C:\Users\WIN10PROPC3\AppData\Roaming\npm\;"
+exit
+IDE restart
+json-server --version
+json-server --watch db.json --port 3001
+
+
+

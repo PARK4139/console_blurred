@@ -1,5 +1,0 @@
-{
-  "routes": [
-    { "src": "/api/db", "dest": "http://localhost:3000" }
-  ]
-}

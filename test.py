@@ -159,7 +159,7 @@ qss = """
 test_loop_limit = 3
 
 
-@TestUtil.measure_seconds_performance
+@TestUtil.measure_seconds_performance_nth
 # @decorate_for_pause  # 테스트 루프 마다 정지 설정
 def test_sprint_core():
     try:
