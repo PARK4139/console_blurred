@@ -19,6 +19,7 @@ cls
 
 :: COMMIT MENT SETTING 
 set commit_ment=REFER TO README.md (commited at %yyyyMMddHHmmss%)
+set commit_ment=기술블로그용 fastapi 컨트롤러 구현 및 json 더미 데이터 생성
 
 
 :: GIT PUSH
