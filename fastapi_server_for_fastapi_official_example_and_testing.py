@@ -65,6 +65,7 @@ async def add_process_response_middleware(request, call_next):
     await FastapiServerUtil.do_preprocess_after_request(request, response)
     return response
 
+
 @app.get("/")
 async def return_success(request: Request):
     DebuggingUtil.print_via_colorama(f"{inspect.currentframe().f_code.co_name}() 호출되었습니다", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
@@ -106,10 +107,10 @@ def get_item(q: Union[str, None] = None):  # 쿼리스트링 q 를 nullable 하�
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
+
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None, p: Union[int, None] = None):
     return {"item_id": item_id, "q": q, "p": p}
-
 
 
 if __name__ == "__main__":

@@ -120,7 +120,6 @@ def make_dummyies_books_without_overwrite():
     dummy_cnt = random.randint(1, 100)
     genres = ["러브코메디", "러브픽션", "러브액션"]
     names = ["내 청춘러브 코메디는 잘못되어 있어", "너에게 닿기를"]
-
     for _ in range(dummy_cnt):
         book_dummy = {
             'book_id': uuid4().hex,
@@ -250,15 +249,6 @@ if __name__ == "__main__":
     print()
     print()
     DebuggingUtil.commentize("fastapi 서버가 시작되었습니다")
-
-    # 스웨거 자동실행
-    # FileSystemUtil.explorer(fr"{settings.protocol_type[0]}://{settings.host[0]}:{settings.port[0]}/docs")
-    # FileSystemUtil.explorer(fr"{settings.protocol_type[0]}://{settings.host[0]}:{settings.port[0]}/redoc")
-    # FileSystemUtil.explorer(fr"{settings.protocol_type[0]}://{settings.host[0]}:{settings.port[0]}")
-
-    # 더미 데이터 객체 생성
-    # FileSystemUtil.explorer(fr"{settings.protocol_type[0]}://{settings.host[0]}:{settings.port[0]}/make-dummyies")
-
     uvicorn.run(
         app=f"{FileSystemUtil.get_target_as_n(__file__)}:app",
         host=settings.host[0],  # class 를 사용하면 tuple 로 오며, str(tuple) 이렇게 사용할 수 없고, tuple[0] 으로 가져와야 하네. js 의 destructon 문법처럼 py의 unpacking 을 사용하는 방법이 있으나 변수 새로 생성해야함.

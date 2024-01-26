@@ -77,7 +77,7 @@ async def return_success(request: Request):
     DebuggingUtil.print_via_colorama(f"{inspect.currentframe().f_code.co_name}() 호출되었습니다", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
     return {"success": f"fastapi 서버로 {os.path.basename(__file__)}를 구동 중 입니다"}
 
-# TodoItem restful api 설계 sample, 저장이 필요없는 경우에는 이와 유사하게 이용
+# 런타임 중에만 저장
 todos = []
 @app.get("/todos")
 def get_todos():
