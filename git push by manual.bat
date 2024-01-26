@@ -25,11 +25,11 @@ set commit_ment=REFER TO README.md (commited at %yyyyMMddHHmmss%)
 git add *  
 git commit -m "%commit_ment%"
 git push -u origin main
-git status | find "working tree clean" 
+git status | find "working tree clean"
 
 
 
-:: GET PROJECT_DIRECTORY NAME
+:: GET PROJECT_DIRECTORY
 SET PROJECT_DIRECTORY=%cd%
 for %%F in ("%CD%") do set "PROJECT_DIRECTORY_DIRNAME=%%~nxF"
 

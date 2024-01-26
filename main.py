@@ -9067,6 +9067,7 @@ class BusinessLogicUtil:
 
             # 테스트용
             # url = "https://www.youtube.com/@blahblah/videos"
+            url = ""
 
             dialog = UiUtil.CustomQdialog(ment="해당 페이지의 href 를 크롤링할까요?", btns=[MentsUtil.YES, MentsUtil.NO], is_input_box=True, input_box_text_default=url)
             dialog.exec()

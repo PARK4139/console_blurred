@@ -16,8 +16,8 @@ https://vercel.com/templates/next.js/nextjs-fastapi-starter
     vercel .
     y
     everyone
-    n
-    json-server # 소문자랑 하이픈으로만 작성해야한다.
+    ? Found project “jung-hoon-parks-projects/fastapi-server-via-vercel”. Link to it? [Y/n] y
+    fastapi-server-via-vercel # 소문자랑 하이픈으로만 작성해야한다.
     ./
     n
 
