@@ -19,6 +19,8 @@ __pycache__
 *.lock
 *.Iock
 *.bat
+*.json
+*.sh
 #________________________________________________ directories
 $cache_database
 $cache_fonts
