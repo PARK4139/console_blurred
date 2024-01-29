@@ -32,7 +32,7 @@ app.encoding = 'utf-8'
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 logger = logging.getLogger(__name__)
-settings = FastapiServerUtil.Settings()
+
 FastapiServerUtil.init_ip_address_allowed(app)
 FastapiServerUtil.init_domain_address_allowed(app)
 FastapiServerUtil.init_cors_policy_allowed(app)
@@ -67,8 +67,8 @@ async def add_process_response_middleware(request, call_next):
 
 
 @app.get("/")
-async def return_success(request: Request):
-    DebuggingUtil.print_via_colorama(f"{inspect.currentframe().f_code.co_name}() 호출되었습니다", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
+async def return_success():
+    DebuggingUtil.print_ment_via_colorama(f"{inspect.currentframe().f_code.co_name}() 호출되었습니다", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
     return {"어서와": "fastapi 서버는 처음이지?"}
 
 
@@ -130,8 +130,8 @@ if __name__ == "__main__":
 
     uvicorn.run(
         app=f"{FileSystemUtil.get_target_as_n(__file__)}:app",
-        host=settings.host[0],  # class 를 사용하면 tuple 로 오며, str(tuple) 이렇게 사용할 수 없고, tuple[0] 으로 가져와야 하네. js 의 destructon 문법처럼 py의 unpacking 을 사용하는 방법이 있으나 변수 새로 생성해야함.
-        port=settings.port[0],
+        host=FastapiServerUtil.Settings.host[0],  # class 를 사용하면 tuple 로 오며, str(tuple) 이렇게 사용할 수 없고, tuple[0] 으로 가져와야 하네. js 의 destructon 문법처럼 py의 unpacking 을 사용하는 방법이 있으나 변수 새로 생성해야함.
+        port=FastapiServerUtil.Settings.port[0],
         reload=True,  # 이 설정 너무 의존하지는 말자. pkg 변경 되면 rerun 다시 해줘야한다
         # log_level="info",
         # log_level="debug",

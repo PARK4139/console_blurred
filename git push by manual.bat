@@ -21,6 +21,7 @@ cls
 :: set commit_ment=REFER TO README.md (commited at %yyyyMMddHHmmss%)
 :: set commit_ment=Members API 작성 및 로컬 테스트 완료
 set commit_ment=FastAPI 기반 API 작성 및 라우팅 및 데이터 유효성 로컬 테스트 일부 완료
+set commit_ment=nav-items API aws 배포 완료
 
 
 :: GIT PUSH
