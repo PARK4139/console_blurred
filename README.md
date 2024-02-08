@@ -1,19 +1,5 @@
-### THIS PROJECT
-#[WORK ASSISTANCE PROGARM]()
-#[SHORTCUTS]() #[BLURRED DESIGN]() #[BASED PYTHON]()
-#[AUTOMATED WORK]()
 
-
-
-
-  
-#
-
-
-
-
-
-### PREVIEW
+### 프로젝트 PREVIEW
 <!-- [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys) -->
 <!-- <div align="center">
   <img src="http://www.storywarren.com/wp-content/uploads/2016/09/space-1.jpg" alt="이미지 설명">
@@ -48,22 +34,22 @@
 
 <div align="center">
   <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_14_16_39.png" width="50%" height="50%"/> 
-  <p>new_ui_prototype_2023_12_14_16_39.png</p>
+  <p>UI 프로토타입 2023-12-14</p>
 </div>
 
 <div align="center">
   <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_16_17_08.png" width="50%" height="50%"/> 
-  <p>new_ui_prototype_2023_12_16_17_08.png</p>
+  <p>UI 프로토타입 2023-12-16</p>
 </div>
 
 <div align="center">
   <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_17_11_51.png" width="50%" height="50%"/> 
-  <p>new_ui_prototype_2023_12_17_11_51.png</p>
+  <p>UI 프로토타입 2023-12-17</p>
 </div>
 
 <div align="center">
   <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_25_01_48.png" width="50%" height="50%"/> 
-  <p>new_ui_prototype_2023_12_25_01_48.png</p>
+  <p>UI 프로토타입 2023-12-25</p>
 </div>
  
 
@@ -76,65 +62,75 @@
 <!-- *LOVELY MY DOG.png* -->  
  
 
-### IT TESTED IN ENVIRONMENT BELOW
-- WINDOWS 10 PRO 
-- PYTHON3.12 
-- bandizip  
-- ffmpeg
-- pot player
 
-### DEVELOPMENT RULE 
-- consider target(file/directory) path as much as possible ✔️
-- Deploy A Package File As Exe File (Using pyinstaller)
-- File Auto Back Up(Following Schedule)
+### 프로젝트 기본설명
 
-### DEVELOPMENT TIMELINE 
-- 2023 12 09 12:20:48 APPLIED "README.md"
-- 2023 12 09 12:20:48 MADE PROJECT TREE
-- 2023 12 09 12:20:48 REPLACED "main.py" AS "index.py"
-- 2023 12 09 12:20:48 ADDED FUNCTION AUTOMATIC BACKUP FILES 
-- 2023 12 09 12:20:48 STARTED INTEGRATING TEST PROJECTS PERFORMED IN SIMILAR PYTHON VIRTUAL ENVIRONMENTS INTO ONE PROJECT(THIS PROJECT)
-- 2023 12 09 12:20:48 APPLIED ".gitignore" 
-- 2023 12 09 12:20:48 UPDATED PROJECT TREE (DIVIDED NECESSARY FILE OR NOT NECESSARY FILE)
-- 2023 12 09 22:02:29 ADDED FUNCTIONS THAT CONVERT MP4 TO MP3 
-- 2023 12 09 22:02:29 ADDED FUNCTIONS THAT CONVERT MP4 TO WAV
-- 2023 12 09 22:02:29 ADDED FUNCTIONS THAT CONVERT MP4 TO WEBM
-- 2023 12 09 22:02:29 ADDED FUNCTIONS THAT CONVERT WAV TO FLAC
-- 2023 12 09 22:02:29 ADDED FUNCTIONS THAT MERGE VIDEO AND SOUND VIA FFMPEG.
-- 2023 12 09 22:02:29 ADDED FUNCTIONS THAT RECOMMANDS CMD.EXE CONSOLE COLOR AND COPY COLOR COMMAND TO CLIPBOARD 
-- 2023 12 09 22:02:29 ADDED FUNCTIONS THAT TTS FROM KOREAN TEXT TO KOREAN SPEACH
-- 2023 12 12 11:44:35 ADDED FUNCTIONS THAT ASK TO AI WITH WRTN/BARD AI WEBSITE
-- 2023 12 12 11:44:35 ADDED FUNCTIONS THAT TAKING SCREEN SHOT
-- 2023 12 12 11:44:35 ADDED FUNCTIONS THAT DOWNLOAD YOUTUBE(AS POSSIBLE AS HIQUALITY)
-- 2023 12 12 11:44:35 ADDED FUNCTIONS THAT BACK UP TARGET(YOU CAN BACK UP WHETHER IT'S A DIRECTORY OR A FILE)
-- 2023 12 13 20:01:40 CHANGED UI AS PROTOTYPE
-- 2023 12 13 20:01:40 TESTED FUNCTIONS BEFORE AND DEBUG (NO FILE PATH ISSUE/NOT INTENDED FUNCTION CALLING)
-- 2023 12 13 20:01:40 TESTED BUILD TEST BY PYINSTALLER (TTS FUNCTION FAILED, I GUESS THIS TROUBLE IS CAUSED CODE RELATED TO FILE PATH, THIS IS AN UNRESOLVED ISSUE)
-- 2023 12 14 01:27:55 ADDED FUNCTIONS THAT SHUTDOWN COMPUTER
-- 2023 12 14 01:27:55 ADDED FUNCTIONS THAT REBOOT COMPUTER
-- 2023 12 13 20:01:40 UPDATED UI AS PROTOTYPE
-- 2023 12 14 16:27:12 APPLIED FIXED-WIDTH-FONT
-- 2023 12 16 14:13:41 UPDATED GUI DESIGN
-- 2023 12 16 14:13:41 APPLIED SINGLETONE,  PROGRAM DESIGN PATTERN BY FOLLOWING PYSIDE6 APPLICATION
-- 2023 12 17 11:54:32 ADDED WINDOW SIZE TOOGLE 
-- 2023 12 25 01:44:06 TESTED pandas/matplotlib/FinanceDataReader/threading/ BASIC CONCEPT
-- 2023 12 25 01:44:06 OPTIMIZE TIME PERFORMANCE ABOUT sleep() METHOD BY TESTING SEVERAL TIMES 
-- 2023 12 25 01:44:06 ADDED IMAGES ABOUT $cache_png\text to voice icon.png FOR TARGET WEBSITE IMAGE CHANGES
-- 2023 12 25 01:44:06 APPLIED FONTS
-- 2023 12 25 01:44:06 ADDED SCHEDULER (threading MODULE)
-- 2023 12 25 01:44:06 ADDED AUTO CLICK BY COWNTDOWN
-- 2023 12 25 01:44:06 ADDED TOOGLE PROGRAM SHORTCUTS (pynput MODULE)
-- 2023 12 30 22:42:49 ADDED FILE/DIRECTORY MODIFIED MONITORING
-- 2023 12 30 22:42:49 ADDED GATHER EMPTY DIRECTORY
-- 2023 12 30 22:42:49 ADDED GATHER SPECIAL FILES
-- 2023 12 30 22:42:49 ADDED GATHER USELESS FILES
-- 2023 12 30 22:42:49 ADDED MERGE DIRECTORIES
-- 2023 12 30 22:42:49 MODIFIED TTS FUNCTION AS ASYNCHRONOUS 
-- 2023 12 30 22:42:49 MODIFIED FILE/DIRECTORY BACK UP SCHEDULE
-- 2024 01 02 02:30:43 ADDED 
-- 2024 01 10 23:49:09 MODIFIED TIMMING SOME FUNCTIONS
-- 2024 01 11 10:30:40 MODIFIED main.py
+| 주제 |     윈도우 기반 자동화 프로그램 |
+| :-: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 개발환경 |  FE : Vercel/Node.js/React/Next.js <br> BE : AWS EC2/Ubuntu/Nginx/Docker/Uvicorn/Fastapi |
+| 참여인원 및 리소스 |  1인 개발 |
+|개발기간 | 2022.12.xx - 2024.02.08 (7달)|
+|결과 | https://github.com/PARK4139/archive_py |
+|성과 | 지역정보/미세먼지 정보 웹 크롤링 자동화  <br> 파일분류 자동화 <br> 파일백업 자동화<br> 유튜브 영상클립 다운로드 |
+ 
 
+### 아래는 테스트 환경입니다
+|1| WINDOWS 10 PRO| 
+| :-: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|2| PYTHON 3.12.0| 
+|3| bandizip|  
+|4| ffmpeg|
+|5| pot player|
+
+### 개발 규칙
+|1| 가능한한 대상(파일/디렉토리) 경로를 고려합니다. ️|
+| :-: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|2| PyInstaller를 사용하여 패키지 파일을 exe 파일로 배포합니다.|
+|3| 파일 자동 백업(일정에 따라)|
+
+### 개발 타임라인 
+- 2023 12 09 12:20:48  "README.md" 적용
+- 2023 12 09 12:20:48  프로젝트 트리 생성
+- 2023 12 09 12:20:48  "main.py"을 "index.py"로 대체
+- 2023 12 09 12:20:48  파일 자동 백업 기능 추가 
+- 2023 12 09 12:20:48  유사한 파이썬 가상 환경에서 수행된 테스트 프로젝트를 이 프로젝트에 통합 시작
+- 2023 12 09 12:20:48  ".gitignore" 적용 
+- 2023 12 09 12:20:48  프로젝트 트리 업데이트 (필요한 파일과 불필요한 파일로 구분)
+- 2023 12 09 22:02:29  MP4를 MP3로 변환하는 기능 추가 
+- 2023 12 09 22:02:29  MP4를 WAV로 변환하는 기능 추가
+- 2023 12 09 22:02:29  MP4를 WEBM으로 변환하는 기능 추가
+- 2023 12 09 22:02:29  WAV를 FLAC로 변환하는 기능 추가
+- 2023 12 09 22:02:29  FFmpeg을 사용하여 비디오와 사운드를 병합하는 기능 추가
+- 2023 12 09 22:02:29  CMD.EXE 콘솔 색상을 권장하고 색상 명령을 클립보드에 복사하는 기능 추가 
+- 2023 12 09 22:02:29  한국어 텍스트를 한국어 음성으로 TTS하는 기능 추가
+- 2023 12 12 11:44:35  WRTN/BARD AI 웹사이트에 질문하는 기능 추가
+- 2023 12 12 11:44:35  스크린샷을 찍는 기능 추가
+- 2023 12 12 11:44:35  YouTube를 다운로드하는 기능 추가 (고화질로 가능한한)
+- 2023 12 12 11:44:35  대상을 백업하는 기능 추가 (디렉토리 또는 파일인지에 상관없이 백업 가능)
+- 2023 12 13 20:01:40  프로토타입으로 UI 변경
+- 2023 12 13 20:01:40  일부 함수의 테스트와 디버그 진행 (파일 경로 문제 없음/의도하지 않은 함수 호출 없음)
+- 2023 12 13 20:01:40  PyInstaller를 사용하여 빌드 테스트 진행 (TTS 기능 실패, 파일 경로와 관련된 코드로 인한 문제로 예상되며, 이는 해결되지 않은 문제입니다)
+- 2023 12 14 01:27:55  컴퓨터 종료 기능 추가
+- 2023 12 14 01:27:55  컴퓨터 재부팅 기능 추가
+- 2023 12 13 20:01:40  프로토타입으로 UI 업데이트
+- 2023 12 14 16:27:12  고정폭 글꼴 적용
+- 2023 12 16 14:13:41  GUI 디자인 업데이트
+- 2023 12 16 14:13:41  Pyside6 애플리케이션을 따라 싱글톤 프로그램 디자인 패턴 적용
+- 2023 12 17 11:54:32  창 크기 전환 기능 추가 
+- 2023 12 25 01:44:06  pandas/matplotlib/FinanceDataReader/threading 기본 개념 테스트
+- 2023 12 25 01:44:06  sleep() 메서드의 시간 성능 최적화를 위해 여러 번 테스트 진행 
+- 2023 12 25 01:44:06  $cache_png\text to voice icon.png 이미지 추가 (대상 웹사이트 이미지 변경을 위해)
+- 2023 12 25 01:44:06  폰트 적용
+- 2023 12 25 01:44:06  스케줄러 추가 (threading 모듈)
+- 2023 12 25 01:44:06  카운트다운으로 자동 클릭 기능 추가
+- 2023 12 25 01:44:06  프로그램 단축키 전환 기능 추가 (pynput 모듈)
+- 2023 12 30 22:42:49  파일/디렉토리 수정 모니터링 기능 추가
+- 2023 12 30 22:42:49  빈 디렉토리 수집 기능 추가
+- 2023 12 30 22:42:49  특정 파일 수집 기능 추가
+- 2023 12 30 22:42:49  쓸모없는 파일 수집 기능 추가
+- 2023 12 30 22:42:49  디렉토리 병합 기능 추가
+- 2023 12 30 22:42:49  TTS 기능을 비동기로 수정 
+- 2023 12 30 22:42:49  파일/디렉토리 백업 일정 수정
 
 
 <!-- ### ABBREVIATED? USAGE EXAMPLE -->

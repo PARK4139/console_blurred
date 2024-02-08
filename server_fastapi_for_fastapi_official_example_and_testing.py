@@ -65,7 +65,6 @@ async def add_process_response_middleware(request, call_next):
     await FastapiServerUtil.do_preprocess_after_request(request, response)
     return response
 
-
 @app.get("/")
 async def return_success():
     DebuggingUtil.print_ment_via_colorama(f"{inspect.currentframe().f_code.co_name}() 호출되었습니다", colorama_color=ColoramaColorUtil.LIGHTWHITE_EX)
@@ -74,12 +73,12 @@ async def return_success():
 
 # fastapi 나름대로 나눈 경우에 따른 실험 테스트, 귀찮지만 꼭 이 실험을 해야 감이 잘 온다.
 @app.get("/들어갈게")  # without query
-def 들어갈게():
+def 들어간대():
     return {"message": f"나가줄래"}
 
 
 @app.get("/종아해요/{who}")  # without query
-def 종아해요(who):
+def 종아한대요(who):
     return {"message": f"종아해요 {who}을 요"}
 
 
@@ -88,7 +87,7 @@ def love1(q):
     return {"message": f"{q}"}
 
 
-@app.get("/파라미터-두개를-넣으면-쿼리두개")
+@app.get("/파라미터-두개를-넣으면-쿼리스트링-두개")
 def love2(q, w):
     return {"message": f"{q} {w}"}
 

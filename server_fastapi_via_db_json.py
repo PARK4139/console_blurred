@@ -323,7 +323,6 @@ def make_dummy_members_without_overwrite():
     MEMBERS_JSON = StateManagementUtil.MEMBERS_JSON
     with open(MEMBERS_JSON, encoding="utf-8") as file:
         existing_data = json.load(file)
-
     dummy_data = existing_data
     dummy_cnt = random.randint(1, 100)
 
