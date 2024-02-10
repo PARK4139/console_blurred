@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>로그인</title>
+</head>
+<body>
+<!--로그인 폼 __________________________________________________________________________________________________________________________________  -->
+<form name='form_login' action="/{{ jinja_data.prefix_promised }}/member/login1" method="post" autocomplete="off">
+
+    <div>
+        <label for="link202311111505">아이디</label>
+        <input type="text" name="id" id="link202311111505">
+    </div>
+
+    <div>
+        <label for="link202311111506">비밀번호</label>
+        <input type="password" name="pw" id="link202311111506">
+    </div>
+    <button type="submit">로그인</button>
+</form>
+<!-- <div>네이버로 로그인</div> -->
+<!-- <div>카카오로 로그인</div> -->
+<!-- 회원가입 페이지로 이동__________________________________________________________________________________________________________________________________ -->
+<form name='form_join' action="/{{ jinja_data.prefix_promised }}/member/join1" method="post">
+    <input style="display: none;" type="text" name="join_process" value="promised202311110318" id="link202311111507">
+    <button type="submit">회원가입</button>
+</form>
+</body>
+</html>

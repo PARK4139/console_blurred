@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>업무 FAQ 공유</title>
+</head>
+<body> 
+    <h1>업무 FAQ 공유</h1>
+    <br> 
+    {# jinja2 template 의 주석 #}
+
+    {% if name %}
+        <h1>당신은 {{ name['id'] }} 이군요!</h1>
+        <h1>당신은 {{ name['login_time'] }} 에  로그인 하셨군요!</h1>
+    {% else %}
+        <h1>당신은 누구신가요?</h1>
+    {% endif %}
+    <br>
+
+  
+    <h1>목록</h1>
+    <ul id="navigation">
+    {% for item in navigation %}
+        <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+    {% endfor %}
+    </ul>
+    <br>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>업무처리</title>
+</head>
+<body>
+<!-- __________________________________________________________________________________________________________________________________ 출근처리 s -->
+<form name='form-go-to-office-process' action="/{{ jinja_data.prefix_promised }}/go-to-office" method="post" autocomplete="off">
+    <input style="display: none;" type="text" name="go-to-office" value="promised202311110318" id="link202311111505">
+    <button type="submit">출근처리</button>
+</form>
+<!-- __________________________________________________________________________________________________________________________________ 출근처리 e -->
+<!-- __________________________________________________________________________________________________________________________________ 파일 업로드 처리 s -->
+<form name='form-file-upload' action="/{{ jinja_data.prefix_promised }}/file-upload">
+    <button type="submit">파일 업로드 처리</button>
+</form>
+<!-- __________________________________________________________________________________________________________________________________ 파일 업로드 처리 e -->
+<!-- __________________________________________________________________________________________________________________________________ 파일 다운로드 처리 s -->
+<form name='form-file-download' action="/{{ jinja_data.prefix_promised }}/file-download">
+    <button type="submit">업무자동화 프로그램 공유 처리</button>
+</form>
+<!-- __________________________________________________________________________________________________________________________________ 파일 다운로드 처리 e -->
+<!-- __________________________________________________________________________________________________________________________________ FAQ 처리 s -->
+<form name='form-faq-board-process' action="/{{ jinja_data.prefix_promised }}/faq-board" method="post" autocomplete="off">
+    <input style="display: none;" type="text" name="faq-board" value="promised202311110318" id="link20231111185429">
+    <button type="submit">업무 FAQ 처리</button>
+</form>
+<!-- __________________________________________________________________________________________________________________________________ FAQ 처리 e -->
+<!-- __________________________________________________________________________________________________________________________________ 물류관리 대시보드 s -->
+<form name='form-logistics-management-process' action="/{{ jinja_data.prefix_promised }}/logistics-management" method="post" autocomplete="off">
+    <input style="display: none;" type="text" name="logistics-management" value="promised202311110318" id="link20231111185430">
+    <button type="submit">물류관리 처리</button>
+</form>
+<!-- __________________________________________________________________________________________________________________________________ 물류관리 대시보드 e -->
+<!-- __________________________________________________________________________________________________________________________________ CS처리 s -->
+<form name='form-customer-service-process' action="/{{ jinja_data.prefix_promised }}/customer-service" method="post" autocomplete="off">
+    <input style="display: none;" type="text" name="customer-service" value="promised202311110318" id="link202311111507">
+    <button type="submit">CS처리</button>
+</form>
+<!-- __________________________________________________________________________________________________________________________________ CS처리 e -->
+<!-- __________________________________________________________________________________________________________________________________ 퇴근처리 s -->
+<form name='form-leave-office-process' action="/{{ jinja_data.prefix_promised }}/leave-office" method="post" autocomplete="off">
+    <input style="display: none;" type="text" name="leave-office" value="promised202311110318" id="link202311111506">
+    <button type="submit">퇴근처리</button>
+</form>
+<!-- __________________________________________________________________________________________________________________________________ 퇴근처리 e -->
+<!-- __________________________________________________________________________________________________________________________________ 로그아웃처리 s -->
+<form name='form_logout' action="/{{ jinja_data.prefix_promised }}/logout" method="post" autocomplete="off">
+    <input style="display: none;" type="text" name="logout" value="promised202311110318" id="link20231111185440">
+    <button type="submit">로그아웃 처리</button>
+</form>
+<!-- __________________________________________________________________________________________________________________________________ 로그아웃처리 e -->
+
+</body>
+<script>
+    // 뒤로가기(history) 초기화
+    history.replaceState(null, null, location.href);
+    window.onpopstate = function(event) {
+      history.go(1);
+    };
+</script>
+</html>
