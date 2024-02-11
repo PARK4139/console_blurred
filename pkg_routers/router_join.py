@@ -85,6 +85,7 @@ async def join__(request: Request):
         'date_joined': BusinessLogicUtil.get_time_as_('%Y_%m_%d_%H_%M_%S'),
         'date_canceled': ''
     }
+
     # 데이터 공통전처리
     # member_data 딕셔너리를 돌면서 모든 value 에 .strip() 처리를 하는 코드
     for key, value in member_data.items():
@@ -125,19 +126,19 @@ async def join__(request: Request):
     # 가입된 아이디인지 확인
     if MemberUtil.is_member_joined_by_id(id=member_data['id'], request=request):
         return f'''
-                   <script>
-                       alert('이미가입된 아이디입니다. 다른 아이디로 회원가입을 시도해주세요.')
-                       setTimeout(function() {{
-                           window.location.href='/{prefix_promised}/member/join'
-                       }}, 0);
-                   </script>
-                   '''
+       <script>
+           alert('이미가입된 아이디입니다. 다른 아이디로 회원가입을 시도해주세요.')
+           setTimeout(function() {{
+               window.location.href='/{prefix_promised}/member/join'
+           }}, 0);
+       </script>
+       '''
 
     # member_data 벨리데이션
     MemberUtil.validate_member(member_data)
 
     # 회원가입
-    MemberUtil.join_member(member=member_data, db=MySqlUtil.get_session_local())
+    MemberUtil.insert_member(member=member_data, db=MySqlUtil.get_session_local())
 
     return f'''
     <script>

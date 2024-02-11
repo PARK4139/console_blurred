@@ -29,7 +29,8 @@ def login(request: Request):
     if 'id' in request.session and request.session['id'] != '':
         return RedirectResponse('/member')
     else:
-        return templates.TemplateResponse('/member/login.html', {"request": request})
+        context = {"request": request}
+        return templates.TemplateResponse('/member/login.html', context=context)
 
 
 @router.post('/member/login1', response_class=HTMLResponse)
@@ -83,12 +84,11 @@ async def login_(request: Request):
                 '''
 
     if MemberUtil.is_member_joined(id=form_data['id'], pw=form_data['pw'], request=request):
-        # 세션에 세션내 에서 유지할 데이터 저장
+
+        # 세션에 세션내 에서 유지할 데이터 저장, 로그인 상태유지를 찾아보니까 보통은 id 나 e-mail 로 한다고 한다, 다음에는 e-mail로 하자.
         request.session['id'] = form_data['id']
         request.session['login_time'] = BusinessLogicUtil.get_time_as_('%Y_%m_%d_%H_%M_%S')
-        for member_joined in result:
-            print(f'member_joined.name: {member_joined.name}  member_joined.id: {member_joined.id}   member_joined.pw: {member_joined.pw}')
-            request.session['name'] = member_joined.name
+        request.session['name'] = MemberUtil.get_member_name_joined(id=form_data['id'], pw=form_data['pw'], request=request)
 
         return f'''
                 <script>
@@ -107,8 +107,7 @@ async def login_(request: Request):
                     }}, 500);
                 </script>
                 '''
-    # context = {"request": request, "jinja_data": jinja_data}
-    # return templates.TemplateResponse('login.html', context=context)
+
 
 
 @router.post('/member/logout')

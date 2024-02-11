@@ -24,7 +24,7 @@ def get_dummies():
     for _ in range(dummy_cnt):
         member_dummy = {
             'id': uuid4().hex + BusinessLogicUtil.get_time_as_('%Y%m%d%H%M%S%f') + CipherUtil.get_random_alphabet(),
-            'pw': BusinessLogicUtil.get_random_int(),  # 암호화 모듈 필요, get_random_int() 는 아직 미완성.
+            'pw': SecurityUtil.get_random_int.get_random_int(),  # 암호화 모듈 필요, get_random_int() 는 아직 미완성.
             'name': random.choice(['김지영', '이민준', '박서연', '최영희', '정민재', '한지수', '서예진', '윤승우', '신하늘', '오준호', '류지현', '임동혁', '송지우', '홍민지', '강성민', '권수진', '신동욱', '최선영', '이지원', '김민재', '정서영', '박준형', '황예린', '강민호', '신지민', '이서연', '한승민', '조윤서', '김동현', '양미경']),
             'date_join': random.choice(['202401270047888999', '202401270047888999']),
             'date_logout_last': random.choice(['202401270047888999', '202401270047888999']),

@@ -8,14 +8,14 @@ from uuid import uuid4
 
 from fastapi import APIRouter
 
-from pkg_park4139 import DebuggingUtil, BusinessLogicUtil, FastapiUtil, StateManagementUtil
+from pkg_park4139 import DebuggingUtil, BusinessLogicUtil, FastapiUtil, StateManagementUtil, SecurityUtil
 
 router = APIRouter()
 
 
 @router.get("/더미멤버들생성")  # todo 더미데이터 구조 수정해야 한다.
 def get_dummies():
-    todos = StateManagementUtil.todos # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
+    todos = StateManagementUtil.todos  # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
     DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
     print("애플리케이션 시작 시 실행되어야 하는 초기화 작업을 수행합니다.")
     # todos: [todo] 에 저장
@@ -24,8 +24,8 @@ def get_dummies():
     for _ in range(dummy_cnt):
         todo_dummy = {
             # 수정해야한다. 여기 내용들
-            'id': uuid4().hex + BusinessLogicUtil.get_time_as_('%Y%m%d%H%M%S%f') + CipherUtil.get_random_alphabet(),
-            'pw': BusinessLogicUtil.get_random_int(),  # 암호화 모듈 필요, get_random_int() 는 아직 미완성.
+            'id': uuid4().hex + BusinessLogicUtil.get_time_as_('%Y%m%d%H%M%S%f') + SecurityUtil.get_random_alphabet(),
+            'pw': SecurityUtil.get_random_int(),  # 암호화 모듈 필요, get_random_int() 는 아직 미완성.
             'name': random.choice(['김지영', '이민준', '박서연', '최영희', '정민재', '한지수', '서예진', '윤승우', '신하늘', '오준호', '류지현', '임동혁', '송지우', '홍민지', '강성민', '권수진', '신동욱', '최선영', '이지원', '김민재', '정서영', '박준형', '황예린', '강민호', '신지민', '이서연', '한승민', '조윤서', '김동현', '양미경']),
             'date_join': random.choice(['202401270047888999', '202401270047888999']),
             'date_logout_last': random.choice(['202401270047888999', '202401270047888999']),
@@ -47,13 +47,13 @@ def get_dummies():
 
 @router.get("/todos")
 def get_todos():
-    todos = StateManagementUtil.todos # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
+    todos = StateManagementUtil.todos  # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
     return todos
 
 
 @router.get("/todo")
 def get_todos(id: str):
-    todos = StateManagementUtil.todos # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
+    todos = StateManagementUtil.todos  # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
     for todo_ in todos:
         if todo_['id'] == id:
             print(rf'todo_ : {todo_}')
@@ -63,9 +63,9 @@ def get_todos(id: str):
 
 @router.post("/todo")
 def create_todo(todo: FastapiUtil.TodoItem):
-    todos = StateManagementUtil.todos # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
+    todos = StateManagementUtil.todos  # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
     todo_ = todo.model_dump()
-    todo_['id'] = uuid4().hex + BusinessLogicUtil.get_time_as_('%Y%m%d%H%M%S%f') + CipherUtil.get_random_alphabet()
+    todo_['id'] = uuid4().hex + BusinessLogicUtil.get_time_as_('%Y%m%d%H%M%S%f') + SecurityUtil.get_random_alphabet()
     print(rf"todo_['id'] : {todo_['id']}")
     todos.append(todo_)
     return {"message": "Todo posted successfully"}
@@ -73,7 +73,7 @@ def create_todo(todo: FastapiUtil.TodoItem):
 
 @router.put("/todo")
 def update_todo(id: str, todo: FastapiUtil.TodoItem):
-    todos = StateManagementUtil.todos # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
+    todos = StateManagementUtil.todos  # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
     for todo_ in todos:
         if todo_['id'] == id:
             todo_['title'] = todo.title
@@ -84,7 +84,7 @@ def update_todo(id: str, todo: FastapiUtil.TodoItem):
 
 @router.delete("/todo")
 def delete_todo(id: str):
-    todos = StateManagementUtil.todos # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
+    todos = StateManagementUtil.todos  # 리스트에 저장, 런타임 중에만 저장이 유지됨, 앱종료 시 데이터 삭제
     for todo_ in todos:
         if todo_['id'] == id:
             # todo_.remove(todo_)
