@@ -1,59 +1,11 @@
-#________________________________________________ important
-__pycache__
-#.gitignore
-.idea
-.pytest_cache
-.venv
-#________________________________________________ files
-*.exe
-*.jpeg
-*.jpg
+# Default ignored files
 *.log
-*.mp3
-*.mp4
-*.png
-*.toml
-*.webm
-*.zip
-*.spec
-*.lock
-*.Iock
-*.bat
 *.json
-*.sh
-#________________________________________________ directories
-$cache_database
-$cache_fonts
-$cache_log
-$cache_mp3
-$cache_png
-$cache_prison
-$cache_recycle_bin
-$cache_sound
-$cache_tools
-$cache_work_for_music
-$cache_zip
-build
-pkg_park4139
+.idea
+*.bat
+*.xls
+*.xlsx
+*.png
+*.PNG
 pkg_yt_dlp
-console_blurred_exe_kill.bat
-console_blurred_exe_run.bat
-console_blurred.spec
-index.bat
-index.spec
-pkg_jq/jq-win64.exe
-park4139_archive.toml
-park4193_logger.log
-parks2park_archive.log
-poetry.lock
-PROJECT_DIRECTORY.txt
-py_pkg_ver_.log
-py_pkg_ver.log
-pyproject.toml
-run cmd as admin.bat
-storage
-success_yt_dlp.log
-success.log
-test foo_py as virtual env.bat
-test_keyboard.py
-test.jpg
+

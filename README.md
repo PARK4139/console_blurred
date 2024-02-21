@@ -37,10 +37,13 @@
   <p>UI 프로토타입 2023-12-14</p>
 </div>
 
-<div align="center">
-  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_16_17_08.png" width="50%" height="50%"/> 
-  <p>UI 프로토타입 2023-12-16</p>
-</div>
+[//]: # (<div align="center">)
+
+[//]: # (  <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_16_17_08.png" width="50%" height="50%"/> )
+
+[//]: # (  <p>UI 프로토타입 2023-12-16</p>)
+
+[//]: # (</div>)
 
 <div align="center">
   <img src="https://red-steps.netlify.app/new_ui_prototype_2023_12_17_11_51.png" width="50%" height="50%"/> 

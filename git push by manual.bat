@@ -24,7 +24,8 @@ cls
 :: set commit_ment=nav-items API aws 배포 완료
 :: set commit_ment="README.md" 업데이트
 :: set commit_ment=Flask 웹 FastApi 웹 마이그레이션 시작(회원가입/로그인 API)
-set commit_ment=Flask 웹 FastApi 웹 마이그레이션 로컬 테스트 완료(회원가입/로그인 API)
+:: set commit_ment=Flask 웹 FastApi 웹 마이그레이션 로컬 테스트 완료(회원가입/로그인 API)
+set commit_ment=윈도우용 커스텀 패키지/윈도우용 파이썬 프로젝트 추출
 
 
 :: GIT PUSH

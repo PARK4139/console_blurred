@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'PARK4139 : Jung Hoon Park'
 
-from pkg_park4139 import TextToSpeechUtil, DebuggingUtil, BusinessLogicUtil
+from pkg_park4139_for_windows import TextToSpeechUtil, DebuggingUtil, BusinessLogicUtil
 
 if __name__ == '__main__':
     try:
