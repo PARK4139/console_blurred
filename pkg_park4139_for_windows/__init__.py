@@ -4947,7 +4947,8 @@ class TextToSpeechUtil:
         HH = TimeUtil.get_time_as_('%H')
         mm = TimeUtil.get_time_as_('%M')
         week_name = BusinessLogicUtil.return_korean_week_name()
-        TextToSpeechUtil.speak_ment_without_async_experimental_2(ment=f'현재 시각 {int(yyyy)}년 {int(MM)}월 {int(dd)}일 {week_name}요일 {int(HH)}시 {int(mm)}분', delay=0.75)
+        TextToSpeechUtil.speak_ment_without_async_experimental_2(ment=f'대한민국 표준시 기준 현재시각', delay=0.55)
+        TextToSpeechUtil.speak_ment_without_async_experimental_2(ment=f'{int(yyyy)}년 {int(MM)}월 {int(dd)}일 {week_name}요일 {int(HH)}시 {int(mm)}분', delay=0.75)
 
 
 class SecurityUtil:
@@ -7064,7 +7065,7 @@ class BusinessLogicUtil:
                                     TextToSpeechUtil.speak_ment("루틴을 전부 미룰게요", delay=0.45)
                                     TextToSpeechUtil.speak_ment("나중에 다시하실 수 있게 기억해 둘게요", delay=0)
                                     routines_left: str = "\n".join(routines)
-                                    dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
+                                    dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=3600)
                                     dialog.exec()
                                     break
                         elif dialog.btn_text_clicked == MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME:
@@ -7076,7 +7077,7 @@ class BusinessLogicUtil:
                             elif dialog.btn_text_clicked == "남은 루틴 전부 미뤄":
                                 TextToSpeechUtil.speak_ment_experimental("네 알겠어요 남은 루틴을 전부 미룰게요. 기억해둘게요 나중에 다시하실 수 있게요", delay=0.65)
                                 routines_left: str = "\n".join(routines)
-                                dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
+                                dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=3600)
                                 dialog.exec()
                                 break
                 break
@@ -7097,7 +7098,7 @@ class BusinessLogicUtil:
                 elif dialog.btn_text_clicked == MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME:
                     TextToSpeechUtil.speak_ment_experimental("네 알겠어요 남은 루틴을 전부 미룰게요. 기억해둘게요 나중에 다시하실 수 있게요", delay=0.65)
                     routines_left: str = "\n".join(routines)
-                    dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
+                    dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=3600)
                     dialog.exec()
                     break
             break
@@ -9830,7 +9831,7 @@ class BusinessLogicUtil:
         HH = TimeUtil.get_time_as_('%H')
         mm = TimeUtil.get_time_as_('%M')
         week_name = BusinessLogicUtil.return_korean_week_name()
-        DebuggingUtil.print_ment_cyan(f'현재 시각 {int(yyyy)}년 {int(MM)}월 {int(dd)}일 {week_name}요일 {int(HH)}시 {int(mm)}분')
+        DebuggingUtil.print_ment_cyan(f'대한민국 표준시 기준 현재시각 {int(yyyy)}년 {int(MM)}월 {int(dd)}일 {week_name}요일 {int(HH)}시 {int(mm)}분')
 
     @staticmethod
     def connect_to_remote_computer_via_chrome_desktop():
@@ -10541,8 +10542,8 @@ class BusinessLogicUtil:
                 if int(mm) % 30 == 0:
                     # TextToSpeechUtil.speak_ments(f'30분 간격 루틴을 시작합니다', sleep_after_play=0.65, thread_join_mode=True)
                     # TextToSpeechUtil.speak_ments(f'깃허브로 파이썬 아카이브 프로젝트 빽업을 시도합니다', sleep_after_play=0.65, thread_join_mode=True)
-                    BusinessLogicUtil.git_push_by_auto()
-                    BusinessLogicUtil.monitor_target_edited_and_sync(target_abspath=StateManagementUtil.PROJECT_DIRECTORY)  # seconds_performance_test_results : ['28.46sec', '27.53sec', '2.85sec', '2.9sec', '2.91sec']
+                    # BusinessLogicUtil.git_push_by_auto()
+                    BusinessLogicUtil.monitor_target_edited_and_sync(target_abspath=StateManagementUtil.SERVICE_DIRECTORY)  # seconds_performance_test_results : ['28.46sec', '27.53sec', '2.85sec', '2.9sec', '2.91sec']
                 if int(mm) % 60 == 0:
                     # TextToSpeechUtil.speak_ments(f'1시간 간격 루틴을 시작합니다', sleep_after_play=0.65, thread_join_mode=True)
                     BusinessLogicUtil.should_i_do(ment="쓰레기통을 비울까요?", function=BusinessLogicUtil.empty_recycle_bin, auto_click_negative_btn_after_seconds=10)
