@@ -13,10 +13,8 @@ Build 배치 수행
 if __name__ == '__main__':
     try:
         while (True):
-            # TextToSpeechUtil.speak_today_time_info() # 이거 설정하면 gtts 모듈 미작동으로 인해 에러뜨며 패키징해도 실행안된다.
-            if TextToSpeechUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment="console Blurred 프로그램을 실행합니다", sleep_after_play=0.95):
-                # if TtsUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment="콘솔 블러 프로그램을 실행합니다", sleep_after_play=0.95):
-                # BusinessLogicUtil.run_console_blurred_as_gui()
+            TextToSpeechUtil.speak_today_time_info() # debugging factor, 이거 설정하면 gtts 모듈 미작동으로 인해 에러뜨며 패키징해도 실행안된다.
+            if TextToSpeechUtil.speak_ment_without_async_experimental_2(ment="콘솔 블러 프로그램을 스케쥴러 모드로 실행합니다", delay=0.95):#success, delay=0.95 가 테스트했을때 적당하다 판단
                 BusinessLogicUtil.run_console_blurred_as_scheduler()
             break
     except Exception as e:

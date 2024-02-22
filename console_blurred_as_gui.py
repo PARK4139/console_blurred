@@ -7,7 +7,7 @@ from pkg_park4139_for_windows import TextToSpeechUtil, DebuggingUtil, BusinessLo
 if __name__ == '__main__':
     try:
         while (True):
-            if TextToSpeechUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment="콘솔 블러 프로그램을 실행합니다", sleep_after_play=0.95):
+            if TextToSpeechUtil.speak_ment_without_async_experimental_2(ment="콘솔 블러 프로그램을 GUI 모드로 실행합니다", delay=0.95):
                 # if TtsUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment="콘솔 블러 프로그램을 실행합니다", sleep_after_play=0.95):
                 BusinessLogicUtil.run_console_blurred_as_gui()
             break

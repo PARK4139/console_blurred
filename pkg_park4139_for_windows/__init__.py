@@ -4697,7 +4697,7 @@ class TextToSpeechUtil:
                     # thread.start()
                     # if thread.is_alive():
                     #     thread.join()
-                    TextToSpeechUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment, sleep_after_play=delay)
+                    TextToSpeechUtil.speak_ment_without_async_experimental_2(ment, delay=delay)
                     pass
                 return None
 
@@ -4796,7 +4796,7 @@ class TextToSpeechUtil:
             DebuggingUtil.trouble_shoot("%%%FOO%%%")
 
     @staticmethod
-    def speak_ment_without_async_and_return_last_word_mp3_length(ment, sleep_after_play=1.00):
+    def speak_ment_without_async_experimental_2(ment, delay=1.00):
         '''
         이 함수를 많이 쓸 수록 프로그램이 느려진다, 왜냐하면 말하는 속도 < 처리 속도
         '''
@@ -4892,7 +4892,7 @@ class TextToSpeechUtil:
                             # time.sleep(length_of_mp3 * 0.95)
                             # time.sleep(length_of_mp3 * 1.05)
                             # time.sleep(length_of_mp3 * 1.00)
-                            time.sleep(length_of_mp3 * sleep_after_play)
+                            time.sleep(length_of_mp3 * delay)
 
                             return length_of_mp3
                             # Park4139.is_speak_as_async_running = False # 쓰레드상태 사용종료로 업데이트
@@ -4947,7 +4947,7 @@ class TextToSpeechUtil:
         HH = TimeUtil.get_time_as_('%H')
         mm = TimeUtil.get_time_as_('%M')
         week_name = BusinessLogicUtil.return_korean_week_name()
-        TextToSpeechUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment=f'현재 시각 {int(yyyy)}년 {int(MM)}월 {int(dd)}일 {week_name}요일 {int(HH)}시 {int(mm)}분', sleep_after_play=0.75)
+        TextToSpeechUtil.speak_ment_without_async_experimental_2(ment=f'현재 시각 {int(yyyy)}년 {int(MM)}월 {int(dd)}일 {week_name}요일 {int(HH)}시 {int(mm)}분', delay=0.75)
 
 
 class SecurityUtil:
@@ -7060,10 +7060,9 @@ class BusinessLogicUtil:
                                     cursor_position = cursor_position + 1
                                     pass
                                 elif dialog.btn_text_clicked == "전부 미뤄":
-                                    TextToSpeechUtil.speak_ment("네 알겠어요", delay=0.45)
-                                    TextToSpeechUtil.speak_ment("전부 미룰게요", delay=0.45)
-                                    TextToSpeechUtil.speak_ment("기억해 둘게요", delay=0.45)
-                                    TextToSpeechUtil.speak_ment("나중에 다시하실 수 있게요", delay=0)
+                                    TextToSpeechUtil.speak_ment("네 알겠어요", delay=0.65)
+                                    TextToSpeechUtil.speak_ment("루틴을 전부 미룰게요", delay=0.45)
+                                    TextToSpeechUtil.speak_ment("나중에 다시하실 수 있게 기억해 둘게요", delay=0)
                                     routines_left: str = "\n".join(routines)
                                     dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
                                     dialog.exec()
