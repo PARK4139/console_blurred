@@ -245,7 +245,7 @@ class TestUtil:
                 ment = rf"총 {n}번의 시간성능측정 테스트를 시도합니다"
                 TestUtil.is_first_test_lap = False
                 DebuggingUtil.print_ment_via_colorama(ment, colorama_color=ColoramaUtil.BLUE)
-                TextToSpeechUtil.speak_ment(ment=ment, sleep_after_play=1)
+                TextToSpeechUtil.speak_ment(ment=ment, delay=1)
             seconds_performance_test_results = TestUtil.test_results
             import time
             time_s = time.time()
@@ -258,7 +258,7 @@ class TestUtil:
             seconds_performance_test_results.append(f"{round(mesured_seconds, 2)}sec")
             if len(seconds_performance_test_results) == n:
                 ment = rf"총 {n}번의 시간성능측정 테스트가 성공 되었습니다"
-                TextToSpeechUtil.speak_ment(ment=ment, sleep_after_play=0.55)
+                TextToSpeechUtil.speak_ment(ment=ment, delay=0.55)
                 DebuggingUtil.print_ment_via_colorama(rf'seconds_performance_test_results = {seconds_performance_test_results}', colorama_color=ColoramaUtil.BLUE)
                 DebuggingUtil.print_ment_via_colorama(rf'type(seconds_performance_test_results) : {type(seconds_performance_test_results)}', colorama_color=ColoramaUtil.BLUE)
                 DebuggingUtil.print_ment_via_colorama(rf'len(seconds_performance_test_results) : {len(seconds_performance_test_results)}', colorama_color=ColoramaUtil.BLUE)
@@ -316,7 +316,7 @@ class TestUtil:
             print(rf'type(milliseconds_performance_test_result) : {type(milliseconds_performance_test_result)}')
             print(rf'len(milliseconds_performance_test_result) : {len(milliseconds_performance_test_result)}')
             if len(milliseconds_performance_test_result) == test_cycle_max_limit:
-                TextToSpeechUtil.speak_ments("시간성능측정이 성공 되었습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental("시간성능측정이 성공 되었습니다", delay=0.65)
                 TestUtil.pause()
 
         return wrapper
@@ -1736,12 +1736,12 @@ class UiUtil:
             self.timer2.timeout.connect(self.update_label)  # noqa # 해당 검사에 대해서는 예외 목록에 "connect"를 넣는 것을 권장합니다. jetbrain 오류로 다년간 지속된 것으로 생각 중이다,
             self.timer2.start(1000)
 
-            TextToSpeechUtil.speak_ments(ment="매크로녹화를 시작합니다", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ment_experimental(ment="매크로녹화를 시작합니다", delay=0.65)
 
             # 매크로녹화시작 로깅
             log_title = "매크로녹화시작"
             contents = f"{StateManagementUtil.UNDERLINE_PROMISED}{TimeUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title}"
-            DebuggingUtil.print_magenta(contents)
+            DebuggingUtil.print_ment_cyan(contents)
             self.save_macro_log(contents=contents)
 
             self.bring_this_window()
@@ -1840,11 +1840,11 @@ class UiUtil:
             log_title = "매크로녹화종료"
             self.time_recording_end = self.elapsed_full_recording_time
             contents = f"{StateManagementUtil.UNDERLINE_PROMISED}{TimeUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title}"
-            DebuggingUtil.print_magenta(contents)
+            DebuggingUtil.print_ment_cyan(contents)
             self.save_macro_log(contents=contents)
 
             # 매크로 로그 확인
-            TextToSpeechUtil.speak_ments(ment="저장된 매크로 로그를 확인합니다", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ment_experimental(ment="저장된 매크로 로그를 확인합니다", delay=0.65)
             FileSystemUtil.explorer(StateManagementUtil.MACRO_LOG)
 
         # @Slot() # 최신 버전의 PySide6에서는 @Slot() 데코레이터를 사용하지 않고도 Slot 메서드를 정의할 수 있습니다. 이렇게 되면 자동으로 Slot으로 인식됩니다. 즉 최신버전 pyside6 에서는 쓸 필요 없다.
@@ -1867,11 +1867,11 @@ class UiUtil:
 
             if button == pynput.mouse.Button.left and pressed:
                 info = f"Park4139.sleep({elapsed_time})   %%%FOO%%%    Park4139.click_mouse_left_btn(abs_x={x},abs_y={y}) "
-                DebuggingUtil.print_magenta(info)
+                DebuggingUtil.print_ment_cyan(info)
                 self.save_macro_log(contents=f"{TimeUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')} {info}")
             elif button == pynput.mouse.Button.right and pressed:
                 info = f"Park4139.sleep({elapsed_time})   %%%FOO%%%    Park4139.click_mouse_right_btn(abs_x={x},abs_y={y}) "
-                DebuggingUtil.print_magenta(info)
+                DebuggingUtil.print_ment_cyan(info)
                 self.save_macro_log(contents=f"{TimeUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')} {info}")
 
             # 현재시간을 이전시간에 저장
@@ -1938,7 +1938,7 @@ class UiUtil:
             # if key == "ctrl+alt":
             log_title = "키보드인풋"
             info = f"Park4139.sleep({elapsed_time})\nPark4139.keyDown('{key}') "
-            DebuggingUtil.print_magenta(info)
+            DebuggingUtil.print_ment_cyan(info)
             self.save_macro_log(contents=f"{TimeUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title} {info}")
 
             # 현재시간을 이전시간에 저장
@@ -1971,7 +1971,7 @@ class UiUtil:
             if pynput.keyboard.GlobalHotKeys.name == "<ctrl>":
                 log_title = "키보드단일키인풋"
                 info = f"  Park4139.sleep({elapsed_time})   %%%FOO%%%    Park4139.press({str(key)}) "
-                DebuggingUtil.print_magenta(info)
+                DebuggingUtil.print_ment_cyan(info)
                 self.save_macro_log(contents=f"{TimeUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title} {info}")
 
             # 현재시간을 이전시간에 저장
@@ -2020,7 +2020,7 @@ class UiUtil:
 
             log_title = "키보드릴리즈"
             info = f"Park4139.sleep({elapsed_time})\nPark4139.keyUp('{key}') "
-            DebuggingUtil.print_magenta(info)
+            DebuggingUtil.print_ment_cyan(info)
             self.save_macro_log(contents=f"{TimeUtil.get_time_as_('%Y-%m-%d_%H:%M:%S')}{log_title} {info}")
 
             # 현재시간을 이전시간에 저장
@@ -2053,10 +2053,10 @@ class UiUtil:
                 global dialog2
                 dialog2 = UiUtil.CustomDialog(q_application=q_application, q_wiget=UiUtil.CustomQdialog(ment="테스트", btns=["실행", "실행하지 않기"]), is_app_instance_mode=False)
                 if dialog2.btn_text_clicked == "실행":
-                    TextToSpeechUtil.speak_ments("정상적으로 동작합니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental("정상적으로 동작합니다", delay=0.65)
 
             def tmp(string: str):
-                TextToSpeechUtil.speak_ments(string, sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(string, delay=0.65)
                 # global tmpc
                 # dialog = CustomDialog(q_application=q_application, q_wiget=RpaProgramMainWindow(), is_app_instance_mode=True, is_exec_mode=True)
                 # global dialog
@@ -2181,18 +2181,18 @@ class UiUtil:
             btn_text_clicked = dialog_.btn_text_clicked
 
             if btn_text_clicked == "":
-                DebuggingUtil.print_magenta(f'버튼 눌렸습니다 입니다 {btn_text_clicked}')
+                DebuggingUtil.print_ment_cyan(f'버튼 눌렸습니다 입니다 {btn_text_clicked}')
             if app == True:  # .....app 은 bool 이 아닌데. 동작 되고있는데..
-                DebuggingUtil.print_magenta("여기는 좀 확인을 해야하는데. 호출 안되면 좋겠는데1")
+                DebuggingUtil.print_ment_cyan("여기는 좀 확인을 해야하는데. 호출 안되면 좋겠는데1")
                 if isinstance(app_foo, QApplication):
-                    DebuggingUtil.print_magenta("여기는 좀 확인을 해야하는데. 호출 안되면 좋겠는데2")
+                    DebuggingUtil.print_ment_cyan("여기는 좀 확인을 해야하는데. 호출 안되면 좋겠는데2")
                     app_foo.exec()
             if app == True:
                 # app_foo.quit()# QApplication 인스턴스 제거시도 : fail
                 # app_foo.deleteLater()# QApplication 인스턴스 파괴시도 : fail
                 # del app_foo # QApplication 인스턴스 파괴시도 : fail
                 # app_foo = None # QApplication 인스턴스 파괴시도 : fail
-                DebuggingUtil.print_magenta("여기는 좀 확인을 해야하는데. 호출 안되면 좋겠는데3")
+                DebuggingUtil.print_ment_cyan("여기는 좀 확인을 해야하는데. 호출 안되면 좋겠는데3")
                 app_foo.shutdown()  # QApplication 인스턴스 파괴시도 : success  # 성공요인은 app.shutdown()이 호출이 되면서 메모리를 해제까지 수행해주기 때문
                 # sys.exit()
         else:
@@ -2548,7 +2548,9 @@ class DebuggingUtil:
     @staticmethod
     def print_ment_light_black(ment):
         DebuggingUtil.print_ment_via_colorama(ment, colorama_color=ColoramaUtil.LIGHTBLACK_EX)
-
+    @staticmethod
+    def print_ment_cyan(ment):
+        DebuggingUtil.print_ment_via_colorama(ment, colorama_color=ColoramaUtil.CYAN)
 
 class CustomErrorUtil(Exception):
     def __init__(self, message):
@@ -2954,9 +2956,9 @@ class FileSystemUtil:
     def convert_mp4_to_webm(target_abspath):
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         '''테스트 필요'''
-        DebuggingUtil.print_magenta(f'from : {target_abspath}')
+        DebuggingUtil.print_ment_cyan(f'from : {target_abspath}')
         file_edited = f'{os.path.splitext(os.path.basename(target_abspath))[0]}.webm'
-        DebuggingUtil.print_magenta(f'to   : {file_edited}')
+        DebuggingUtil.print_ment_cyan(f'to   : {file_edited}')
 
         path_started = os.getcwd()
         os.system("chcp 65001 >nul")
@@ -2973,9 +2975,9 @@ class FileSystemUtil:
         # 한글 인코딩 setting
         os.system("chcp 65001 >nul")
 
-        DebuggingUtil.print_magenta(f'from : {target_abspath}')
+        DebuggingUtil.print_ment_cyan(f'from : {target_abspath}')
         file_edited = f'{os.path.splitext(os.path.basename(target_abspath))[0]}.flac'
-        DebuggingUtil.print_magenta(f'to   : {file_edited}')
+        DebuggingUtil.print_ment_cyan(f'to   : {file_edited}')
 
         # ffmpeg location setting
         ffmpeg_exe = rf"{StateManagementUtil.USERPROFILE}\Desktop\`workspace\tool\LosslessCut-win-x64\resources\ffmpeg.exe"
@@ -2985,16 +2987,16 @@ class FileSystemUtil:
         except Exception as e:
             pass
         os.chdir(destination)
-        DebuggingUtil.print_magenta(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"        를 수행합니다.')
+        DebuggingUtil.print_ment_cyan(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"        를 수행합니다.')
         subprocess.check_output(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"', shell=True)
 
     @staticmethod
     def convert_mp4_to_wav(target_abspath):
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         '''테스트 필요'''
-        DebuggingUtil.print_magenta(f'from : {target_abspath}')
+        DebuggingUtil.print_ment_cyan(f'from : {target_abspath}')
         file_edited = f'{os.path.splitext(os.path.basename(target_abspath))[0]}.wav'
-        DebuggingUtil.print_magenta(f'to   : {file_edited}')
+        DebuggingUtil.print_ment_cyan(f'to   : {file_edited}')
 
         path_started = os.getcwd()
 
@@ -3017,9 +3019,9 @@ class FileSystemUtil:
         '''테스트 필요'''
         # 한글 인코딩 setting
         os.system("chcp 65001 >nul")
-        DebuggingUtil.print_magenta(f'from : {target_abspath}')
+        DebuggingUtil.print_ment_cyan(f'from : {target_abspath}')
         file_edited = f'{os.path.splitext(os.path.basename(target_abspath))[0]}.flac'
-        DebuggingUtil.print_magenta(f'to   : {file_edited}')
+        DebuggingUtil.print_ment_cyan(f'to   : {file_edited}')
 
         path_started = os.getcwd()
 
@@ -3031,7 +3033,7 @@ class FileSystemUtil:
         except Exception as e:
             pass
         os.chdir(destination)
-        DebuggingUtil.print_magenta(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"        를 수행합니다.')
+        DebuggingUtil.print_ment_cyan(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"        를 수행합니다.')
         subprocess.check_output(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"', shell=True)
 
         os.chdir(path_started)
@@ -3042,9 +3044,9 @@ class FileSystemUtil:
         '''테스트 필요'''
         os.system("chcp 65001 >nul")
 
-        DebuggingUtil.print_magenta(f'from : {target_abspath}')
+        DebuggingUtil.print_ment_cyan(f'from : {target_abspath}')
         file_edited = f'{os.path.splitext(os.path.basename(target_abspath))[0]}.flac'
-        DebuggingUtil.print_magenta(f'to   : {file_edited}')
+        DebuggingUtil.print_ment_cyan(f'to   : {file_edited}')
 
         path_started = os.getcwd()
 
@@ -3056,7 +3058,7 @@ class FileSystemUtil:
         except Exception as e:
             pass
         os.chdir(destination)
-        DebuggingUtil.print_magenta(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"        를 수행합니다.')
+        DebuggingUtil.print_ment_cyan(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"        를 수행합니다.')
         subprocess.check_output(f'"{ffmpeg_exe}" -i "{target_abspath}" -c:a flac "{file_edited}"', shell=True)
 
         os.chdir(path_started)
@@ -3283,11 +3285,11 @@ class FileSystemUtil:
         if line_cnt_from_db == None:
             DbTomlUtil.insert_db_toml(key=key, value=BusinessLogicUtil.get_line_cnt_of_file(file_abspath))  # 50000 줄의 str 다루는 것보다 50000 개의 list 다루는 것이 속도성능에 대하여 효율적이다.
             line_cnt_from_db = DbTomlUtil.select_db_toml(key=key)
-        DebuggingUtil.print_magenta(f"line_cnt_from_db : {line_cnt_from_db}")
+        DebuggingUtil.print_ment_cyan(f"line_cnt_from_db : {line_cnt_from_db}")
 
         # 새로 측정된 파일의 줄 수
         line_cnt_measured = BusinessLogicUtil.get_line_cnt_of_file(file_abspath)
-        DebuggingUtil.print_magenta(f"line_cnt_measured : {line_cnt_measured}")
+        DebuggingUtil.print_ment_cyan(f"line_cnt_measured : {line_cnt_measured}")
 
         # 로직분리 새로운 시도: 기능에 따라 조건문을 여러개 만들어 보았다.
         # commentize() 관련된 로직 분리
@@ -3322,7 +3324,7 @@ class FileSystemUtil:
 
             target_abspath = target_abspath
             future_abspath = rf"{target_abspath}_sync"
-            DebuggingUtil.print_magenta(rf'future_abspath : {future_abspath}')
+            DebuggingUtil.print_ment_cyan(rf'future_abspath : {future_abspath}')
 
             # 기존 작업 폴더가 없는 경우
             if not os.path.exists(future_abspath):
@@ -3645,10 +3647,10 @@ class FileSystemUtil:
         print(rf'len(directoryies_) : {len(directoryies_)}')
 
         if 0 == len(directoryies_):
-            TextToSpeechUtil.speak_ments("타겟경로가 아무것도 입력되지 않았습니다", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ment_experimental("타겟경로가 아무것도 입력되지 않았습니다", delay=0.65)
             return
         elif 1 == len(directoryies_):
-            TextToSpeechUtil.speak_ments("하나의 타겟경로로는 머지를 시도할수 없습니다, 여러개의 타겟경로들을 입력해주세요", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ment_experimental("하나의 타겟경로로는 머지를 시도할수 없습니다, 여러개의 타겟경로들을 입력해주세요", delay=0.65)
             return
         elif 1 < len(directoryies_):
             for index, directory in enumerate(directoryies_):
@@ -3658,7 +3660,7 @@ class FileSystemUtil:
                     if os.path.exists(drive_path):
                         connected_drives.append(drive_path)
                         if directory == drive_path:
-                            TextToSpeechUtil.speak_ments("입력된 타겟경로는 너무 광범위하여, 진행할 수 없도록 설정되어 있습니다", sleep_after_play=0.65)
+                            TextToSpeechUtil.speak_ment_experimental("입력된 타겟경로는 너무 광범위하여, 진행할 수 없도록 설정되어 있습니다", delay=0.65)
                             break
 
             # FileSystemUtil.make_leaf_directory(StateManagementUtil.EMPTY_DIRECTORYIES)
@@ -3880,7 +3882,7 @@ class FileSystemUtil:
         target_abspath = str(target_abspath)
         target_abspath = target_abspath.replace('\"', '')
         target_abspath = rf'explorer "{target_abspath}"'
-        DebuggingUtil.print_magenta(rf'{target_abspath}')
+        DebuggingUtil.print_ment_cyan(rf'{target_abspath}')
         try:
             subprocess.check_output(target_abspath, shell=True).decode('utf-8').split('\n')
         except UnicodeDecodeError:
@@ -3905,7 +3907,7 @@ class FileSystemUtil:
             if "" != line.strip():
                 pid = line
                 pids.append(pid)
-                DebuggingUtil.print_magenta(f'pid: {pid}')
+                DebuggingUtil.print_ment_cyan(f'pid: {pid}')
         return pids
 
     @staticmethod
@@ -4469,7 +4471,7 @@ class TextToSpeechUtil:
         async def speak_as_async(ment):
             DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
             # pyglet_player 가 play() 하고 있으면 before_mp3_length_used_in_speak_as_async 만큼 대기
-            DebuggingUtil.print_magenta(rf'before_mp3_length_used_in_speak_as_async 만큼 재생 대기')
+            DebuggingUtil.print_ment_cyan(rf'before_mp3_length_used_in_speak_as_async 만큼 재생 대기')
 
             # Park4139.pyglet_player 을 del 을 한 경우:
             # Park4139.pyglet_player 에 대한 참조가 불가능해진다. 다른 참조법을 적용해보자. 시도해보니 Park4139.pyglet_player 는 더이상 쓸 수가 없다.
@@ -4549,7 +4551,7 @@ class TextToSpeechUtil:
 
                             # Park4139.debug_as_cli(rf'프로세스 세션을 빼앗지 않고 mp3재생')
                             ment_mp3 = os.path.abspath(ment_mp3)
-                            DebuggingUtil.print_magenta(rf'{ment_mp3}')
+                            DebuggingUtil.print_ment_cyan(rf'{ment_mp3}')
                             try:
                                 # 재생
                                 # pyglet_player = Park4139.pyglet_player
@@ -4585,7 +4587,7 @@ class TextToSpeechUtil:
 
                                 # Park4139.is_speak_as_async_running = False # 쓰레드상태 사용종료로 업데이트
                             except FileNotFoundError:
-                                DebuggingUtil.print_magenta(f"{ment_mp3} 재생할 파일이 없습니다")
+                                DebuggingUtil.print_ment_cyan(f"{ment_mp3} 재생할 파일이 없습니다")
                             except:
                                 DebuggingUtil.trouble_shoot("%%%FOO%%%")
                                 return
@@ -4613,7 +4615,7 @@ class TextToSpeechUtil:
         loop.run_until_complete(speak_as_async(ment))
 
     @staticmethod
-    def speak_ments(ment, sleep_after_play=1.00, thread_join_mode=False):
+    def speak_ment_experimental(ment, delay=1.00, thread_join_mode=False):
         if FileSystemUtil.is_os_windows():
             # if thread_for_speak_as_async is not None:
             #     # 이전에 생성된 쓰레드가 있다면 종료
@@ -4670,7 +4672,7 @@ class TextToSpeechUtil:
                     # del Park4139.pyglet_player
                     # tmp = Park4139.pyglet_player
         else:
-            DebuggingUtil.print_magenta(ment=f"{inspect.currentframe().f_code.co_name}() 는 리눅스 환경에서 테스트가 필요합니다.")
+            DebuggingUtil.print_ment_cyan(ment=f"{inspect.currentframe().f_code.co_name}() 는 리눅스 환경에서 테스트가 필요합니다.")
 
         # 비동기 이벤트 함수 설정 (simple for void async processing)
         async def process_thread_speak(ment):
@@ -4695,7 +4697,7 @@ class TextToSpeechUtil:
                     # thread.start()
                     # if thread.is_alive():
                     #     thread.join()
-                    TextToSpeechUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment, sleep_after_play=sleep_after_play)
+                    TextToSpeechUtil.speak_ment_without_async_and_return_last_word_mp3_length(ment, sleep_after_play=delay)
                     pass
                 return None
 
@@ -4712,7 +4714,7 @@ class TextToSpeechUtil:
             thread.join()
 
     @staticmethod
-    def speak_ment(ment, sleep_after_play=1.00):  # 많이 쓸 수록 프로그램이 느려진다
+    def speak_ment(ment, delay=1.00):  # 많이 쓸 수록 프로그램이 느려진다
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         ment = str(ment)
         ment = ment.strip()
@@ -4726,17 +4728,17 @@ class TextToSpeechUtil:
                 if "," in ment:  # , 를 넣으면 나누어 읽도록 업데이트
                     ments = ment.split(",")
                     for ment in ments:
-                        TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                        TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     break
                 if type(ment) == str:
                     cache_mp3 = rf'{StateManagementUtil.PROJECT_DIRECTORY}\$cache_mp3'
                     FileSystemUtil.make_leaf_directory(leaf_directory_abspath=cache_mp3)
 
-                    DebuggingUtil.print_magenta("ment 전처리, 윈도우 경로명에 들어가면 안되는 문자들 공백으로 대체")
+                    DebuggingUtil.print_ment_cyan("ment 전처리, 윈도우 경로명에 들어가면 안되는 문자들 공백으로 대체")
                     ment = BusinessLogicUtil.get_str_replaced_special_characters(target=ment, replacement=" ")
                     ment = ment.replace("\n", " ")
 
-                    DebuggingUtil.print_magenta(rf'파일 없으면 생성')
+                    DebuggingUtil.print_ment_cyan(rf'파일 없으면 생성')
                     ment__mp3 = rf'{cache_mp3}\{ment}_.mp3'
                     ment_mp3 = rf'{cache_mp3}\{ment}.mp3'
                     if not os.path.exists(ment_mp3):
@@ -4768,16 +4770,16 @@ class TextToSpeechUtil:
                         DebuggingUtil.trouble_shoot("%%%FOO%%%")
                     try:
                         ment_mp3 = os.path.abspath(ment_mp3)
-                        DebuggingUtil.print_magenta(rf'{ment_mp3}')
+                        DebuggingUtil.print_ment_cyan(rf'{ment_mp3}')
                         try:
                             source = pyglet.media.load(ment_mp3)
                             source.play()
 
                             length_of_mp3 = TextToSpeechUtil.get_length_of_mp3(ment_mp3)
-                            time.sleep(length_of_mp3 * sleep_after_play)
+                            time.sleep(length_of_mp3 * delay)
                             return length_of_mp3
                         except FileNotFoundError:
-                            DebuggingUtil.print_magenta(f"{ment_mp3} 재생할 파일이 없습니다")
+                            DebuggingUtil.print_ment_cyan(f"{ment_mp3} 재생할 파일이 없습니다")
                         except:
                             DebuggingUtil.trouble_shoot("%%%FOO%%%")
                             break
@@ -4799,9 +4801,9 @@ class TextToSpeechUtil:
         이 함수를 많이 쓸 수록 프로그램이 느려진다, 왜냐하면 말하는 속도 < 처리 속도
         '''
 
-        # 임시 음소거를 위한 설정 처리, 필요시 ment = "`" 삭제
-        DebuggingUtil.print_ment_light_yellow("음소거 모드를 실행중입니다")
-        ment = "`"
+        # 음소거 모드, 필요시 ment = "`" 주석해제
+        # DebuggingUtil.print_ment_light_yellow("음소거 모드를 실행중입니다")
+        # ment = "`"
 
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")  # noqa , pycharm 에서 개별검사 억제설정 via noqa
         ment = str(ment)
@@ -4816,7 +4818,7 @@ class TextToSpeechUtil:
                 if "," in ment:  # , 를 넣으면 나누어 읽도록 업데이트
                     ments = ment.split(",")
                     for ment in ments:
-                        TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                        TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     break
                 if type(ment) == str:
                     # while Park4139.is_speak_as_async_running:
@@ -4827,11 +4829,11 @@ class TextToSpeechUtil:
                     cache_mp3 = rf'{StateManagementUtil.PROJECT_DIRECTORY}\$cache_mp3'
                     FileSystemUtil.make_leaf_directory(leaf_directory_abspath=cache_mp3)
 
-                    DebuggingUtil.print_magenta("ment 전처리, 윈도우 경로명에 들어가면 안되는 문자들 공백으로 대체")
+                    DebuggingUtil.print_ment_cyan("ment 전처리, 윈도우 경로명에 들어가면 안되는 문자들 공백으로 대체")
                     ment = BusinessLogicUtil.get_str_replaced_special_characters(target=ment, replacement=" ")
                     ment = ment.replace("\n", " ")
 
-                    DebuggingUtil.print_magenta(rf'파일 없으면 생성')
+                    DebuggingUtil.print_ment_cyan(rf'파일 없으면 생성')
                     ment__mp3 = rf'{cache_mp3}\{ment}_.mp3'
                     ment_mp3 = rf'{cache_mp3}\{ment}.mp3'
                     if not os.path.exists(ment_mp3):
@@ -4875,7 +4877,7 @@ class TextToSpeechUtil:
 
                         # Park4139.debug_as_cli(rf'프로세스 세션을 빼앗지 않고 mp3재생')
                         ment_mp3 = os.path.abspath(ment_mp3)
-                        DebuggingUtil.print_magenta(rf'{ment_mp3}')
+                        DebuggingUtil.print_ment_cyan(rf'{ment_mp3}')
                         try:
                             # 재생
                             source = pyglet.media.load(ment_mp3)
@@ -4895,7 +4897,7 @@ class TextToSpeechUtil:
                             return length_of_mp3
                             # Park4139.is_speak_as_async_running = False # 쓰레드상태 사용종료로 업데이트
                         except FileNotFoundError:
-                            DebuggingUtil.print_magenta(f"{ment_mp3} 재생할 파일이 없습니다")
+                            DebuggingUtil.print_ment_cyan(f"{ment_mp3} 재생할 파일이 없습니다")
                         except:
                             DebuggingUtil.trouble_shoot("%%%FOO%%%")
                             break
@@ -4928,13 +4930,13 @@ class TextToSpeechUtil:
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         server_hour = TimeUtil.get_time_as_('%H')
         server_minute = TimeUtil.get_time_as_('%M')
-        TextToSpeechUtil.speak_ments(f'{server_hour}시 {server_minute}분 입니다', sleep_after_play=0.65)
+        TextToSpeechUtil.speak_ment_experimental(f'{server_hour}시 {server_minute}분 입니다', delay=0.65)
 
     @staticmethod
     def speak_server_ss():
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         server_seconds = TimeUtil.get_time_as_('%S')
-        TextToSpeechUtil.speak_ments(f'{server_seconds}초', sleep_after_play=0.65)
+        TextToSpeechUtil.speak_ment_experimental(f'{server_seconds}초', delay=0.65)
 
     @staticmethod
     def speak_today_time_info():
@@ -5540,9 +5542,9 @@ class DbTomlUtil:
                 # with open(db_abspath, "w") as f2:
                 #     toml.dump(db_template, f2)
                 FileSystemUtil.make_leaf_file(db_abspath)
-                DebuggingUtil.print_magenta(f"DB를 만들었습니다 {db_abspath}")
+                DebuggingUtil.print_ment_cyan(f"DB를 만들었습니다 {db_abspath}")
             else:
-                DebuggingUtil.print_magenta(f"DB가 이미존재합니다 {db_abspath}")
+                DebuggingUtil.print_ment_cyan(f"DB가 이미존재합니다 {db_abspath}")
         except:
             DebuggingUtil.trouble_shoot("%%%FOO%%%")
 
@@ -6663,7 +6665,7 @@ class BusinessLogicUtil:
         if TextToSpeechUtil.is_only_no(user_input):
             user_input = int(user_input)
         else:
-            TextToSpeechUtil.speak_ments("you can input only number, please input only number again", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ment_experimental("you can input only number, please input only number again", delay=0.65)
             return None
         return user_input
 
@@ -6703,7 +6705,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment="다운로드하고 싶은 URL을 입력해주세요", btns=["입력", "입력하지 않기"], is_input_box=True, input_box_text_default=clipboard.paste())
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "입력":
                 url = dialog.input_box.text()
                 BusinessLogicUtil.download_from_youtube_to_webm_alt(url)
@@ -6717,7 +6719,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment="시스템을 종료할까요?", btns=["종료", "종료하지 않기"])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "종료":
                 FileSystemUtil.shutdown_this_computer()
             else:
@@ -6735,7 +6737,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment="빽업할 타겟경로를 입력하세요", btns=["입력", "입력하지 않기"], is_input_box=True, input_box_text_default=previous_input)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "입력":
                 BusinessLogicUtil.back_up_target(dialog.input_box.text())
             else:
@@ -6749,7 +6751,7 @@ class BusinessLogicUtil:
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
             if btn_text_clicked == "시작하기":
-                DebuggingUtil.print_magenta("아무 테스트도 정의되지 않았습니다.")
+                DebuggingUtil.print_ment_cyan("아무 테스트도 정의되지 않았습니다.")
                 pass
             else:
                 break
@@ -6761,7 +6763,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment="절전모드로 진입할까요?", btns=["진입", "10분 뒤 진입", "20분 뒤 진입", "30분 뒤 진입", "1시간 뒤 진입", "진입하지 않기"])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "진입":
                 FileSystemUtil.enter_power_saving_mode()
             elif btn_text_clicked == "10분 뒤 진입":
@@ -6790,7 +6792,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment="WRITE SOMETHING YOU WANT TO TRANSLATE", btns=["Translate this to Korean", "Don't"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "Translate this to Korean":
                 BusinessLogicUtil.translate_eng_to_kor(dialog.input_box.text())
             else:
@@ -6803,7 +6805,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment='번역하고 싶은 내용을 입력하세요', btns=["영어로 번역", "번역하지 않기"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "영어로 번역":
                 BusinessLogicUtil.translate_kor_to_eng(dialog.input_box.text())
             else:
@@ -6817,7 +6819,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment="프로그램을 종료할까요?", btns=["종료", "종료하지 않기"])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "종료":
                 # app.quit()
                 # Park4139.taskkill("python.exe")
@@ -6834,7 +6836,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment="nyaa.si 에서 검색할 내용을 입력하세요", btns=["검색", "검색하지 않기"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "검색":
                 BusinessLogicUtil.search_animation_data_from_web(dialog.input_box.text())
             else:
@@ -6847,11 +6849,11 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment="어디로 길을 찾아드릴까요?", btns=["찾아줘", "찾아주지 않아도 되"], is_input_box=True)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "찾아줘":
                 BusinessLogicUtil.find_direction_via_naver_map(dialog.input_box.text())
             else:
-                TextToSpeechUtil.speak_ments("네, 알겠습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental("네, 알겠습니다", delay=0.65)
                 break
 
     @staticmethod
@@ -6861,7 +6863,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment='시스템을 재시작할까요?', btns=[MentsUtil.YES, MentsUtil.NO])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == MentsUtil.YES:
                 FileSystemUtil.reboot_this_computer()
             else:
@@ -6876,7 +6878,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment='AI 에게 할 질문을 입력하세요', btns=["질문하기", "질문하지 않기"], is_input_box=True, input_box_text_default=previous_question)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == "질문하기":
                 BusinessLogicUtil.ask_to_web(dialog.input_box.text())
             else:
@@ -6890,7 +6892,7 @@ class BusinessLogicUtil:
             dialog = UiUtil.CustomQdialog(ment='rdp1에 원격접속할까요?', btns=[MentsUtil.YES, MentsUtil.NO])
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
-            DebuggingUtil.print_magenta(btn_text_clicked)
+            DebuggingUtil.print_ment_cyan(btn_text_clicked)
             if btn_text_clicked == MentsUtil.YES:
                 BusinessLogicUtil.connect_remote_rdp1()
             else:
@@ -7006,7 +7008,7 @@ class BusinessLogicUtil:
                 dialog = UiUtil.CustomQdialog(ment=ment, btns=["하나씩 가이드해줘", "한번에 가이드해줘", "모두 미리 수행했어"], auto_click_positive_btn_after_seconds=30)
                 is_first_entry = False
             else:
-                TextToSpeechUtil.speak_ments(ment='루틴을 하나씩 가이드할까요?', sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment='루틴을 하나씩 가이드할까요?', delay=0.65)
                 dialog = UiUtil.CustomQdialog(ment='루틴을 하나씩 가이드할까요?', btns=["하나씩 가이드해줘", "한번에 가이드해줘", "모두 미리 수행했어"], auto_click_positive_btn_after_seconds=30)
             dialog.exec()
             btn_text_clicked = dialog.btn_text_clicked
@@ -7014,7 +7016,7 @@ class BusinessLogicUtil:
                 routines = []
                 if len(routines) == 0:
                     ment = "모든 루틴을 계획대로 잘 수행하셨군요, 계획대로 잘 하셨습니다, 랜덤보상을 하나드릴게요"
-                    TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     UiUtil.pop_up_as_complete(title_="작업성공보고", ment=ment, auto_click_positive_btn_after_seconds=5)
                     # 랜덤보상들 여기에 작성하기
                     FileSystemUtil.explorer(StateManagementUtil.MUSIC_FOR_WORK)
@@ -7035,7 +7037,7 @@ class BusinessLogicUtil:
                         del routines[cursor_position]  # 리스트의 특정 인덱스 삭제
                         if len(routines) == 0:
                             ment = "루틴을 하나하나 계획대로 잘 수행하셨군요,\n 계획대로 잘 하셨습니다,\n 미루지 않았으니 내일도 좋은일 가득할 거에요,\n 랜덤보상을 하나드릴게요"
-                            TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                            TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                             UiUtil.pop_up_as_complete(title_="작업성공보고", ment=ment, auto_click_positive_btn_after_seconds=5)
                             # 랜덤보상들 여기에 작성하기
                             FileSystemUtil.explorer(StateManagementUtil.MUSIC_FOR_WORK)
@@ -7043,7 +7045,7 @@ class BusinessLogicUtil:
                     elif dialog.btn_text_clicked == MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME:
                         # ment = f'정말로 "{routines[cursor_position]}" 하는 것을 다음으로 미루시겠어요?, 미루지 않는 습관은 인생에 중요한데도요?'
                         ment = f'정말로 "{routines[cursor_position]}" 하는 것을 다음으로 미루시겠어요?,\n 미루지 않는 습관은 인생에 중요한데도요?'
-                        TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                        TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                         dialog = UiUtil.CustomQdialog(ment=ment, btns=[MentsUtil.OK_I_WILL_DO_IT_NOW, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=3600)
                         dialog.exec()
                         if dialog.btn_text_clicked == MentsUtil.OK_I_WILL_DO_IT_NOW:
@@ -7058,7 +7060,10 @@ class BusinessLogicUtil:
                                     cursor_position = cursor_position + 1
                                     pass
                                 elif dialog.btn_text_clicked == "전부 미뤄":
-                                    TextToSpeechUtil.speak_ments("네 알겠어요. 전부 미룰게요. 기억해둘게요. 나중에 다시하실 수 있게요", sleep_after_play=0.65)
+                                    TextToSpeechUtil.speak_ment("네 알겠어요", delay=0.45)
+                                    TextToSpeechUtil.speak_ment("전부 미룰게요", delay=0.45)
+                                    TextToSpeechUtil.speak_ment("기억해 둘게요", delay=0.45)
+                                    TextToSpeechUtil.speak_ment("나중에 다시하실 수 있게요", delay=0)
                                     routines_left: str = "\n".join(routines)
                                     dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
                                     dialog.exec()
@@ -7070,7 +7075,7 @@ class BusinessLogicUtil:
                                 cursor_position = cursor_position + 1
                                 pass
                             elif dialog.btn_text_clicked == "남은 루틴 전부 미뤄":
-                                TextToSpeechUtil.speak_ments("네 알겠어요 남은 루틴을 전부 미룰게요. 기억해둘게요 나중에 다시하실 수 있게요", sleep_after_play=0.65)
+                                TextToSpeechUtil.speak_ment_experimental("네 알겠어요 남은 루틴을 전부 미룰게요. 기억해둘게요 나중에 다시하실 수 있게요", delay=0.65)
                                 routines_left: str = "\n".join(routines)
                                 dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
                                 dialog.exec()
@@ -7078,19 +7083,20 @@ class BusinessLogicUtil:
                 break
                 # '응, 아니 지금할게'
             elif btn_text_clicked == "한번에 가이드해줘":
-                TextToSpeechUtil.speak_ments("네 한번에 가이드를 할게요 예정된 루틴목록입니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment("네 한번에 가이드를 할게요", delay=0.55)
+                TextToSpeechUtil.speak_ment("예정된 루틴목록입니다", delay=0)
                 routines_promised: str = "\n".join(routines)
-                dialog = UiUtil.CustomQdialog(ment=f"<예정된 루틴목록>\n\n{routines_promised}", btns=[MentsUtil.DONE, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=10)
+                dialog = UiUtil.CustomQdialog(ment=f"<예정된 루틴목록>\n\n{routines_promised}", btns=[MentsUtil.DONE, MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME], auto_click_negative_btn_after_seconds=3600)
                 dialog.exec()
                 if dialog.btn_text_clicked == MentsUtil.DONE:
                     ment = "계획대로 잘 하셨습니다, 미루지 않았으니 내일도 좋은일 가득할 거에요, 랜덤보상을 하나드릴게요"
-                    TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     UiUtil.pop_up_as_complete(title_="작업성공보고", ment=ment, auto_click_positive_btn_after_seconds=5)
                     # 랜덤보상들 여기에 작성하기
                     FileSystemUtil.explorer(StateManagementUtil.MUSIC_FOR_WORK)
                     break
                 elif dialog.btn_text_clicked == MentsUtil.I_WANT_TO_TO_DO_NEXT_TIME:
-                    TextToSpeechUtil.speak_ments("네 알겠어요 남은 루틴을 전부 미룰게요. 기억해둘게요 나중에 다시하실 수 있게요", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental("네 알겠어요 남은 루틴을 전부 미룰게요. 기억해둘게요 나중에 다시하실 수 있게요", delay=0.65)
                     routines_left: str = "\n".join(routines)
                     dialog = UiUtil.CustomQdialog(ment=f"<남은 루틴목록>\n\n{routines_left}", btns=[MentsUtil.CHECKED], auto_click_positive_btn_after_seconds=10)
                     dialog.exec()
@@ -7160,10 +7166,10 @@ class BusinessLogicUtil:
                     if os.path.exists(drive_path):
                         connected_drives.append(drive_path)
                         if target_abspath == drive_path:
-                            TextToSpeechUtil.speak_ments("입력된 타겟경로는 너무 광범위하여 진행할 수 없도록 설정되어 있습니다", sleep_after_play=0.65)
+                            TextToSpeechUtil.speak_ment_experimental("입력된 타겟경로는 너무 광범위하여 진행할 수 없도록 설정되어 있습니다", delay=0.65)
                             break
                 if not os.path.exists(target_abspath):
-                    TextToSpeechUtil.speak_ments("입력된 타겟경로가 존재하지 않습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental("입력된 타겟경로가 존재하지 않습니다", delay=0.65)
                     continue
                 if target_abspath == "":
                     continue
@@ -7194,10 +7200,10 @@ class BusinessLogicUtil:
                         if os.path.exists(drive_path):
                             connected_drives.append(drive_path)
                             if directory_abspath == drive_path:
-                                TextToSpeechUtil.speak_ments("입력된 타겟경로는 너무 광범위하여 진행할 수 없도록 설정되어 있습니다", sleep_after_play=0.65)
+                                TextToSpeechUtil.speak_ment_experimental("입력된 타겟경로는 너무 광범위하여 진행할 수 없도록 설정되어 있습니다", delay=0.65)
                                 break
                     if not os.path.exists(directory_abspath):
-                        TextToSpeechUtil.speak_ments("입력된 타겟경로가 존재하지 않습니다", sleep_after_play=0.65)
+                        TextToSpeechUtil.speak_ment_experimental("입력된 타겟경로가 존재하지 않습니다", delay=0.65)
                         continue
                     if directory_abspath == "":
                         continue
@@ -7231,7 +7237,7 @@ class BusinessLogicUtil:
                             ment = "약속된 불필요한 파일이 검출되지 않았습니다"
                             print(ment)
                             # mkmk 팝업 띄우기
-                            TextToSpeechUtil.speak_ments(ment=ment, sleep_after_play=0.65)
+                            TextToSpeechUtil.speak_ment_experimental(ment=ment, delay=0.65)
                             break
                         for useless_file in useless_files:
                             FileSystemUtil.move_target_without_overwrite(target_abspath=useless_file, dst=useless_directories)  # mkmk
@@ -7349,11 +7355,11 @@ class BusinessLogicUtil:
                         if os.path.exists(drive_path):
                             connected_drives.append(drive_path)
                             if target_abspath == drive_path:
-                                TextToSpeechUtil.speak_ments("입력된 타겟경로는 너무 광범위하여 진행할 수 없도록 설정되어 있습니다", sleep_after_play=0.65)
+                                TextToSpeechUtil.speak_ment_experimental("입력된 타겟경로는 너무 광범위하여 진행할 수 없도록 설정되어 있습니다", delay=0.65)
                                 is_nested_loop_broken = True
                                 break
                     if not os.path.exists(target_abspath):
-                        TextToSpeechUtil.speak_ments("입력된 타겟경로가 존재하지 않습니다", sleep_after_play=0.65)
+                        TextToSpeechUtil.speak_ment_experimental("입력된 타겟경로가 존재하지 않습니다", delay=0.65)
                         continue
                     if target_abspath == "":
                         continue
@@ -7371,11 +7377,11 @@ class BusinessLogicUtil:
                         file_path = dialog2.input_box.text()
                         file_path = file_path.strip()
                         if file_path == "":
-                            TextToSpeechUtil.speak_ments("입력된 타겟경로가 존재하지 않습니다", sleep_after_play=0.65)
+                            TextToSpeechUtil.speak_ment_experimental("입력된 타겟경로가 존재하지 않습니다", delay=0.65)
                             break
                         if "\n" in file_path:
                             file_paths = file_path.split("\n")
-                            TextToSpeechUtil.speak_ments(f"{len(file_paths)}개의 키워드들이 입력되었습니다, 파일분류를 시작합니다", sleep_after_play=0.65)
+                            TextToSpeechUtil.speak_ment_experimental(f"{len(file_paths)}개의 키워드들이 입력되었습니다, 파일분류를 시작합니다", delay=0.65)
                         else:
                             file_paths = [file_path]
                         for file_path in file_paths:
@@ -7438,27 +7444,27 @@ class BusinessLogicUtil:
     def make_me_go_to_sleep():
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         StateManagementUtil.count_of_make_me_go_to_sleep.append("!!")
-        TextToSpeechUtil.speak_ments(ment=f'이제 그만 주무세요, 새벽 {TimeUtil.get_time_as_('%H')}입니다', sleep_after_play=0.95, thread_join_mode=True)
-        TextToSpeechUtil.speak_ments(ment='건강을 위해서 자는 것이 좋습니다, 더 나은 삶을 위해 주무셔야 합니다', sleep_after_play=0.95, thread_join_mode=True)
-        TextToSpeechUtil.speak_ments(ment='개발을 하고 있는 것이라면 지금 자고 나서, 일찍일어나 코드를 작성하는 것이 좋습니다', sleep_after_play=0.95, thread_join_mode=True)
-        TextToSpeechUtil.speak_ments(ment='늦게까지 개발하고 일찍일어 나지 못할 것이라면요', sleep_after_play=0.95, thread_join_mode=True)
+        TextToSpeechUtil.speak_ment_experimental(ment=f'이제 그만 주무세요, 새벽 {TimeUtil.get_time_as_('%H')}입니다', delay=0.95, thread_join_mode=True)
+        TextToSpeechUtil.speak_ment_experimental(ment='건강을 위해서 자는 것이 좋습니다, 더 나은 삶을 위해 주무셔야 합니다', delay=0.95, thread_join_mode=True)
+        TextToSpeechUtil.speak_ment_experimental(ment='개발을 하고 있는 것이라면 지금 자고 나서, 일찍일어나 코드를 작성하는 것이 좋습니다', delay=0.95, thread_join_mode=True)
+        TextToSpeechUtil.speak_ment_experimental(ment='늦게까지 개발하고 일찍일어 나지 못할 것이라면요', delay=0.95, thread_join_mode=True)
         # TextToSpeechUtil.speak_ments(ment='늦게까지 개발하고 못 일어날 거잖아요', sleep_after_play=0.95, thread_join_mode=True)
-        TextToSpeechUtil.speak_ments(ment='내일 너무 피곤하지 않을까요, 하루를 망쳐버릴 수도 있어요', sleep_after_play=0.95, thread_join_mode=True)
-        TextToSpeechUtil.speak_ments(ment='', sleep_after_play=0.95, thread_join_mode=True)
+        TextToSpeechUtil.speak_ment_experimental(ment='내일 너무 피곤하지 않을까요, 하루를 망쳐버릴 수도 있어요', delay=0.95, thread_join_mode=True)
+        TextToSpeechUtil.speak_ment_experimental(ment='', delay=0.95, thread_join_mode=True)
         if len(StateManagementUtil.count_of_make_me_go_to_sleep) == 10:
-            TextToSpeechUtil.speak_ments(ment='아무래도 안되겠군요, 이제 하나씩 종료를 할겁니다', sleep_after_play=0.75, thread_join_mode=True)
+            TextToSpeechUtil.speak_ment_experimental(ment='아무래도 안되겠군요, 이제 하나씩 종료를 할겁니다', delay=0.75, thread_join_mode=True)
 
-            TextToSpeechUtil.speak_ments(ment='팟플레이어를 종료합니다', sleep_after_play=0.95, thread_join_mode=True)
+            TextToSpeechUtil.speak_ment_experimental(ment='팟플레이어를 종료합니다', delay=0.95, thread_join_mode=True)
             # BusinessLogicUtil.should_i_do(ment="알송을 종료합니다", function=partial(BusinessLogicUtil.taskkill, 'ALSong.exe'), auto_click_positive_btn_after_seconds=5)
 
-            TextToSpeechUtil.speak_ments(ment='알송을 종료합니다', sleep_after_play=0.95, thread_join_mode=True)
+            TextToSpeechUtil.speak_ment_experimental(ment='알송을 종료합니다', delay=0.95, thread_join_mode=True)
             BusinessLogicUtil.should_i_do(ment="알송을 종료합니다", function=partial(BusinessLogicUtil.taskkill, 'ALSong.exe'), auto_click_positive_btn_after_seconds=5)
 
-            TextToSpeechUtil.speak_ments(ment='개발 도구를 종료합니다', sleep_after_play=0.95, thread_join_mode=True)
+            TextToSpeechUtil.speak_ment_experimental(ment='개발 도구를 종료합니다', delay=0.95, thread_join_mode=True)
             BusinessLogicUtil.should_i_do(ment="개발 도구를 종료합니다", function=partial(BusinessLogicUtil.taskkill, 'ALSong.exe'), auto_click_negative_btn_after_seconds=20)
 
             ment = "프로젝트 백업을 하고 최대절전모드로 전환해 드릴까요?"
-            TextToSpeechUtil.speak_ments(ment=ment, sleep_after_play=0.95, thread_join_mode=True)
+            TextToSpeechUtil.speak_ment_experimental(ment=ment, delay=0.95, thread_join_mode=True)
             BusinessLogicUtil.should_i_do(ment=ment, function=BusinessLogicUtil.back_up_project_and_change_to_power_saving_mode(), auto_click_negative_btn_after_seconds=20)
 
     @staticmethod
@@ -7498,7 +7504,7 @@ class BusinessLogicUtil:
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         DebuggingUtil.commentize("모든 시스템 환경변수 출력")
         for i in os.environ:
-            DebuggingUtil.print_magenta(i)
+            DebuggingUtil.print_ment_cyan(i)
         return os.environ.get(environment_variable_name)
 
     @staticmethod
@@ -7509,12 +7515,12 @@ class BusinessLogicUtil:
         DebuggingUtil.commentize("기대한 결과가 나오지 않을 수 있습니다")
         DebuggingUtil.commentize("업데이트 전 시스템 환경변수")
         for i in sys.path:
-            DebuggingUtil.print_magenta(i)
+            DebuggingUtil.print_ment_cyan(i)
         sys.path.insert(0, new_path)
         sys.path.append(new_path)
         DebuggingUtil.commentize("업데이트 전 시스템 환경변수")
         for i in sys.path:
-            DebuggingUtil.print_magenta(i)
+            DebuggingUtil.print_ment_cyan(i)
 
     @staticmethod
     def get_name_space():  # name space # namespace # 파이썬 네임스페이스
@@ -7532,7 +7538,7 @@ class BusinessLogicUtil:
                 target_abspath = target_abspath.replace("\"", "")
 
                 if target_abspath.strip() == "":
-                    TextToSpeechUtil.speak_ments(ment="빽업할 대상이 입력되지 않았습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment="빽업할 대상이 입력되지 않았습니다", delay=0.65)
                     break
 
                 target_dirname = os.path.dirname(target_abspath)
@@ -7540,12 +7546,12 @@ class BusinessLogicUtil:
                 target_basename = os.path.basename(target_abspath).split(".")[0]
                 target_zip = rf'{target_dirname}\$zip_{target_basename}.zip'
                 target_yyyy_mm_dd_hh_mm_ss_zip_basename = rf'{target_basename} - {TimeUtil.get_time_as_("%Y %m %d %H %M %S")}.zip'
-                DebuggingUtil.print_magenta(f"target_abspath : {target_abspath}")
-                DebuggingUtil.print_magenta(f"target_dirname : {target_dirname}")
-                DebuggingUtil.print_magenta(f"target_dirname_dirname : {target_dirname_dirname}")
-                DebuggingUtil.print_magenta(f"target_basename : {target_basename}")
-                DebuggingUtil.print_magenta(f"target_zip : {target_zip}")
-                DebuggingUtil.print_magenta(f"target_yyyy_mm_dd_HH_MM_SS_zip_basename : {target_yyyy_mm_dd_hh_mm_ss_zip_basename}")
+                DebuggingUtil.print_ment_cyan(f"target_abspath : {target_abspath}")
+                DebuggingUtil.print_ment_cyan(f"target_dirname : {target_dirname}")
+                DebuggingUtil.print_ment_cyan(f"target_dirname_dirname : {target_dirname_dirname}")
+                DebuggingUtil.print_ment_cyan(f"target_basename : {target_basename}")
+                DebuggingUtil.print_ment_cyan(f"target_zip : {target_zip}")
+                DebuggingUtil.print_ment_cyan(f"target_yyyy_mm_dd_HH_MM_SS_zip_basename : {target_yyyy_mm_dd_hh_mm_ss_zip_basename}")
 
                 DebuggingUtil.commentize(f"{target_zip} 로 빽업")
                 cmd = f'bz.exe c "{target_zip}" "{target_abspath}"'
@@ -7575,7 +7581,7 @@ class BusinessLogicUtil:
                 try:
                     os.chdir(target_dirname)
                 except:
-                    TextToSpeechUtil.speak_ments(ment="경로를 이해할 수 없습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment="경로를 이해할 수 없습니다", delay=0.65)
                     os.chdir(StateManagementUtil.PROJECT_DIRECTORY)
                     break
                 lines = FileSystemUtil.get_cmd_output('dir /b /a-d *.zip')
@@ -7621,7 +7627,7 @@ class BusinessLogicUtil:
                                     try:
                                         file_with_time_stamp_zip = os.path.abspath(line.strip())
                                         file_dirname_old_abspath = os.path.abspath(target_dirname_old)
-                                        DebuggingUtil.print_magenta(rf'move "{file_with_time_stamp_zip}" "{file_dirname_old_abspath}"')
+                                        DebuggingUtil.print_ment_cyan(rf'move "{file_with_time_stamp_zip}" "{file_dirname_old_abspath}"')
                                         shutil.move(file_with_time_stamp_zip, file_dirname_old_abspath)
                                     except Exception:
                                         DebuggingUtil.trouble_shoot("%%%FOO%%%")
@@ -7644,7 +7650,7 @@ class BusinessLogicUtil:
                 target_abspath = target_abspath.replace("\"", "")
 
                 if target_abspath.strip() == "":
-                    TextToSpeechUtil.speak_ments(ment="빽업할 대상이 입력되지 않았습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment="빽업할 대상이 입력되지 않았습니다", delay=0.65)
                     break
 
                 target_dirname = os.path.dirname(target_abspath)
@@ -7681,7 +7687,7 @@ class BusinessLogicUtil:
                 target_abspath = target_abspath.replace("\"", "")
 
                 if target_abspath.strip() == "":
-                    TextToSpeechUtil.speak_ments(ment="빽업할 대상이 입력되지 않았습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment="빽업할 대상이 입력되지 않았습니다", delay=0.65)
                     break
 
                 target_dirname = os.path.dirname(target_abspath)
@@ -7690,11 +7696,11 @@ class BusinessLogicUtil:
                 special_target_zip = rf'{target_dirname}\$zip_{target_basename}.zip'
                 target_abspath_zip = rf'{target_dirname}\{target_basename}.zip'
                 target_basename_zip = rf'{target_basename}.zip'
-                DebuggingUtil.print_magenta(f"target_abspath : {target_abspath}")
-                DebuggingUtil.print_magenta(f"target_dirname : {target_dirname}")
-                DebuggingUtil.print_magenta(f"target_dirname_dirname : {target_dirname_dirname}")
-                DebuggingUtil.print_magenta(f"target_basename : {target_basename}")
-                DebuggingUtil.print_magenta(f"special_target_zip : {special_target_zip}")
+                DebuggingUtil.print_ment_cyan(f"target_abspath : {target_abspath}")
+                DebuggingUtil.print_ment_cyan(f"target_dirname : {target_dirname}")
+                DebuggingUtil.print_ment_cyan(f"target_dirname_dirname : {target_dirname_dirname}")
+                DebuggingUtil.print_ment_cyan(f"target_basename : {target_basename}")
+                DebuggingUtil.print_ment_cyan(f"special_target_zip : {special_target_zip}")
 
                 cmd = f'bz.exe c "{special_target_zip}" "{target_abspath}"'
                 FileSystemUtil.get_cmd_output(cmd)
@@ -7745,9 +7751,9 @@ class BusinessLogicUtil:
     def print_and_open_py_pkg_global_path():
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         for path in sys.path:
-            DebuggingUtil.print_magenta(path)
+            DebuggingUtil.print_ment_cyan(path)
             if BusinessLogicUtil.is_regex_in_contents(target=path, regex='site-packages') == True:
-                DebuggingUtil.print_magenta(rf'echo "{path}"')
+                DebuggingUtil.print_ment_cyan(rf'echo "{path}"')
                 FileSystemUtil.explorer(path)
 
     @staticmethod
@@ -7835,7 +7841,7 @@ class BusinessLogicUtil:
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         while True:
             if url.strip() == "":
-                DebuggingUtil.print_magenta(rf"다운로드할 url이 아닙니다 {url}")
+                DebuggingUtil.print_ment_cyan(rf"다운로드할 url이 아닙니다 {url}")
                 break
             # 다운로드가 안되면 주석 풀어 시도
             # os.system(rf'{StateManagementUtil.YT_DLP_CMD} -U')
@@ -7873,20 +7879,20 @@ class BusinessLogicUtil:
             audio_id = ""
             for line in lines:  # mkmk
                 if 'video only' in line or 'audio only' in line:
-                    DebuggingUtil.print_magenta(line)
+                    DebuggingUtil.print_ment_cyan(line)
                     # video_id 설정
                     for id in video_ids_allowed:
                         if id in line:
                             video_id = id
                             if video_id.strip() == "":
-                                DebuggingUtil.print_magenta(rf"다운로드 할 수 있는 video_id가 아닙니다 {video_id.strip()}")
+                                DebuggingUtil.print_ment_cyan(rf"다운로드 할 수 있는 video_id가 아닙니다 {video_id.strip()}")
                                 break
                     # audio_id 설정
                     for id in audio_ids_allowed:
                         if id in line:
                             audio_id = id
                             if audio_id.strip() == "":
-                                DebuggingUtil.print_magenta(rf"다운로드 할 수 있는 audio_id가 아닙니다 {audio_id.strip()}")
+                                DebuggingUtil.print_ment_cyan(rf"다운로드 할 수 있는 audio_id가 아닙니다 {audio_id.strip()}")
                                 break
 
             # 다운로드 가능 옵션 ID 설정
@@ -7909,7 +7915,6 @@ class BusinessLogicUtil:
             # 다운로드의 최고 품질이 아닐 수 있다. 그래도
             # 차선책으로 두는 것이 낫겠다
             # cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f best "{url}"'
-
             # cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f {video_id}+{audio_id} {url}' # 초기에 만든 선택적인 방식
             # cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f "best[ext=webm]" {url}' # 마음에 안드는 결과
             cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f "bestvideo[ext=webm]+bestaudio[ext=webm]" {url}'  # 지금 가장 마음에 드는 방법
@@ -7917,7 +7922,7 @@ class BusinessLogicUtil:
             if video_id == "" or audio_id == "" == 1:
                 # text = "다운로드를 진행할 수 없습니다\n다운로드용 video_id 와 audio_id를 설정 후\nurl을 다시 붙여넣어 다운로드를 다시 시도하세요\n{url}"
                 print("불완전한 다운로드 명령어가 감지되었습니다....")
-                TextToSpeechUtil.speak_ments(ment="불완전한 다운로드 명령어가 감지되었습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment="불완전한 다운로드 명령어가 감지되었습니다", delay=0.65)
                 dialog = UiUtil.CustomQdialog(ment=f"에러코드[E004]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", btns=["확인"], is_input_box=True, input_box_text_default=url)
                 dialog.exec()
                 print(cmd)
@@ -7949,14 +7954,14 @@ class BusinessLogicUtil:
                 src = os.path.abspath(file)
                 src_renamed = rf"{storage}\{os.path.basename(file)}"
 
-                DebuggingUtil.print_magenta(f'src_renamed : {src_renamed}')
+                DebuggingUtil.print_ment_cyan(f'src_renamed : {src_renamed}')
                 if src == os.getcwd():  # 여기 또 os.getcwd() 있는 부분 수정하자..
                     # E001 : 실행불가능한 명령어입력 감지
                     # S001 : 다운로드 가능한 video_id 와 audio_id 를 가용목록에 추가해주세요.
                     dialog = UiUtil.CustomQdialog(ment=f"에러코드[E001]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", btns=["확인"], is_input_box=True, input_box_text_default=url)
                     dialog.exec()
-                    DebuggingUtil.print_magenta("cmd")
-                    DebuggingUtil.print_magenta(cmd)
+                    DebuggingUtil.print_ment_cyan("cmd")
+                    DebuggingUtil.print_ment_cyan(cmd)
                     break
                 # shutil.move(src, storage)
                 if src != os.getcwd():  # 여기 또 os.getcwd() 있는 부분 수정하자..
@@ -7967,12 +7972,14 @@ class BusinessLogicUtil:
             print(rf'다운로드 결과 확인 중...')
             try:
                 src_moved = rf'{storage}\{file}'
+                DebuggingUtil.print_ment_cyan(rf'''src_moved : {src_moved}''')
 
-                # 4 줄 주석처리
-                # dialog = UiUtil.CustomQdialog(ment="다운로드된 영상을 재생할까요?", btns=["재생하기", "재생하지 않기"], auto_click_negative_btn_after_seconds=3)
-                # dialog.exec()
-                # if dialog.btn_text_clicked == "재생하기":
-                #     FileSystemUtil.explorer(target_abspath=src_moved)
+                # 재생할까요? 불필요하면 주석
+                # dialog = UiUtil.CustomQdialog(ment="다운로드된 영상을 재생할까요?", btns=["재생하기", "재생하지 않기"], auto_click_negative_btn_after_seconds=10)
+                dialog = UiUtil.CustomQdialog(ment="다운로드된 영상을 재생할까요?", btns=["재생하기", "재생하지 않기"], auto_click_negative_btn_after_seconds=3600)
+                dialog.exec()
+                if dialog.btn_text_clicked == "재생하기":
+                    FileSystemUtil.explorer(target_abspath=src_moved)
 
                 # UiUtil.pop_up_as_complete(title="작업성공보고", ment=f"다운로드가 성공되었습니다\n{src_moved}", auto_click_positive_btn_after_seconds=2) # 성공 뜨는게 귀찮아서 주석처리함,
 
@@ -7989,10 +7996,10 @@ class BusinessLogicUtil:
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         while True:
             if url.strip() == "":
-                DebuggingUtil.print_magenta(rf"다운로드할 url이 아닙니다 {url}")
+                DebuggingUtil.print_ment_cyan(rf"다운로드할 url이 아닙니다 {url}")
                 break
 
-            DebuggingUtil.print_magenta('다운로드 옵션 파싱 중...')
+            DebuggingUtil.print_ment_cyan('다운로드 옵션 파싱 중...')
             video_id = ''
             cmd = rf'{StateManagementUtil.YT_DLP_CMD} -F {url}'
             lines = FileSystemUtil.get_cmd_output(cmd=cmd)
@@ -8016,28 +8023,28 @@ class BusinessLogicUtil:
             audio_id = ""
             for line in lines:
                 if 'video only' in line or 'audio only' in line:
-                    DebuggingUtil.print_magenta(line)
+                    DebuggingUtil.print_ment_cyan(line)
                     # video_id 설정
                     for id in video_ids_allowed:
                         if id in line:
                             video_id = id
                             if video_id.strip() == "":
-                                DebuggingUtil.print_magenta(rf"다운로드 할 수 있는 video_id가 아닙니다 {video_id.strip()}")
+                                DebuggingUtil.print_ment_cyan(rf"다운로드 할 수 있는 video_id가 아닙니다 {video_id.strip()}")
                                 break
                     # audio_id 설정
                     for id in audio_ids_allowed:
                         if id in line:
                             audio_id = id
                             if audio_id.strip() == "":
-                                DebuggingUtil.print_magenta(rf"다운로드 할 수 있는 audio_id가 아닙니다 {audio_id.strip()}")
+                                DebuggingUtil.print_ment_cyan(rf"다운로드 할 수 있는 audio_id가 아닙니다 {audio_id.strip()}")
                                 break
             cmd = rf'{StateManagementUtil.YT_DLP_CMD} -f {video_id}+{audio_id} {url}'  # 초기에 만든 선택적인 방식
             if video_id == "" or audio_id == "" == 1:
                 print("불완전한 다운로드 명령어가 감지되었습니다....")
-                TextToSpeechUtil.speak_ments(ment="불완전한 다운로드 명령어가 감지되었습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment="불완전한 다운로드 명령어가 감지되었습니다", delay=0.65)
                 dialog = UiUtil.CustomQdialog(ment=f"에러코드[E000]\n불완전한 다운로드 명령어가 감지되었습니다. 에러코드를 관리자에게 문의해주세요", btns=["확인"], is_input_box=True, input_box_text_default=url)
                 dialog.exec()
-                DebuggingUtil.print_magenta(cmd)
+                DebuggingUtil.print_ment_cyan(cmd)
                 break
 
             print(rf'명령어 실행 중...')
@@ -8062,16 +8069,16 @@ class BusinessLogicUtil:
 
                 src = os.path.abspath(file)
                 dst_ = rf"{storage}\{os.path.basename(file)}"
-                DebuggingUtil.print_magenta(f'src : {src}')
+                DebuggingUtil.print_ment_cyan(f'src : {src}')
 
-                DebuggingUtil.print_magenta(f'dst_ : {dst_}')
+                DebuggingUtil.print_ment_cyan(f'dst_ : {dst_}')
                 if src == os.getcwd():  # 여기 또 os.getcwd() 있는 부분 수정하자..
                     print("실행불가능한 명령어가 실행되어 다운로드 할 수 없었습니다")
-                    TextToSpeechUtil.speak_ments(ment="실행불가능한 명령어가 실행되어 다운로드 할 수 없었습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment="실행불가능한 명령어가 실행되어 다운로드 할 수 없었습니다", delay=0.65)
                     dialog = UiUtil.CustomQdialog(ment=f"에러코드[E003]\n아래의 비디오 아이디를 저장하고 에러코드를 관리자에게 문의해주세요\nvideo id: {url}", btns=["확인"], is_input_box=True, input_box_text_default=url)
                     dialog.exec()
-                    DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}다운로드 가능한 video_id 와 audio_id 를 가용목록에 추가해주세요")
-                    DebuggingUtil.print_magenta(cmd)
+                    DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}다운로드 가능한 video_id 와 audio_id 를 가용목록에 추가해주세요")
+                    DebuggingUtil.print_ment_cyan(cmd)
                     break
 
                 if src != os.getcwd():  # 여기 또 os.getcwd() 있는 부분 수정하자..
@@ -8088,7 +8095,7 @@ class BusinessLogicUtil:
                 dialog = UiUtil.CustomQdialog(ment=f"다운로드된 영상을 재생할까요?{src_moved}", btns=[MentsUtil.YES], is_input_box=True)
                 dialog.exec()
                 if dialog.input_box.text() == MentsUtil.YES:
-                    TextToSpeechUtil.speak_ment(ment="다운로드된 영상을 재생합니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment(ment="다운로드된 영상을 재생합니다", delay=0.65)
                     FileSystemUtil.get_cmd_output(cmd=rf'explorer "{src_moved}"')
                 break  # download clip alt() 에서는 break 해야할듯.
 
@@ -8105,10 +8112,10 @@ class BusinessLogicUtil:
         while True:
             urls = str(urls).strip()
             if urls == None:
-                TextToSpeechUtil.speak_ments(ment="다운로드할 대상 목록에 아무것도 입력되지 않았습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment="다운로드할 대상 목록에 아무것도 입력되지 않았습니다", delay=0.65)
                 break
             if urls == "None":
-                TextToSpeechUtil.speak_ments(ment="다운로드할 대상 목록에 이상한 것이 입력되었습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment="다운로드할 대상 목록에 이상한 것이 입력되었습니다", delay=0.65)
                 break
 
             if "\n" in urls:
@@ -8137,9 +8144,9 @@ class BusinessLogicUtil:
                         # if url is not "None":
                         urls_removed_duplicated_element.append(url)
             urls = urls_removed_duplicated_element
-            DebuggingUtil.print_magenta(f"len(urls) : {len(urls)}")
+            DebuggingUtil.print_ment_cyan(f"len(urls) : {len(urls)}")
             for i in urls:
-                DebuggingUtil.print_magenta(i)
+                DebuggingUtil.print_ment_cyan(i)
 
             # DebuggingUtil.commentize(f'다운로드 할게 없으면 LOOP break')
             if len(urls) == 0:
@@ -8147,14 +8154,14 @@ class BusinessLogicUtil:
                 # TtsUtil.speak_ments(ment="다운로드할 대상이 없습니다", sleep_after_play=0.65)
                 break
             if len(urls) != 1:
-                TextToSpeechUtil.speak_ments(f"{str(len(urls))}개의 다운로드 대상이 확인되었습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(f"{str(len(urls))}개의 다운로드 대상이 확인되었습니다", delay=0.65)
             for url in urls:
                 url = url.strip()  # url에 공백이 있어도 다운로드 가능하도록 설정
                 if '&list=' in url:
                     DebuggingUtil.commentize(f' clips mode')
                     clips = Playlist(url)  # 이걸로도 parsing 기능 수행 생각 중
-                    DebuggingUtil.print_magenta(f"predicted clips cnt : {len(clips.video_urls)}")
-                    TextToSpeechUtil.speak_ments(ment=f"{len(clips.video_urls)}개의 다운로드 목록이 확인되었습니다", sleep_after_play=0.65)
+                    DebuggingUtil.print_ment_cyan(f"predicted clips cnt : {len(clips.video_urls)}")
+                    TextToSpeechUtil.speak_ment_experimental(ment=f"{len(clips.video_urls)}개의 다운로드 목록이 확인되었습니다", delay=0.65)
                     # os.system(f'echo "여기서부터 비디오 리스트 시작 {url}" >> success_yt_dlp.log')
                     for clip in clips.video_urls:
                         try:
@@ -8279,13 +8286,13 @@ class BusinessLogicUtil:
                                 # Park4139.debug_as_cli(f'setting_key: {setting_key}  ,setting_value: {setting_value}  ')
                             # Park4139.debug_as_cli(f"color {color_bg}{color_text}")
                             for i in range(0, 32):
-                                DebuggingUtil.print_magenta('')
+                                DebuggingUtil.print_ment_cyan('')
                             to_right_nbsp = ''
                             for i in range(0, 150):
                                 to_right_nbsp = to_right_nbsp + ' '
-                            DebuggingUtil.print_magenta(f"{to_right_nbsp}color {color_bg}{color_text}")
+                            DebuggingUtil.print_ment_cyan(f"{to_right_nbsp}color {color_bg}{color_text}")
                             for i in range(0, 32):
-                                DebuggingUtil.print_magenta('')
+                                DebuggingUtil.print_ment_cyan('')
                             os.system(f"color {color_bg}{color_text}")
                             import clipboard
                             clipboard.copy(f'color {color_bg}{color_text}')
@@ -8305,7 +8312,7 @@ class BusinessLogicUtil:
             for line in lines:
                 if "" != line:
                     if os.getcwd() != line:
-                        DebuggingUtil.print_magenta(lines)
+                        DebuggingUtil.print_ment_cyan(lines)
             time.sleep(60)
 
     @staticmethod
@@ -8392,8 +8399,8 @@ class BusinessLogicUtil:
 
                 # 디버깅
                 # Park4139TestUtil.pause()
-                DebuggingUtil.print_magenta(f'{cmd}')
-                DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}")
+                DebuggingUtil.print_ment_cyan(f'{cmd}')
+                DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}")
                 return "REPLACED global pkg_park4139_for_windows AS local_pkg"
             else:
                 return "pkg_park4139_for_windows NOT FOUND AT GLOBAL LOCATION"
@@ -8415,9 +8422,9 @@ class BusinessLogicUtil:
         dst = rf'{StateManagementUtil.PROJECT_DIRECTORY}\storage'
         paths = [os.path.abspath(dst), os.path.basename(file_v_abspath)]
         file_va = os.path.join(*paths)
-        DebuggingUtil.print_magenta(rf'file_v_abspath : {file_v_abspath}')
-        DebuggingUtil.print_magenta(rf'file_a_abspath : {file_a_abspath}')
-        DebuggingUtil.print_magenta(rf'file_va : {file_va}')
+        DebuggingUtil.print_ment_cyan(rf'file_v_abspath : {file_v_abspath}')
+        DebuggingUtil.print_ment_cyan(rf'file_a_abspath : {file_a_abspath}')
+        DebuggingUtil.print_ment_cyan(rf'file_va : {file_va}')
 
         DebuggingUtil.commentize(f'ffmpeg.exe 위치 설정')
         location_ffmpeg = rf"{StateManagementUtil.USERPROFILE}\Desktop\`workspace\tool\LosslessCut-win-x64\resources\ffmpeg.exe"
@@ -8439,18 +8446,18 @@ class BusinessLogicUtil:
 
         DebuggingUtil.commentize(f' 파일머지 시도')
         try:
-            DebuggingUtil.print_magenta(rf'echo y | "{location_ffmpeg}" -i "{file_v_abspath}" -i "{file_a_abspath}" -c copy "{file_va}"')
+            DebuggingUtil.print_ment_cyan(rf'echo y | "{location_ffmpeg}" -i "{file_v_abspath}" -i "{file_a_abspath}" -c copy "{file_va}"')
             lines = subprocess.check_output(
                 rf'echo y | "{location_ffmpeg}" -i "{file_v_abspath}" -i "{file_a_abspath}" -c copy "{file_va}"', shell=True).decode(
                 'utf-8').split("\n")
             for line in lines:
-                DebuggingUtil.print_magenta(line)
+                DebuggingUtil.print_ment_cyan(line)
         except Exception as e:
             DebuggingUtil.trouble_shoot("202312030018")
 
-        DebuggingUtil.print_magenta(rf'다운로드 및 merge 결과 확인 시도')
+        DebuggingUtil.print_ment_cyan(rf'다운로드 및 merge 결과 확인 시도')
         try:
-            DebuggingUtil.print_magenta(rf'explorer "{file_va}"')
+            DebuggingUtil.print_ment_cyan(rf'explorer "{file_va}"')
             subprocess.check_output(rf'explorer "{file_va}"', shell=True).decode('utf-8').split("\n")
         except Exception as e:
             DebuggingUtil.trouble_shoot("202312030019a")
@@ -8461,7 +8468,7 @@ class BusinessLogicUtil:
                 subprocess.check_output(rf'echo y | del /f "{file_v_abspath}"', shell=True).decode('utf-8').split("\n")
                 lines = subprocess.check_output(rf'echo y | del /f "{file_a_abspath}"', shell=True).decode('utf-8').split("\n")
                 for line in lines:
-                    DebuggingUtil.print_magenta(line)
+                    DebuggingUtil.print_ment_cyan(line)
         except Exception as e:
             DebuggingUtil.trouble_shoot("202312030020")
 
@@ -8634,8 +8641,8 @@ class BusinessLogicUtil:
                     file_cnt = file_cnt + 1
                     f.write(str(file_cnt) + " " + os.path.join(dirpath, file) + "\n")
         f.close()  # close() 를 사용하지 않으려면 with 문을 사용하는 방법도 있다.
-        DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} all_list.txt writing e")
-        DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} all_list_proper.txt rewriting s")
+        DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} all_list.txt writing e")
+        DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} all_list_proper.txt rewriting s")
         texts_black = [
             "C:\\$WinREAgent",
             "C:\\mingw64",
@@ -8684,9 +8691,9 @@ class BusinessLogicUtil:
                     pass
         f.close()
         f2.close()
-        DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} all_list_proper.txt rewriting e")
+        DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} all_list_proper.txt rewriting e")
 
-        DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} files opening s")
+        DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} files opening s")
         os.chdir(os.getcwd())
 
         # 윈도우냐 아니냐
@@ -8696,11 +8703,11 @@ class BusinessLogicUtil:
         # os.system("type all_list.txt")
         # os.system("explorer all_list.txt")
         os.system("explorer all_list_proper.txt")
-        DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} files opening e")
+        DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} files opening e")
 
         # os.system('del "'+os.getcwd()+'\\all_list.txt"')
         # mk("all_list.txt")
-        DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} e")
+        DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}{StateManagementUtil.UNDERLINE_PROMISED} e")
 
     @staticmethod
     def get_line_cnt_of_file(target_abspath: str):
@@ -8722,7 +8729,7 @@ class BusinessLogicUtil:
                 line_cnt = file.read().count("\n") + 1
             return line_cnt
         except FileNotFoundError:
-            DebuggingUtil.print_magenta("파일을 찾을 수 없었습니다")
+            DebuggingUtil.print_ment_cyan("파일을 찾을 수 없었습니다")
             pass
         except Exception:
             DebuggingUtil.trouble_shoot("%%%FOO%%%")
@@ -8793,14 +8800,14 @@ class BusinessLogicUtil:
                 for i in pyautogui.KEYBOARD_KEYS:
                     if str(i) == str(presses[0]):
                         pyautogui.press(str(presses[0]), interval=interval)
-                        DebuggingUtil.print_magenta(rf"{str(i)} 눌렸습니다3")
+                        DebuggingUtil.print_ment_cyan(rf"{str(i)} 눌렸습니다3")
                         break
                     else:
                         pass
             else:
                 pyautogui.hotkey(*presses, interval=interval)
                 tmp = ' + '.join(i for i in presses)
-                DebuggingUtil.print_magenta(rf"{tmp} 눌렸습니다")
+                DebuggingUtil.print_ment_cyan(rf"{tmp} 눌렸습니다")
             # Park4139.sleep(milliseconds=100)
             break
 
@@ -8866,7 +8873,7 @@ class BusinessLogicUtil:
             # Snipping Tool.ink 종료 try3
             # 이미지를 인식해서 닫는방법
 
-            TextToSpeechUtil.speak_ments(ment="스크린샷 저장을 성공했습니다", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ment_experimental(ment="스크린샷 저장을 성공했습니다", delay=0.65)
         except:
             traceback.print_exc(file=sys.stdout)
 
@@ -8925,13 +8932,13 @@ class BusinessLogicUtil:
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         BusinessLogicUtil.sleep(milliseconds=500)
         BusinessLogicUtil.copy_and_paste_with_keeping_clipboard_current_contents(presses)
-        DebuggingUtil.print_magenta(rf"{str(presses)} 눌렸어요")
+        DebuggingUtil.print_ment_cyan(rf"{str(presses)} 눌렸어요")
 
     @staticmethod
     def write_slow(presses: str):
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
         pyautogui.write(presses, interval=0.09)
-        DebuggingUtil.print_magenta(rf"{str(presses)} 눌렸어요")
+        DebuggingUtil.print_ment_cyan(rf"{str(presses)} 눌렸어요")
 
     @staticmethod
     def ask_to_wrtn(question: str):
@@ -9014,7 +9021,7 @@ class BusinessLogicUtil:
             BusinessLogicUtil.press('enter')
 
             # 작업마침 알림
-            TextToSpeechUtil.speak_ments(ment='길찾기가 시도되었습니다', sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ment_experimental(ment='길찾기가 시도되었습니다', delay=0.65)
             break
 
     @staticmethod
@@ -9024,15 +9031,15 @@ class BusinessLogicUtil:
             while 1:
                 # answer = "tate no"
                 DebuggingUtil.commentize(f"{btn_text_clicked} 입력되었습니다")
-                DebuggingUtil.print_magenta(btn_text_clicked)
+                DebuggingUtil.print_ment_cyan(btn_text_clicked)
                 special_prefixes = " ".join(["subsplease", "1080"]) + " "
                 query = urllib.parse.quote(f"{special_prefixes}{btn_text_clicked}")
                 if query == "":
-                    TextToSpeechUtil.speak_ments(ment="아무것도 입력되지 않았습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment="아무것도 입력되지 않았습니다", delay=0.65)
                     break
                 # url = f'https://nyaa.si/?f=0&c=0_0&q={query}&p=1'
                 url = f'https://nyaa.si/?f=0&c=0_0&q={query}'
-                DebuggingUtil.print_magenta(url)
+                DebuggingUtil.print_ment_cyan(url)
 
                 driver = SeleniumUtil.get_driver_for_selenium()
                 driver.get(url)
@@ -9052,7 +9059,7 @@ class BusinessLogicUtil:
 
                 DebuggingUtil.commentize("페이지 소스 RAW")
                 page_src = driver.page_source
-                DebuggingUtil.print_magenta(page_src)
+                DebuggingUtil.print_ment_cyan(page_src)
                 # Park4139.debug_as_gui(context=f"\n{page_src}")
                 # Park4139.debug_as_gui(context=f"페이지 소스 RAW:\n\n{page_src}")
 
@@ -9066,7 +9073,7 @@ class BusinessLogicUtil:
                 # num = 0  # num 초기값
                 # Park4139.debug_as_cli(soup.get_text())
                 for i in soup.find_all(name="a"):
-                    DebuggingUtil.print_magenta(i)
+                    DebuggingUtil.print_ment_cyan(i)
 
                 results = []
                 DebuggingUtil.commentize("web src 분석시작2")
@@ -9074,7 +9081,7 @@ class BusinessLogicUtil:
                 for line in lines:
                     results.append(line.get('title'))
                     results.append(line.get('href'))
-                    DebuggingUtil.print_magenta(line)
+                    DebuggingUtil.print_ment_cyan(line)
                     # pass
                 DebuggingUtil.commentize("titles")
                 titles = []
@@ -9083,28 +9090,28 @@ class BusinessLogicUtil:
                         if BusinessLogicUtil.is_regex_in_contents_with_case_ignored(contents=str(i).strip(), regex=btn_text_clicked):
                             if not BusinessLogicUtil.is_regex_in_contents_with_case_ignored(contents=str(i).strip(), regex="&q="):
                                 if not BusinessLogicUtil.is_regex_in_contents_with_case_ignored(contents=str(i).strip(), regex="xt="):
-                                    DebuggingUtil.print_magenta(f'{type(i)} : {i}')
+                                    DebuggingUtil.print_ment_cyan(f'{type(i)} : {i}')
                                     titles.append(i)
                 DebuggingUtil.commentize("magnets")
                 magnets = []
                 for i in results:
                     if type(i) is str:
                         if BusinessLogicUtil.is_regex_in_contents(target=i, regex="magnet*"):
-                            DebuggingUtil.print_magenta(f'{type(i)} : {i}')
+                            DebuggingUtil.print_ment_cyan(f'{type(i)} : {i}')
                             magnets.append(i)
                 DebuggingUtil.commentize("finally crawled result")
                 for i in results:
                     if type(i) is str:
                         if BusinessLogicUtil.is_regex_in_contents(target=i, regex="magnet*"):
-                            DebuggingUtil.print_magenta(f'{type(i)} : {i}')
+                            DebuggingUtil.print_ment_cyan(f'{type(i)} : {i}')
                         if BusinessLogicUtil.is_regex_in_contents_with_case_ignored(contents=str(i).strip(), regex=btn_text_clicked):
                             if not BusinessLogicUtil.is_regex_in_contents_with_case_ignored(contents=str(i).strip(), regex="&q="):
                                 if not BusinessLogicUtil.is_regex_in_contents_with_case_ignored(contents=str(i).strip(), regex="xt="):
-                                    DebuggingUtil.print_magenta(f'{type(i)} : {i}')
+                                    DebuggingUtil.print_ment_cyan(f'{type(i)} : {i}')
                 results_about_titles_and_magnets = ""
                 if len(magnets) == len(titles):
                     for i in range(0, len(magnets)):
-                        DebuggingUtil.print_magenta(f"{i}   :    {titles[i]}    :     {magnets[i]}")
+                        DebuggingUtil.print_ment_cyan(f"{i}   :    {titles[i]}    :     {magnets[i]}")
                         results_about_titles_and_magnets = results_about_titles_and_magnets + f"{i}   :    {titles[i]}    :     {magnets[i]}\n"
                 # dialog = CustomDialog(contents="웹 크롤링 결과를 화면에 시현할까요?", buttons=["시현하기", "시현하지 않기"])
                 # dialog.exec()
@@ -9114,34 +9121,34 @@ class BusinessLogicUtil:
                 dialog = UiUtil.CustomQdialog(ment=results_about_titles_and_magnets, btns=["확인"])
                 dialog.exec()
                 btn_text_clicked = dialog.btn_text_clicked
-                DebuggingUtil.print_magenta(btn_text_clicked)
+                DebuggingUtil.print_ment_cyan(btn_text_clicked)
                 if btn_text_clicked == "확인":
                     pass
                 if len(magnets) == len(titles):
                     for i in range(0, len(magnets) - 1):
-                        DebuggingUtil.print_magenta(f"{i}   :    {titles[i]}    :     {magnets[i]}")
+                        DebuggingUtil.print_ment_cyan(f"{i}   :    {titles[i]}    :     {magnets[i]}")
                 else:
                     ment = "크롤링 결과가 이상합니다\n크롤링한 마그넷주소의 개수와 타이틀의 개수가 일치하지 않습니다\n크롤링을 계속할까요"
-                    TextToSpeechUtil.speak_ments(ment.replace("\n", " "), sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment.replace("\n", " "), delay=0.65)
                     dialog = UiUtil.CustomQdialog(ment=ment, btns=["계속하기", "계속하지 않기"])
                     dialog.exec()
                     btn_text_clicked = dialog.btn_text_clicked
-                    DebuggingUtil.print_magenta(btn_text_clicked)
+                    DebuggingUtil.print_ment_cyan(btn_text_clicked)
                     if btn_text_clicked == "계속하지 않기":
-                        TextToSpeechUtil.speak_ments(ment="네 계속하지 않겠습니다", sleep_after_play=0.65)
+                        TextToSpeechUtil.speak_ment_experimental(ment="네 계속하지 않겠습니다", delay=0.65)
                         break
 
                 while True:
                     ment = '토렌트에 추가하고 싶은 항목의 숫자인덱스를 입력하세요.\n전부를 원하시면 * 을 입력해주세요'
-                    TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     dialog = UiUtil.CustomQdialog(ment=ment, btns=["계속하기", "그만하기", "크롤링 결과 다시보기"], is_input_box=True)
                     dialog.exec()
                     btn_text_clicked = dialog.btn_text_clicked
                     text_of_from_input_box = str(dialog.input_box.text()).strip()
-                    DebuggingUtil.print_magenta(f"text_of_input_box : {text_of_from_input_box}")
-                    DebuggingUtil.print_magenta(f"btn_text_clicked : {btn_text_clicked}")
+                    DebuggingUtil.print_ment_cyan(f"text_of_input_box : {text_of_from_input_box}")
+                    DebuggingUtil.print_ment_cyan(f"btn_text_clicked : {btn_text_clicked}")
                     if btn_text_clicked == "그만하기":
-                        TextToSpeechUtil.speak_ments(ment="네 그만하겠습니다", sleep_after_play=0.65)
+                        TextToSpeechUtil.speak_ment_experimental(ment="네 그만하겠습니다", delay=0.65)
                         break
                     elif btn_text_clicked == "크롤링 결과 다시보기":
                         dialog = UiUtil.CustomQdialog(ment=results_about_titles_and_magnets, btns=["확인"])
@@ -9151,9 +9158,9 @@ class BusinessLogicUtil:
                             mg_num = int(text_of_from_input_box)
                             try:
                                 if magnets[int(mg_num)]:
-                                    DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}다운로드 가능한 범위의 숫자인덱스입니다")
+                                    DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}다운로드 가능한 범위의 숫자인덱스입니다")
                             except IndexError:
-                                TextToSpeechUtil.speak_ments(ment="다운로드 가능한 범위의 숫자인덱스가 아닙니다", sleep_after_play=0.65)
+                                TextToSpeechUtil.speak_ment_experimental(ment="다운로드 가능한 범위의 숫자인덱스가 아닙니다", delay=0.65)
                             ment = f"1건에 대한 마그넷 추가를 진행할까요?\n"  # 단건 마그넷 추가 진행
                             ment = ment + f"\n"
                             ment = ment + f"index  : {int(mg_num)}\n"
@@ -9165,7 +9172,7 @@ class BusinessLogicUtil:
                             dialog.exec()
                             btn_text_clicked = dialog.btn_text_clicked
                             if btn_text_clicked == "그만하기":
-                                TextToSpeechUtil.speak_ments(ment="네 그만하겠습니다", sleep_after_play=0.65)
+                                TextToSpeechUtil.speak_ment_experimental(ment="네 그만하겠습니다", delay=0.65)
                                 break
                             webbrowser.open(magnets[int(mg_num)])  # 토렌트 추가
                             break
@@ -9177,18 +9184,18 @@ class BusinessLogicUtil:
                             dialog.exec()
                             btn_text_clicked = dialog.btn_text_clicked
                             if btn_text_clicked == "그만하기":
-                                TextToSpeechUtil.speak_ments(ment="네 그만하겠습니다", sleep_after_play=0.65)
+                                TextToSpeechUtil.speak_ment_experimental(ment="네 그만하겠습니다", delay=0.65)
                                 break
                             for i in range(0, len(magnets)):
                                 # Park4139.sleep(milliseconds=random.randint(20, 40))
                                 BusinessLogicUtil.sleep(milliseconds=random.randint(10, 20))
                                 # Park4139.sleep(milliseconds=random.randint(1,3))
-                                DebuggingUtil.print_magenta(f"{i}  : title  {titles[i]}")
-                                DebuggingUtil.print_magenta(f"{i}  : magnet {magnets[i]}")
+                                DebuggingUtil.print_ment_cyan(f"{i}  : title  {titles[i]}")
+                                DebuggingUtil.print_ment_cyan(f"{i}  : magnet {magnets[i]}")
                                 webbrowser.open(magnets[i])  # 토렌트 추가
                             break
                         else:
-                            TextToSpeechUtil.speak_ments(ment="입력하신 내용이 숫자나 별이 아닌 것 같아요", sleep_after_play=0.65)
+                            TextToSpeechUtil.speak_ment_experimental(ment="입력하신 내용이 숫자나 별이 아닌 것 같아요", delay=0.65)
                 break
         except:
             traceback.print_exc(file=sys.stdout)
@@ -9204,7 +9211,7 @@ class BusinessLogicUtil:
         # 존재하는 경우 %%a:\$RECYCLE.BIN for /f "tokens=* usebackq" %%b in (`"dir /a:d/b %%a:\$RECYCLE.BIN\"`) do rd / q/s "%%a:\$RECYCLE.BIN\%%~b"
         # 존재하는 경우 %%a:\RECYCLER for /f "tokens=* usebackq" %%b in (`"dir /a:d/b %%a:\RECYCLER\"`) do rd /q/s "%% a:\RECYCLER\%%~b"
         # )
-        TextToSpeechUtil.speak_ments(f'휴지통을 비웠습니다', sleep_after_play=0.65, thread_join_mode=True)
+        TextToSpeechUtil.speak_ment_experimental(f'휴지통을 비웠습니다', delay=0.65, thread_join_mode=True)
 
         # 가끔 휴지통을 열어볼까요?
         # DebuggingUtil.commentize("숨김 휴지통 열기")
@@ -9260,7 +9267,7 @@ class BusinessLogicUtil:
         if FileSystemUtil.is_os_windows():
             UiUtil.pop_up_as_complete(title_="디버깅결과보고", ment=context, input_text_default=input_text_default, auto_click_positive_btn_after_seconds=auto_click_positive_btn_after_seconds)
         else:
-            DebuggingUtil.print_magenta(ment=context)
+            DebuggingUtil.print_ment_cyan(ment=context)
 
     @staticmethod
     def click_mouse_left_btn(abs_x=None, abs_y=None):
@@ -9341,14 +9348,14 @@ class BusinessLogicUtil:
                 loop_cnt = loop_cnt + 1
                 try:
                     img = pyautogui.locateOnScreen(img_abspath, confidence=0.7, grayscale=True)
-                    DebuggingUtil.print_magenta(type(img))
-                    DebuggingUtil.print_magenta(img)
-                    DebuggingUtil.print_magenta(img != None)
+                    DebuggingUtil.print_ment_cyan(type(img))
+                    DebuggingUtil.print_ment_cyan(img)
+                    DebuggingUtil.print_ment_cyan(img != None)
                     if img != None:
                         return img
                     else:
                         DebuggingUtil.commentize(f"화면 이미지 분석 중...")
-                        DebuggingUtil.print_magenta(img_abspath)
+                        DebuggingUtil.print_ment_cyan(img_abspath)
                         BusinessLogicUtil.sleep(milliseconds=15)
                         if is_zoom_toogle_mode == True:
                             if chrome_zoom_step == 14:
@@ -9371,13 +9378,13 @@ class BusinessLogicUtil:
                     return None
                 try:
                     img = pyautogui.locateOnScreen(img_abspath, confidence=0.7, grayscale=True)
-                    DebuggingUtil.print_magenta(type(img))
-                    DebuggingUtil.print_magenta(img)
-                    DebuggingUtil.print_magenta(img != None)
+                    DebuggingUtil.print_ment_cyan(type(img))
+                    DebuggingUtil.print_ment_cyan(img)
+                    DebuggingUtil.print_ment_cyan(img != None)
                     if img != None:
                         return img
                 except:
-                    DebuggingUtil.print_magenta(img_abspath)
+                    DebuggingUtil.print_ment_cyan(img_abspath)
                     BusinessLogicUtil.sleep(milliseconds=10)
                     if is_zoom_toogle_mode == True:
                         if chrome_zoom_step == 14:
@@ -9458,19 +9465,19 @@ class BusinessLogicUtil:
         while True:
             url_ = str(url).strip()
             if url_ == None:
-                TextToSpeechUtil.speak_ments(ment="아무것도 입력되지 않았습니다.", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment="아무것도 입력되지 않았습니다.", delay=0.65)
                 break
             if url_ == "":
-                TextToSpeechUtil.speak_ments(ment="아무것도 입력되지 않았습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment="아무것도 입력되지 않았습니다", delay=0.65)
                 break
             if url_ == "None":
-                TextToSpeechUtil.speak_ments(ment="이상한 것이 입력되었습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment="이상한 것이 입력되었습니다", delay=0.65)
                 break
             urls = [url.strip() for url in url_.split("\n")]
 
-            DebuggingUtil.print_magenta(rf'urls : {urls}')
-            DebuggingUtil.print_magenta(rf'type(urls) : {type(urls)}')
-            DebuggingUtil.print_magenta(rf'len(urls) : {len(urls)}')
+            DebuggingUtil.print_ment_cyan(rf'urls : {urls}')
+            DebuggingUtil.print_ment_cyan(rf'type(urls) : {type(urls)}')
+            DebuggingUtil.print_ment_cyan(rf'len(urls) : {len(urls)}')
 
             try:
                 useless_parts_of_url = [
@@ -9494,7 +9501,7 @@ class BusinessLogicUtil:
     @staticmethod
     def speak_that_service_is_in_preparing():
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
-        TextToSpeechUtil.speak_ments(ment="아직 준비되지 않은 서비스 입니다", sleep_after_play=0.65)
+        TextToSpeechUtil.speak_ment_experimental(ment="아직 준비되지 않은 서비스 입니다", delay=0.65)
 
     @staticmethod
     def ask_to_web(question):
@@ -9529,7 +9536,7 @@ class BusinessLogicUtil:
                 BusinessLogicUtil.press("ctrl", "-")
 
             # 사용자에게 질문 답변
-            TextToSpeechUtil.speak_ments(ment="AI 에게 질문을 성공했습니다", sleep_after_play=0.65)
+            TextToSpeechUtil.speak_ment_experimental(ment="AI 에게 질문을 성공했습니다", delay=0.65)
             break
 
     @staticmethod
@@ -9541,11 +9548,11 @@ class BusinessLogicUtil:
         time_s = time.time()
 
         keys = key_plus_key.split("+")
-        DebuggingUtil.print_magenta(f"{keys[0]}+{keys[1]}가 눌릴때까지 기다리고 있습니다")
+        DebuggingUtil.print_ment_cyan(f"{keys[0]}+{keys[1]}가 눌릴때까지 기다리고 있습니다")
         while True:
             if all(keyboard.is_pressed(key) for key in keys):
                 # 단축키 조합이 모두 눌렸을 때 실행할 코드를 여기에 작성해주세요
-                DebuggingUtil.print_magenta(f"{keys[0]}+{keys[1]}가 눌렸습니다")
+                DebuggingUtil.print_ment_cyan(f"{keys[0]}+{keys[1]}가 눌렸습니다")
                 return True
             else:
                 time_e = time.time()
@@ -9758,9 +9765,9 @@ class BusinessLogicUtil:
                         break
                     hwnd = win32gui.FindWindowEx(None, hwnd, None, None)
             else:
-                DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}프로세스가 실행 중이지 않습니다.")
+                DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}프로세스가 실행 중이지 않습니다.")
         except psutil.NoSuchProcess:
-            DebuggingUtil.print_magenta(f"{StateManagementUtil.UNDERLINE_PROMISED}유효하지 않은 PID입니다.")
+            DebuggingUtil.print_ment_cyan(f"{StateManagementUtil.UNDERLINE_PROMISED}유효하지 않은 PID입니다.")
 
     @staticmethod
     def get_target_pid_by_process_name_legacy(target_process_name: str):
@@ -9787,7 +9794,7 @@ class BusinessLogicUtil:
                 max_cnt = max(cnts)
             except ValueError:
                 # Park4139.debug_as_cli(traceback.format_exc())
-                DebuggingUtil.print_magenta(f"{target_process_name}에 대한 현재 실행중인 pid 가 없는 것 같습니다")
+                DebuggingUtil.print_ment_cyan(f"{target_process_name}에 대한 현재 실행중인 pid 가 없는 것 같습니다")
                 break
             for i in range(0, max_cnt):  # max(cnts):  pids 요소별 가장 " " 가 많이 든 요소의 개수
                 pids: [str] = [i.replace("  ", " ") for i in pids]  # 공백 제거
@@ -9812,7 +9819,7 @@ class BusinessLogicUtil:
 
             for pid, size in pid_and_size.items():  # 프로세스명이 중복일 때 size 가 큰 프로세스의 pid를 리턴
                 if size == max(sizes):
-                    DebuggingUtil.print_magenta(f"pid : {pid}")
+                    DebuggingUtil.print_ment_cyan(f"pid : {pid}")
                     return int(pid)
 
     @staticmethod
@@ -9824,7 +9831,7 @@ class BusinessLogicUtil:
         HH = TimeUtil.get_time_as_('%H')
         mm = TimeUtil.get_time_as_('%M')
         week_name = BusinessLogicUtil.return_korean_week_name()
-        DebuggingUtil.print_magenta(f'현재 시각 {int(yyyy)}년 {int(MM)}월 {int(dd)}일 {week_name}요일 {int(HH)}시 {int(mm)}분')
+        DebuggingUtil.print_ment_cyan(f'현재 시각 {int(yyyy)}년 {int(MM)}월 {int(dd)}일 {week_name}요일 {int(HH)}시 {int(mm)}분')
 
     @staticmethod
     def connect_to_remote_computer_via_chrome_desktop():
@@ -9974,7 +9981,7 @@ class BusinessLogicUtil:
                         global ment_about_pm_ranking
                         ment_about_pm_ranking = ment
                         target_url = f'https://www.dustrank.com/air/air_dong_detail.php?addcode=41173103'
-                        DebuggingUtil.print_magenta(target_url)
+                        DebuggingUtil.print_ment_cyan(target_url)
                         driver.get(target_url)
                         page_src = driver.page_source
                         soup = BeautifulSoup(page_src, "lxml")
@@ -10008,7 +10015,7 @@ class BusinessLogicUtil:
 
                         global results_about_pm_ranking
                         results_about_pm_ranking = results
-                        DebuggingUtil.print_magenta(f"async def {inspect.currentframe().f_code.co_name}() is done...")
+                        DebuggingUtil.print_ment_cyan(f"async def {inspect.currentframe().f_code.co_name}() is done...")
                         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
                     except:
                         DebuggingUtil.trouble_shoot("%%%FOO%%%")
@@ -10025,7 +10032,7 @@ class BusinessLogicUtil:
                     global title
                     title = ment
                     target_url = 'https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&qvt=0&query=전국초미세먼지'
-                    DebuggingUtil.print_magenta(target_url)
+                    DebuggingUtil.print_ment_cyan(target_url)
                     driver.get(target_url)
                     page_src = driver.page_source
                     soup = BeautifulSoup(page_src, "lxml")
@@ -10048,7 +10055,7 @@ class BusinessLogicUtil:
                     results___ = results_
                     global results_about_nationwide_ultrafine_dust
                     results_about_nationwide_ultrafine_dust = results___
-                    DebuggingUtil.print_magenta(f"async def {inspect.currentframe().f_code.co_name}() is done...")
+                    DebuggingUtil.print_ment_cyan(f"async def {inspect.currentframe().f_code.co_name}() is done...")
                     DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
 
                 async def crawl_naver_weather():
@@ -10061,7 +10068,7 @@ class BusinessLogicUtil:
                     global ment_about_naver_weather
                     ment_about_naver_weather = ment
                     target_url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=동안구+관양동+날씨'
-                    DebuggingUtil.print_magenta(target_url)
+                    DebuggingUtil.print_ment_cyan(target_url)
                     driver.get(target_url)
                     page_src = driver.page_source
                     soup = BeautifulSoup(page_src, "lxml")
@@ -10092,7 +10099,7 @@ class BusinessLogicUtil:
 
                     global results_about_naver_weather
                     results_about_naver_weather = results
-                    DebuggingUtil.print_magenta(f"async def {inspect.currentframe().f_code.co_name}() is done...")
+                    DebuggingUtil.print_ment_cyan(f"async def {inspect.currentframe().f_code.co_name}() is done...")
                     DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
 
                 async def crawl_geo_info():
@@ -10105,7 +10112,7 @@ class BusinessLogicUtil:
                     ment_about_geo = ment
                     # target_url = 'https://map.naver.com/p'
                     target_url = 'https://www.google.com/search?q=현재위치'
-                    DebuggingUtil.print_magenta(target_url)
+                    DebuggingUtil.print_ment_cyan(target_url)
                     driver.get(target_url)
                     page_src = driver.page_source
                     soup = BeautifulSoup(page_src, "lxml")
@@ -10117,7 +10124,7 @@ class BusinessLogicUtil:
 
                     global results_about_geo
                     results_about_geo = results
-                    DebuggingUtil.print_magenta(f"async def {inspect.currentframe().f_code.co_name}() is done...")
+                    DebuggingUtil.print_ment_cyan(f"async def {inspect.currentframe().f_code.co_name}() is done...")
                     DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
 
                 def run_async_loop1():
@@ -10173,7 +10180,7 @@ class BusinessLogicUtil:
                 thread3.join()
                 thread4.join()
 
-                TextToSpeechUtil.speak_ments(ment='날씨에 대한 웹크롤링 및 데이터 분석이 성공되었습니다', sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment='날씨에 대한 웹크롤링 및 데이터 분석이 성공되었습니다', delay=0.65)
                 # 함수가 break 로 끝이 나면 창들이 창을 닫아야 dialog 들이 사라지도록 dialog 를 global 처리를 해두었음.
                 global dialog4
                 global dialog3
@@ -10223,7 +10230,7 @@ class BusinessLogicUtil:
             elif 300 < target_size_megabite:
                 StateManagementUtil.biggest_targets.append(target.strip())
             else:
-                DebuggingUtil.print_magenta(f'{target.strip()}pass')
+                DebuggingUtil.print_ment_cyan(f'{target.strip()}pass')
 
         DebuggingUtil.commentize(f'smallest_target 출력')
         # targets 에서 biggest_targets 과 일치하는 것을 소거 시도
@@ -10305,7 +10312,7 @@ class BusinessLogicUtil:
     @staticmethod
     def change_console_color():
         DebuggingUtil.commentize(f"{inspect.currentframe().f_code.co_name}()")
-        TextToSpeechUtil.speak_ments(ment="테스트 콘솔의 색상을 바꿔볼게요", sleep_after_play=0.65)
+        TextToSpeechUtil.speak_ment_experimental(ment="테스트 콘솔의 색상을 바꿔볼게요", delay=0.65)
         BusinessLogicUtil.toogle_console_color(color_bg='0', colors_texts=['7', 'f'])
 
     @staticmethod
@@ -10331,7 +10338,7 @@ class BusinessLogicUtil:
         correct_answer: int = random.randint(1, 100)
         left_oportunity: int = 10
         ment = f"<UP AND DOWN GAME>\n\nFIND CORRECT NUMBER"
-        TextToSpeechUtil.speak_ments(ment, sleep_after_play=1.0)
+        TextToSpeechUtil.speak_ment_experimental(ment, delay=1.0)
         dialog = UiUtil.CustomQdialog(ment=ment, btns=["START", "EXIT"], is_input_box=False)
         dialog.exec()
         user_input = None
@@ -10343,11 +10350,11 @@ class BusinessLogicUtil:
 
         if btn_text_clicked == "START":
             ment = f"START IS PRESSED, LETS START GAME"
-            TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65, thread_join_mode=True)
+            TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65, thread_join_mode=True)
             while left_oportunity >= 0:
                 if left_oportunity == 0:
                     ment = f"LEFT CHANCE IS {left_oportunity} \nTAKE YOUR NEXT CHANCE."
-                    TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     dialog = UiUtil.CustomQdialog(ment=ment, btns=["EXIT"])
                     dialog.exec()
                     break
@@ -10355,7 +10362,7 @@ class BusinessLogicUtil:
                     ment = f"TYPE NUMBER BETWEEN 1 TO 100"
                     if user_input is None:
                         ment = ment + ", AGAIN"
-                    TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     dialog = UiUtil.CustomQdialog(ment=ment, btns=["SUBMIT"], is_input_box=True)
                     dialog.exec()
                     user_input = BusinessLogicUtil.is_user_input_sanitized(dialog.input_box.text())
@@ -10364,13 +10371,13 @@ class BusinessLogicUtil:
                     is_game_strated = True
                 elif user_input == correct_answer:
                     ment = f"CONGRATULATIONS, YOUR NUMBER IS {correct_answer}\nTHIS IS ANSWER, SEE YOU AGAIN"
-                    TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     dialog = UiUtil.CustomQdialog(ment=ment, btns=["EXIT"])
                     dialog.exec()
                     break
                 elif correct_answer < user_input:
                     ment = f"YOUR NUMBER IS {user_input}\n\nYOU NEED DOWN\nYOUR LEFT CHANCE IS {left_oportunity}"
-                    TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     dialog = UiUtil.CustomQdialog(ment=ment, btns=["SUBMIT"], is_input_box=True)
                     dialog.exec()
                     user_input = BusinessLogicUtil.is_user_input_sanitized(dialog.input_box.text())
@@ -10378,7 +10385,7 @@ class BusinessLogicUtil:
                         left_oportunity = left_oportunity - 1
                 elif correct_answer > user_input:
                     ment = f"YOUR NUMBER IS {user_input}\n\nYOU NEED UP\nYOUR LEFT CHANCE IS {left_oportunity}"
-                    TextToSpeechUtil.speak_ments(ment, sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment, delay=0.65)
                     dialog = UiUtil.CustomQdialog(ment=ment, btns=["submit"], is_input_box=True)
                     dialog.exec()
                     user_input = BusinessLogicUtil.is_user_input_sanitized(dialog.input_box.text())
@@ -10480,7 +10487,7 @@ class BusinessLogicUtil:
                 BusinessLogicUtil.should_i_do(ment="랜덤 스케쥴을 실행할까요?", function=BusinessLogicUtil.do_random_schedules, auto_click_negative_btn_after_seconds=5)
 
                 if not DbTomlUtil.is_accesable_local_database():
-                    TextToSpeechUtil.speak_ments("로컬 데이터베이스에 접근할 수 없어 접근이 가능하도록 설정했습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental("로컬 데이터베이스에 접근할 수 없어 접근이 가능하도록 설정했습니다", delay=0.65)
 
                 # BusinessLogicUtil.should_i_do(ment="백업할 타겟들을 크기에 따라 분류를 해둘까요?", function=BusinessLogicUtil.classify_targets_between_smallest_targets_biggest_targets, auto_click_positive_btn_after_seconds=10)
                 BusinessLogicUtil.should_i_do(ment="백업할 타겟들을 크기에 따라 분류를 해둘까요?", function=BusinessLogicUtil.classify_targets_between_smallest_targets_biggest_targets, auto_click_negative_btn_after_seconds=5)
@@ -10511,22 +10518,22 @@ class BusinessLogicUtil:
                     # TextToSpeechUtil.speak_ments('근무시간이므로 음악을 종료합니다', sleep_after_play=0.65, thread_join_mode=True)
                     BusinessLogicUtil.taskkill('ALSong.exe')
                 if int(HH) == 11 and int(mm) == 30:
-                    # TextToSpeechUtil.speak_ments(f'{int(HH)} 시 {int(mm)}분 루틴을 시작합니다', sleep_after_play=0.65, thread_join_mode=True)
-                    # TextToSpeechUtil.speak_ments('점심시간입니다, 음악을 재생합니다', sleep_after_play=0.65, thread_join_mode=True)
-                    # TextToSpeechUtil.speak_ments('용량이 큰 약속된 타겟들을 빽업을 수행 시도합니다', sleep_after_play=0.65, thread_join_mode=True)
-                    BusinessLogicUtil.back_up_biggest_targets()
-                    # TextToSpeechUtil.speak_ments('용량이 작은 약속된 타겟들을 빽업을 수행 시도합니다', sleep_after_play=0.65, thread_join_mode=True)
-                    BusinessLogicUtil.back_up_smallest_targets()
-                    # TextToSpeechUtil.speak_ments('흩어져있는 storage 들을 한데 모으는 시도를 합니다', sleep_after_play=0.65, thread_join_mode=True)
-                    BusinessLogicUtil.gather_storages()
+                    # # TextToSpeechUtil.speak_ments('용량이 큰 약속된 타겟들을 빽업을 수행 시도합니다', sleep_after_play=0.65, thread_join_mode=True)
+                    # BusinessLogicUtil.back_up_biggest_targets()
+                    # # TextToSpeechUtil.speak_ments('용량이 작은 약속된 타겟들을 빽업을 수행 시도합니다', sleep_after_play=0.65, thread_join_mode=True)
+                    # BusinessLogicUtil.back_up_smallest_targets()
+                    # # TextToSpeechUtil.speak_ments('흩어져있는 storage 들을 한데 모으는 시도를 합니다', sleep_after_play=0.65, thread_join_mode=True)
+                    # BusinessLogicUtil.gather_storages()
+                    pass
                 if int(HH) == 22 and int(mm) == 10:
-                    # TextToSpeechUtil.speak_ments(f'{int(HH)} 시 {int(mm)}분 루틴을 시작합니다', sleep_after_play=0.65, thread_join_mode=True)
-                    TextToSpeechUtil.speak_ments('씻으실 것을 추천드립니다, 샤워루틴을 수행하실 것을 추천드립니다', sleep_after_play=0.65, thread_join_mode=True)  # 샤워루틴 확인창 띄우기
+                    TextToSpeechUtil.speak_ment_experimental('씻으실 것을 추천드립니다, 샤워루틴을 수행하실 것을 추천드립니다', delay=0.65, thread_join_mode=True)  # 샤워루틴 확인창 띄우기
                 if int(HH) == 22 and int(mm) == 30:
-                    # TextToSpeechUtil.speak_ments(f'{int(HH)} 시 {int(mm)}분 루틴을 시작합니다', sleep_after_play=0.65, thread_join_mode=True)
-                    TextToSpeechUtil.speak_ments('건강을 위해서 지금 씻고 주무실 것을 추천드려요', sleep_after_play=0.65, thread_join_mode=True)
+                    TextToSpeechUtil.speak_ment_experimental('건강을 위해서 지금 씻고 주무실 것을 추천드려요', delay=0.65, thread_join_mode=True)
+                    TextToSpeechUtil.speak_ment_experimental('건강을 위해서 24시에 최대 절전 모드에 예약이 되었습니다', delay=0.65, thread_join_mode=True)
                 if int(HH) == 24:
-                    TextToSpeechUtil.speak_ments(f'자정이 되었습니다', sleep_after_play=0.65, thread_join_mode=True)
+                    TextToSpeechUtil.speak_ment_experimental(f'자정이 되었습니다', delay=0.65, thread_join_mode=True)
+                    TextToSpeechUtil.speak_ment_experimental('지금부터 예약된 최대 절전 모드에 진입합니다', delay=0.65, thread_join_mode=True)
+                    BusinessLogicUtil.back_up_project_and_change_to_power_saving_mode()
                 if int(mm) % 15 == 0:
                     # TextToSpeechUtil.speak_ments(f'15분 간격 루틴을 시작합니다', sleep_after_play=0.65, thread_join_mode=True)
                     # TextToSpeechUtil.speak_ments(f'랜덤 스케줄을 시작합니다', sleep_after_play=0.65, thread_join_mode=True)
@@ -10558,7 +10565,7 @@ class BusinessLogicUtil:
                 already_said_about_today_greeting = DbTomlUtil.select_db_toml(key=DbTomlUtil.get_db_toml_key(unique_id=unique_id))
             if already_said_about_today_greeting == False:
                 ment = f'오늘도 좋은 하루 되세요!'
-                TextToSpeechUtil.speak_ments(ment=ment, sleep_after_play=0.65, thread_join_mode=True)
+                TextToSpeechUtil.speak_ment_experimental(ment=ment, delay=0.65, thread_join_mode=True)
                 BusinessLogicUtil.should_i_do(ment=ment, auto_click_positive_btn_after_seconds=100)
                 DbTomlUtil.update_db_toml(key=DbTomlUtil.get_db_toml_key(unique_id=unique_id), value=True)  # DB_TOML 업데이트
             if BusinessLogicUtil.is_midnight():  # 자정이면 초기화
@@ -10575,7 +10582,7 @@ class BusinessLogicUtil:
                     already_said_about_new_year_today = DbTomlUtil.select_db_toml(key=DbTomlUtil.get_db_toml_key(unique_id=unique_id))
                 if already_said_about_new_year_today == False:
                     ment = f'{yyyy} 신년입니다! 새해에는 반드시 좋은일이 가득하시길 바랄게요!!'
-                    TextToSpeechUtil.speak_ments(ment=ment, sleep_after_play=0.65, thread_join_mode=True)
+                    TextToSpeechUtil.speak_ment_experimental(ment=ment, delay=0.65, thread_join_mode=True)
                     BusinessLogicUtil.should_i_do(ment=ment, auto_click_positive_btn_after_seconds=100)
                     DbTomlUtil.update_db_toml(key=DbTomlUtil.get_db_toml_key(unique_id=unique_id), value=yyyy)  # DB_TOML 업데이트
                 if BusinessLogicUtil.is_midnight():  # 자정이면 초기화
@@ -10590,7 +10597,7 @@ class BusinessLogicUtil:
                     already_said_about_christmas_today = DbTomlUtil.select_db_toml(key=DbTomlUtil.get_db_toml_key(unique_id=unique_id))
                 if already_said_about_christmas_today == False:
                     ment = f'{yyyy}년 크리스마스입니다! 즐거운 크리스마스 되세요!'
-                    TextToSpeechUtil.speak_ments(ment=ment, sleep_after_play=0.65, thread_join_mode=True)
+                    TextToSpeechUtil.speak_ment_experimental(ment=ment, delay=0.65, thread_join_mode=True)
                     BusinessLogicUtil.should_i_do(ment=ment, auto_click_positive_btn_after_seconds=100)
                     DbTomlUtil.update_db_toml(key=DbTomlUtil.get_db_toml_key(unique_id=unique_id), value=True)  # DB_TOML 업데이트
                 if BusinessLogicUtil.is_midnight():  # 자정이면 초기화
@@ -10727,7 +10734,7 @@ class BusinessLogicUtil:
 
     @staticmethod
     def back_up_project_and_change_to_power_saving_mode():
-        BusinessLogicUtil.back_up_target(target_abspath=StateManagementUtil.PROJECT_DIRECTORY)
+        BusinessLogicUtil.back_up_target(target_abspath=StateManagementUtil.SERVICE_DIRECTORY)
         FileSystemUtil.enter_power_saving_mode()
 
     @staticmethod
@@ -11199,9 +11206,9 @@ class BusinessLogicUtil:
                 if is_image_finded:
                     BusinessLogicUtil.press("shift", "w")
                 else:
-                    TextToSpeechUtil.speak_ments(ment="이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다", sleep_after_play=0.65)
+                    TextToSpeechUtil.speak_ment_experimental(ment="이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다", delay=0.65)
             else:
-                TextToSpeechUtil.speak_ments(ment="이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다", sleep_after_play=0.65)
+                TextToSpeechUtil.speak_ment_experimental(ment="이미지를 찾을 수 없어 해당 자동화 기능을 마저 진행할 수 없습니다", delay=0.65)
             break
         pass
 
